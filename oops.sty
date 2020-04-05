@@ -11,208 +11,361 @@
 %% See http://www.latex-project.org/lppl.txt
 %% ----------------------------------------------------------------
 %% 
+ \RequirePackage{datetime}
+ \RequirePackage{l3keys2e}
  \RequirePackage{xparse}[2019/05/28]
  \ProvidesExplPackage
- {oops}                                                               % Package name
- {2020/03/11}                                                         % Release date
- {1.0}                                                                % Release version
- {An object oriented practical scribe's package}                      % Description
-
+ {oops}                                                                                       % Package name
+ {2020/04/04}                                                                                 % Release date
+ {1.1}                                                                                        % Release version
+ {A tool for organizing, and streamlining the generation, of macro definitions}               % Description
 \NeedsTeXFormat{LaTeX2e}[2019/10/01]
 \ExplSyntaxOn
-\msg_new:nnn
-{Oops}
-{generic}
-{#1}
-\seq_new:N \__erw_oops_seq
-\keys_define:nn { Oops }
+\cs_new_protected:Npn \@@_aux_key:w #1 = #2 \q_stop
 {
-  GenericObject .tl_gset:N = \__erw_oops_object_default_tl,
-  GenericObject .value_required:n = false,
-  GenericObject .default:n = {Math},
-  GenericObject .initial:n = {Math},
-  Inner .code:n =
+  \seq_gput_right:Nx \g@@_aux_key_seq { \tl_trim_spaces:n{ #1 } }
+}
+\cs_new_protected:Nn \@@_aux_key:n
+{
+  \@@_aux_key:w #1 \q_stop
+}
+\cs_new_protected:Nn \@@_aux_key:N
+{
+  \seq_gclear_new:N \g@@_aux_key_seq
+  \seq_map_function:NN #1 \@@_aux_key:n
+}
+\cs_new:Nn \@@_aux_name:n
+{
+  \tl_gset:Nn \g@@_name_tl{ #1 }
+}
+\@@_aux_name:n
+{
+  \msg_error:nnx{ @@ }
+  { generic }
+  { \exp_not:N\g@@_name_tl~undefined }
+}
+\prop_new:N \g@@_aux_prop
+\cs_new_protected:Nn \@@_aux_prop:nn
+{
+  \prop_gput:Nnn \g@@_aux_prop{ #1 } { #2 }
+}
+\cs_generate_variant:Nn \@@_aux_prop:nn { eo }
+\cs_new_protected:Npn \@@_aux_prop:w #1 = #2 \q_stop
+{
+  \@@_aux_prop:eo
+  { \tl_trim_spaces:n{ #1 } }
+  { \@@_option_inner_:n{ #2 } }
+}
+\cs_new_protected:Nn \@@_aux_prop:n
+{
+  \@@_aux_prop:w #1 \q_stop
+}
+\cs_new_protected:Nn \@@_aux_prop:N
+{
+  \prop_gclear_new:N \g@@_aux_prop
+  \seq_if_empty:NTF #1
+  { \c_empty_tl }
   {
-    \cs_gset:Npn \__erw_oops_inner_default:n ##1{#1}
+    \seq_map_function:NN #1 \@@_aux_prop:n
+  }
+}
+\cs_new_protected:Nn \@@_aux_val:Nn
+{
+  \seq_gclear_new:N \@@_aux_val
+  \@@_seq_from_prop:NNn \@@_aux_val #1 { \@@_prop_name:n{ #2 } }
+}
+\iow_new:N \g@@_log_iow
+\AtEndDocument{\iow_close:N \g@@_log_iow}
+\bool_set_false:N \g@@_log_open_bool
+\cs_new_protected:Nn \@@_log_close:
+{
+  \iow_close:N \g@@_log_iow
+  \bool_gset_false:N \g@@_log_open_bool
+}
+\cs_new_protected:Nn \@@_log_open:
+{
+  \tl_gset:Nx \g@@_log_to_tl{oops\pdfdate}
+  \iow_open:Nn \g@@_log_iow {\g@@_log_to_tl}
+  \bool_gset_true:N \g@@_log_open_bool
+}
+\cs_new_protected:Nn \@@_log_restore:n
+{
+  \file_input:n{#1}
+  \tl_log:n{restore~#1}
+}
+\cs_generate_variant:Nn \@@_log_restore:n { e }
+\cs_new_protected:Nn \@@_log_restore:
+{
+  \@@_log_restore:e{\g@@_log_to_tl}
+}
+\tl_new:N \g@@_log_to_tl
+\cs_new_protected:Nn \@@_log_save:n
+{
+  \bool_if:nTF{ \g@@_log_open_bool }
+  { \iow_now:Nn \g@@_log_iow { #1 } }
+  { \msg_error:nnn{ @@ }{ iow }{ \g@@_log_iow }  }
+}
+\cs_generate_variant:Nn \@@_log_save:n { e }
+\cs_new_protected:Nn \@@_make_key:Nn
+{
+  \exp_args:NNx
+  \ProvideDocumentCommand{ #1 }
+  { O{\g@@_name_tl} }
+  {
+    \@@_prop_item:nn{ ##1 }{ #2 }
+  }
+}
+\cs_generate_variant:Nn \@@_make_key:Nn {c}
+\cs_new_protected:Nn \@@_make_key:n
+{
+  \@@_make_key:cn{#1}{#1}
+}
+\cs_generate_variant:Nn \@@_make_key:n { e }
+\cs_new_protected:Nn \@@_make_key:N
+{
+  \seq_map_function:NN #1 \@@_make_key:e
+}
+\cs_new_protected:Npn \@@_make_new:nnn #1 #2 #3
+{
+  \exp_args:NNx \DeclareDocumentCommand \OopsNew
+  { m +o E{ i s o }{ { #1 }{ #2 }{ #3 } } m E{ i }{ { #1 } } d<> +o }
+  {
+    \@@_prop_if_exist:nTF{ ##1 }
+    { \c_empty_tl }
+    { \@@_prop_new:n{ ##1 } }
+    \exp_args:No \@@_option_inner:n{ ##3 }
+    \seq_set_from_clist:Nn \g@@_aux_keyval_seq { ##6 }
+    \@@_aux_prop:N \g@@_aux_keyval_seq
+    \@@_prop_append:Nn \g@@_aux_prop { ##1 }
+    \@@_aux_key:N \g@@_aux_keyval_seq
+    \@@_make_key:N \g@@_aux_key_seq
+    \bool_if:nTF{ \g@@_log_open_bool }
+    {
+\@@_log_save:n
+{
+  \begingroup \def \@@_log_entry { \OopsNew{ ##1 }i{##3}{ ##6 } } \expandafter \endgroup \@@_log_entry
+}
+}{\c_empty_tl}
+\IfValueT{ ##2 }
+{
+  \@@_aux_val:Nn \g@@_aux_key_seq { ##1 }
+  \@@_option_outer:n{ ##5 }
+  ##2
+  \@@_option_outer_:n
+  {
+    \exp_last_unbraced:NNo
+    \seq_use:Nnnn
+    \@@_aux_val
+    { ##4 }
+  }
+}
+\IfValueTF{ ##8 }
+{
+  \IfValueTF{ ##9 }
+  {
+    \exp_not:n{ \OopsNew{ ##1 }i{ ##7 }{ ##8 }[ ##9 ] }
+  }
+  {
+    \exp_not:n{ \OopsNew{ ##1 }i{ ##7 }{ ##8 } }
+  }
+}
+{
+  \IfValueT{##9}
+  {
+    \exp_not:n{ \OopsNew{ ##1 }[ ##9 ] }
+  }
+}
+}
+}
+\msg_new:nnn {@@}{ generic }{ #1 }
+\msg_new:nnn {@@}{ iow }{ #1~is~closed~can't~save }
+\msg_new:nnn {@@}{ keyonly }{ #1~does~not~take~values;~keyval~is~#2 }
+\msg_new:nnn {@@}{ keywrong }{ #1~does~not~recognize~key~#2 }
+\msg_new:nnn {@@}{ unset }{ #1~unset }
+\cs_new_protected:Nn \@@_option_inner:n
+{
+  \cs_gset:Npn \@@_option_inner_:n ##1 { #1 }
+}
+\cs_new_protected:Nn \@@_option_inner_default:n
+{
+  \tl_gset:Nn \g@@_option_inner_tl { #1 }
+}
+\@@_option_inner_default:n
+{
+  \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_inner_tl }
+}
+\cs_new:Nn \@@_option_name:n
+{
+  \tl_gset:Nn \g@@_option_name_tl{ #1 }
+}
+\@@_option_name:n
+{
+  \msg_error:nnx{ @@ }
+  { generic }
+  { \exp_not:N\g@@_option_name_tl~undefined }
+}
+\cs_new_protected:Nn \@@_option_outer:n
+{
+  \cs_gset:Npn \@@_option_outer_:n ##1 { #1 }
+}
+\cs_new_protected:Nn \@@_option_outer_default:n
+{
+  \tl_gset:Nn \g@@_option_outer_tl { #1 }
+}
+\@@_option_outer_default:n
+{
+  \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_outer_tl }
+}
+\cs_new_protected:Nn \@@_option_separ_default:n
+{
+  \cs_gset:Npn \g@@_option_separ_tl { #1 }
+}
+\@@_option_separ_default:n
+{
+  \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_separ_tl }
+}
+\cs_new_protected:Npn \@@_prop_append:NN #1 #2
+{
+  \cs_set:Nn \@@_prop_append:nn
+  {
+    \prop_gput:Nnx #1 { ##1 }{ \prop_item:Nn #2{ ##1 } }
+  }
+  \prop_map_function:NN #2 \@@_prop_append:nn
+}
+\cs_generate_variant:Nn \@@_prop_append:NN { cN }
+\cs_new_protected:Nn \@@_prop_append:Nn
+{
+  \@@_prop_append:cN{ \@@_prop_name:n { #2 } } #1
+}
+\cs_new_protected:Nn \@@_prop_clear_new:n
+{
+  \prop_clear_new:c{ \@@_prop_name:n { #1 } }
+}
+\cs_new:Nn \@@_prop_if_exist:nTF
+{
+  \prop_if_exist:cTF{ \@@_prop_name:n { #1 } }{ #2 }{ #3 }
+}
+\cs_new:Nn \@@_prop_item:nn
+{
+  \prop_item:cn { \@@_prop_name:n { #1 } } { #2 }
+}
+\cs_new:Npn \@@_prop_name:n #1{ @@_#1 }
+\cs_new_protected:Nn \@@_prop_new:n
+{
+  \prop_new:c{ \@@_prop_name:n { #1 } }
+}
+\cs_new_protected:Nn \@@_seq_from_prop:NNn
+{
+  \cs_set_protected:Nn \@@_seq_from_prop:n
+  {
+    \seq_gput_right:No #1 { \prop_item:cn{ #3 }{ ##1 } }
+  }
+  \seq_map_function:NN #2 \@@_seq_from_prop:n
+}
+\cs_new_protected:Nn \@@_test_a:n
+{
+  \OopsClear[Test]
+  \OopsNew{Test}[A:~]#1{ X = x, Y = y, Z = z }
+}
+\cs_new_protected:Nn \@@_test_b:n
+{
+  \OopsClear[Test]
+  \OopsNew{Test}[B:~]{ W = w, X = x }#1< Y = y, Z = z >
+}
+\tl_const:Nn \c@@_test_a { A }
+\tl_const:Nn \c@@_test_b { B }
+\cs_new:Nn \@@_test:nn
+{
+  \tl_set:Nn \l_tmpa_tl { #1 }
+  \tl_case:NnTF \l_tmpa_tl
+  {
+    \c@@_test_a { \@@_test_a:n{#2} }
+    \c@@_test_b { \@@_test_b:n{#2} }
+  }
+  { \c_empty_tl }
+  {
+    \msg_error:nnnn{ @@ }
+    { keywrong }
+    { \@@_test:n }
+    { #1 }
+  }
+}
+\keys_define:nn { @@ }
+{
+  Name .code:n={
+    \@@_aux_name:n{ #1 }
+  },
+  Name .value_required:n = false,
+  Name .default:n = { Math },
+  Name .initial:n = { Math },
+  Inner .code:n={
+    \@@_option_inner_default:n{ #1 }
+    \exp_last_unbraced:Nf
+    \@@_make_new:nnn
+    {
+      { \g@@_option_inner_tl }
+      { \g@@_option_separ_tl }
+      { \g@@_option_outer_tl }
+    }
   },
   Inner .value_required:n = false,
-  Inner .default:n = {#1},
-  Inner .initial:n = {#1},
-  Separators .tl_gset:N = \__erw_oops_separators_default_tl,
-  Separators .value_required:n = false,
-  Separators .default:n = {{ \text{~and~}}{\text{,~}}{\text{,~and~}}},
-  Separators .initial:n = {{ \text{~and~}}{\text{,~}}{\text{,~and~}}},
-  Outer .code:n =
-  {
-    \cs_gset:Npn \__erw_oops_outer_default:n ##1{#1}
+  Inner .default:n = { ####1 },
+  Inner .initial:n = { ####1 },
+  Outer .code:n={
+    \@@_option_outer_default:n{ #1 }
+    \exp_last_unbraced:Nf
+    \@@_make_new:nnn
+    {
+      { \g@@_option_inner_tl }
+      { \g@@_option_separ_tl }
+      { \g@@_option_outer_tl }
+    }
   },
   Outer .value_required:n = false,
-  Outer .default:n = {\ensuremath{#1}},
-  Outer .initial:n = {\ensuremath{#1}}
-}
-\cs_new:Npn \__erw_oops_name:n #1{__erw_oops_#1}
-\cs_new_protected:Nn \__erw_oops_new:n
-{
-  \prop_new:c{\__erw_oops_name:n { #1 }}
-}
-\cs_new_protected:Nn \__erw_oops_clear_new:n
-{
-  \prop_clear_new:c{\__erw_oops_name:n { #1 }}
-}
-\cs_new_protected:Nn \__erw_oops_put:nnn
-{
-  \prop_put:cnn { \__erw_oops_name:n { #1 } } { #2 } { #3 }
-}
-\cs_new_protected:Nn \__erw_oops_putinner:nnn
-{
-  \__erw_oops_put:nnn{#1}
-  {#2}
-  {\__erw_oops_inner:n{#3}}
-}
-\cs_new:Nn \__erw_oops_item:nn
-{
-  \prop_item:cn { \__erw_oops_name:n { #1 } } { #2 }
-}
-\cs_new:Npn \__erw_oops_item:nnn #1 #2 #3
-{
-  \__erw_oops_item:nn{#1}{#2}
-}
-\cs_new:Nn \__erw_oops_itemcmd:Nn
-{
-  \ProvideDocumentCommand{#1}
-  {O{\__erw_oops_object_default_tl}}
-  {
-    \__erw_oops_item:nn {##1}{ #2 }
-  }
-}
-\cs_generate_variant:Nn \__erw_oops_itemcmd:Nn {c}
-\cs_new:Npn \__erw_oops_itemcmd:nnn
-#1
-#2
-#3
-{
-  \__erw_oops_itemcmd:cn{#2}{#2}
-}
-\cs_new:Npn \__erw_oops_itemto_seq:nnn #1 #2 #3
-{
-  \seq_put_right:Nn
-  \__erw_oops_seq
-  {\__erw_oops_item:nn{#1}{#2}}
-}
-\cs_new:Nn \__erw_oops_if_exist:nTF
-{
-  \prop_if_exist:cTF{\__erw_oops_name:n { #1 }}{#2}{#3}
-}
-\cs_set:Npn \__erw_oops_parse:Nnn
-#1 % fun
-#2 % prop name
-#3 % clist
-{
-
-  \tl_if_blank:nTF{#3}
-  {\c_empty_tl}
-  {
-    \seq_set_split:Nnn \l_tmpa_seq {,}{#3}
-    \cs_set:Npn \__erw_oops_parse:w ##1 = ##2 \q_stop
+  Outer .default:n = { \ensuremath{####1} },
+  Outer .initial:n = { \ensuremath{####1} },
+  Save .code:n = {
+    \bool_if:nTF{#1}
+    {\@@_log_open:}
+    {\@@_log_close:}
+  },
+  Save .value_required:n = false,
+  Save .default:n = \BooleanFalse,
+  Save .initial:n = \BooleanFalse,
+  Separ .code:n={
+    \@@_option_separ_default:n{ #1 }
+    \exp_last_unbraced:Nf
+    \@@_make_new:nnn
     {
-      #1
-      {#2}
-      {\tl_trim_spaces:n{##1}} % key
-      {\tl_trim_spaces:n{##2}} % value
+      { \g@@_option_inner_tl }
+      { \g@@_option_separ_tl }
+      { \g@@_option_outer_tl }
     }
-    \cs_set:Npn \__erw_oops_parse:n ##1
-    {
-      \__erw_oops_parse:w ##1 \q_stop
-    }
-    \seq_map_function:NN \l_tmpa_seq \__erw_oops_parse:n
-  }
+  },
+  Separ .value_required:n = false,
+  Separ .default:n = { { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } } },
+  Separ .initial:n = { { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } } }
 }
-\NewDocumentCommand{\OopsOptions}
-{m}
+\NewDocumentCommand{ \OopsClear }
+{ O{\g@@_name_tl} }
 {
-  \keys_set:nn { Oops } {#1}
+  \@@_prop_clear_new:n{ #1 }
 }
-\NewDocumentCommand{\OopsClear}
-{m}
+\NewDocumentCommand{ \OopsOption }
+{ m }
 {
-  \__erw_oops_clear_new:n{#1}
+  \keys_set:nn{ @@ }{ #1 }
 }
-\NewDocumentCommand{\OopsNew}
+\NewDocumentCommand{\OopsRestore}
+{o}
 {
-  m
-  +o
-  E{iso}
-  {
-    {\__erw_oops_inner_default:n{##1}}
-    {\__erw_oops_separators_default_tl}
-    {\__erw_oops_outer_default:n{##1}}
-  }
-  m
-  E{i}
-  {
-    {\__erw_oops_inner_default:n{##1}}
-  }
-  g
-  +o
+  \IfValueTF{#1}
+  {\@@_log_restore:e{#1}}
+  {\@@_log_restore:}
 }
+\NewDocumentCommand\OopsTest{mm}
 {
-  \__erw_oops_if_exist:nTF{#1}
-  {\c_empty_tl}
-  {\__erw_oops_new:n{#1}}
-
-  \IfValueTF{#2}
-  {#2}
-  {\c_empty_tl}
-  \cs_gset:Npn
-
-  \__erw_oops_inner:n ##1
-  {#3}
-  \__erw_oops_parse:Nnn
-  \__erw_oops_putinner:nnn
-  {#1}
-  {#6}
-
-  \__erw_oops_parse:Nnn
-  \__erw_oops_itemcmd:nnn
-  {#1}
-  {#6}
-
-  \IfValueTF{#2}
-  {
-    \seq_clear:N \__erw_oops_seq
-    \__erw_oops_parse:Nnn
-    \__erw_oops_itemto_seq:nnn
-    {#1}
-    {#6}
-    \cs_gset:Npn
-    \__erw_oops_outer:n ##1
-    {#5}
-    \__erw_oops_outer:n
-    {\exp_last_unbraced:NNo
-      \seq_use:Nnnn
-      \__erw_oops_seq
-      {#4}
-    }
-  }
-  {\c_empty_tl}
-
-  \IfValueTF{#8}
-  {
-    \IfValueTF{#9}
-    {
-      \exp_not:n{\OopsNew{#1}i{#7}{#8}[#9]}
-    }
-    {
-      \exp_not:n{\OopsNew{#1}i{#7}{#8}}
-    }
-  }
-  {
-    \IfValueTF{#9}
-    {
-      \exp_not:n{\OopsNew{#1}[#9]}
-    }
-    {\c_empty_tl}
-  }
+  \@@_test:nn{ #1 }{ #2 }
 }
 \ExplSyntaxOff
 %% 
@@ -229,9 +382,11 @@
 %% Erwann Rogard.
 %% 
 %% This work consists of the file  oops.dtx
-%% and the derived files   oops.ins,
-%% oops.pdf and
-%% oops.sty.
+%% and the derived files:
+%% oops.ins,
+%% oops.pdf,
+%% oops.sty,
+%% and oops[timestamp].tex.
 %% 
 %%
 %% End of file `oops.sty'.
