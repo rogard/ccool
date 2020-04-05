@@ -132,11 +132,11 @@ and oops[timestamp].tex.
 \providecommand\pkgparsi{\texttt{token~list$_{3}$}}
 \providecommand\pkgparsii{\texttt{token~list$_{4}$}}
 \providecommand\pkgparsiii{\texttt{token~list$_{5}$}}
-\providecommand\pkgkeyi{\docparam{Inner}}
-\providecommand\pkgkeyn{\docparam{Name}}
-\providecommand\pkgkeyo{\docparam{Outer}}
-\providecommand\pkgkeys{\docparam{Separ}}
-\providecommand\pkgkeyw{\docparam{Save}}
+\providecommand\pkgkeyin{\docparam{Inner}}
+\providecommand\pkgkeyna{\docparam{Name}}
+\providecommand\pkgkeyou{\docparam{Outer}}
+\providecommand\pkgkeysa{\docparam{Save}}
+\providecommand\pkgkeyse{\docparam{Separ}}
 \providecommand\pkgnexti{\texttt{code$_{3}$}}
 \providecommand\pkgnextkvl{\texttt{keyval~list$_{2}$}}
 \providecommand\pkgnextexp{\texttt{token~list$_{6}$}}
@@ -211,7 +211,7 @@ and oops[timestamp].tex.
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsClear}}
 %   \begin{function}{\OopsClear}
 %     \begin{syntax}
-%       \cs{OopsClear}\docopto{\pkgparname}
+%       \cs{OopsClear}\docopto{\meta{\pkgparname}}
 %     \end{syntax}
 %   \end{function}
 %   
@@ -298,7 +298,7 @@ and oops[timestamp].tex.
 %   \item[Semantics]
 %     \begin{enumerate}
 %     \item Defines \cs{\meta{key_{i}}}\docopto{\meta{\pkgparname}} as \meta{\pkgpari} applied to \meta{\docparam{val}_{\docparam{i}}}.
-%     \item If \pkgkeyw$=$\cs{BooleanTrue},\\
+%     \item If \pkgkeysa$=$\cs{BooleanTrue},\\
 %       writes \pkgwrite~to file \file{oops}\meta{digits}\file{.tex},\\
 %       where \meta{digits}=|\pdfdate| 
 %     \item If \meta{\pkgparexp}$\neq$ \docargnoval,\\
@@ -327,22 +327,22 @@ and oops[timestamp].tex.
 %   \end{function}
 %   
 %   \addtocounter{subsection}{1}
-%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeyi}
-%   \DescribeOption{\pkgkeyi}
+%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeyin}
+%   \DescribeOption{\pkgkeyin}
 %   \begin{description}
 %   \item[Semantics] \docU{\docdefaultfor}\meta{\pkgpari}
 %   \item[Syntax] Use |####1| as the argument to be replaced
 %   \end{description} 
 %   
 %   \addtocounter{subsection}{1}
-%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeyn}
-%   \DescribeOption{\pkgkeyn}
+%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeyna}
+%   \DescribeOption{\pkgkeyna}
 %   \begin{description}
 %   \item[Semantics] \docU{\docdefaultfor}\meta{\pkgparname}
 %   \end{description} 
 %   
 %   \addtocounter{subsection}{1}
-%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeyo}
+%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeyou}
 %   \DescribeOption{Outer}
 %   \begin{description}
 %   \item[Semantics] \docU{\docdefaultfor}\meta{\pkgparo}
@@ -350,25 +350,25 @@ and oops[timestamp].tex.
 %   \end{description}
 %   
 %   \addtocounter{subsection}{1}
-%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeys}
-%   \DescribeOption{\pkgkeys}
+%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeysa}
+%   \DescribeOption{\pkgkeysa}
+%   \begin{description}
+%   \item[Syntax] \meta{\docbool}
+%   \end{description}
+%
+%   \addtocounter{subsection}{1}
+%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeyse}
+%   \DescribeOption{\pkgkeyse}
 %   \begin{description}
 %   \item[Syntax] That of `separators' in \cite[Section 8 of \pkg{l3seq}]{interface3}
 %   \item[Semantics] \docU{\docdefaultfor}\pkgpars
-%   \end{description}
-%   
-%   \addtocounter{subsection}{1}
-%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgkeyw}
-%   \DescribeOption{\pkgkeyw}
-%   \begin{description}
-%   \item[Syntax] \meta{\docbool}
 %   \end{description}
 %   
 %   \addtocounter{section}{1}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsRestore}}
 %   \begin{function}{\OopsRestore}
 %     \begin{syntax}
-%       \cs{OopsRestore}\docopto{\docpath}
+%       \cs{OopsRestore}\docopto{\meta{\docpath}}
 %     \end{syntax} 
 %     \begin{description}
 %     \item[Semantics] Restores the definitions saved in \meta{\docpath} and writes to \file{oops.log}: `restore \meta{\docpath}'
@@ -666,8 +666,7 @@ and oops[timestamp].tex.
   \@@_aux_prop:eo
   { \tl_trim_spaces:n{ #1 } }
   { \@@_option_inner_:n{ #2 } }
-% ^^A v1.1, FAIL with N = N (OK with N= N)
-% ^^A\prop_gput:Noo \g@@_aux_prop
+% ^^A\prop_gput:Noo \g@@_aux_prop % v1.1, FAIL with N = N (OK with N= N)
 % ^^A  { \tl_trim_spaces:n{ #1 } } { \@@_option_inner_:n{ #2 } }
 }
 %    \end{macrocode}
@@ -833,7 +832,7 @@ and oops[timestamp].tex.
     \@@_make_key:N \g@@_aux_key_seq
     \bool_if:nTF{ \g@@_log_open_bool }
     {
-% ^^A https://tex.stackexchange.com/questions/536597/journaling-calls-to-a-function-taking-inline-code-as-argument-macro-param-in-h        
+%^^A https://tex.stackexchange.com/questions/536597
 \@@_log_save:n
 {
   \begingroup \def \@@_log_entry { \OopsNew{ ##1 }i{##3}{ ##6 } } \expandafter \endgroup \@@_log_entry      
