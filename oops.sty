@@ -5,20 +5,21 @@
 %% The original source files were:
 %%
 %% oops.dtx  (with options: `package')
-%% ----------------------------------------------------------------
-%% oops --- An object oriented practical scribe's package
+%% -----------------------------------------------------------------------------------------------
+%% oops --- A tool for organizing, and streamlining the making of, definitions (intended for math)
 %% Released under the LaTeX Project Public License v1.3c or later
 %% See http://www.latex-project.org/lppl.txt
-%% ----------------------------------------------------------------
+%% -----------------------------------------------------------------------------------------------
 %% 
  \RequirePackage{datetime}
  \RequirePackage{l3keys2e}
  \RequirePackage{xparse}[2019/05/28]
  \ProvidesExplPackage
  {oops}                                                                                       % Package name
- {2020/04/04}                                                                                 % Release date
- {1.1}                                                                                        % Release version
- {A tool for organizing, and streamlining the generation, of macro definitions}               % Description
+ {2020/04/06}                                                                                 % Release date
+ {1.2}                                                                                        % Release version
+ {A tool for organizing, and streamlining the making of, definitions (intended for math)}    % Description
+
 \NeedsTeXFormat{LaTeX2e}[2019/10/01]
 \ExplSyntaxOn
 \cs_new_protected:Npn \@@_aux_key:w #1 = #2 \q_stop
@@ -54,7 +55,7 @@
 {
   \@@_aux_prop:eo
   { \tl_trim_spaces:n{ #1 } }
-  { \@@_option_inner_:n{ #2 } }
+  { \@@_option_inner:e{ \tl_trim_spaces:n{ #2 } } }
 }
 \cs_new_protected:Nn \@@_aux_prop:n
 {
@@ -88,24 +89,27 @@
   \iow_open:Nn \g@@_log_iow {\g@@_log_to_tl}
   \bool_gset_true:N \g@@_log_open_bool
 }
-\cs_new_protected:Nn \@@_log_restore:n
+\cs_new_protected:Nn \@@_log_read:n
 {
   \file_input:n{#1}
-  \tl_log:n{restore~#1}
+  \tl_log:n{read~from~#1}
 }
-\cs_generate_variant:Nn \@@_log_restore:n { e }
-\cs_new_protected:Nn \@@_log_restore:
+\cs_generate_variant:Nn \@@_log_read:n { e }
+\cs_new_protected:Nn \@@_log_read:
 {
-  \@@_log_restore:e{\g@@_log_to_tl}
+  \@@_log_read:e{\g@@_log_to_tl}
 }
 \tl_new:N \g@@_log_to_tl
-\cs_new_protected:Nn \@@_log_save:n
+\cs_new_protected:Nn \@@_log_write:n
 {
   \bool_if:nTF{ \g@@_log_open_bool }
-  { \iow_now:Nn \g@@_log_iow { #1 } }
+  {
+    \iow_now:Nn \g@@_log_iow { #1 }
+    \tl_log:n{ write~to~#1 }
+  }
   { \msg_error:nnn{ @@ }{ iow }{ \g@@_log_iow }  }
 }
-\cs_generate_variant:Nn \@@_log_save:n { e }
+\cs_generate_variant:Nn \@@_log_write:n { e }
 \cs_new_protected:Nn \@@_make_key:Nn
 {
   \exp_args:NNx
@@ -128,63 +132,52 @@
 \cs_new_protected:Npn \@@_make_new:nnn #1 #2 #3
 {
   \exp_args:NNx \DeclareDocumentCommand \OopsNew
-  { m +o E{ i s o }{ { #1 }{ #2 }{ #3 } } m E{ i }{ { #1 } } d<> +o }
+  { m +o E{ i }{ { #1 } } m s E{ s o }{ { #2 }{ #3 } } +o }
   {
     \@@_prop_if_exist:nTF{ ##1 }
     { \c_empty_tl }
     { \@@_prop_new:n{ ##1 } }
-    \exp_args:No \@@_option_inner:n{ ##3 }
-    \seq_set_from_clist:Nn \g@@_aux_keyval_seq { ##6 }
+    \exp_args:No \@@_option_inner_set:n{ ##3 }
+    \seq_set_from_clist:Nn \g@@_aux_keyval_seq { ##4 }
     \@@_aux_prop:N \g@@_aux_keyval_seq
     \@@_prop_append:Nn \g@@_aux_prop { ##1 }
     \@@_aux_key:N \g@@_aux_keyval_seq
     \@@_make_key:N \g@@_aux_key_seq
     \bool_if:nTF{ \g@@_log_open_bool }
+    {%^^A https://tex.stackexchange.com/questions/536597
+      \@@_log_write:n
+      {
+        \begingroup \def \@@_log_entry { \OopsNew{ ##1 }i{##3}{ ##4 } } \expandafter \endgroup \@@_log_entry
+      }
+    }{\c_empty_tl}
+    \IfValueT{ ##2 }{ ##2 }
+    \IfBooleanT{ ##5 }
     {
-\@@_log_save:n
-{
-  \begingroup \def \@@_log_entry { \OopsNew{ ##1 }i{##3}{ ##6 } } \expandafter \endgroup \@@_log_entry
-}
-}{\c_empty_tl}
-\IfValueT{ ##2 }
-{
-  \@@_aux_val:Nn \g@@_aux_key_seq { ##1 }
-  \@@_option_outer:n{ ##5 }
-  ##2
-  \@@_option_outer_:n
-  {
-    \exp_last_unbraced:NNo
-    \seq_use:Nnnn
-    \@@_aux_val
-    { ##4 }
+      \@@_aux_val:Nn \g@@_aux_key_seq { ##1 }
+      \@@_option_outer_set:n{ ##7 }
+      \@@_option_outer:n
+      {
+        \exp_last_unbraced:NNo
+        \seq_use:Nnnn
+        \@@_aux_val
+        { ##6 }
+      }
+    }
+    \IfValueT{ ##8 }
+    {
+      \exp_not:n{ \OopsNew{ ##1 }[ ##8 ] }
+    }
   }
-}
-\IfValueTF{ ##8 }
-{
-  \IfValueTF{ ##9 }
-  {
-    \exp_not:n{ \OopsNew{ ##1 }i{ ##7 }{ ##8 }[ ##9 ] }
-  }
-  {
-    \exp_not:n{ \OopsNew{ ##1 }i{ ##7 }{ ##8 } }
-  }
-}
-{
-  \IfValueT{##9}
-  {
-    \exp_not:n{ \OopsNew{ ##1 }[ ##9 ] }
-  }
-}
-}
 }
 \msg_new:nnn {@@}{ generic }{ #1 }
-\msg_new:nnn {@@}{ iow }{ #1~is~closed~can't~save }
+\msg_new:nnn {@@}{ iow }{ #1~is~closed~can't~write }
 \msg_new:nnn {@@}{ keyonly }{ #1~does~not~take~values;~keyval~is~#2 }
 \msg_new:nnn {@@}{ keywrong }{ #1~does~not~recognize~key~#2 }
 \msg_new:nnn {@@}{ unset }{ #1~unset }
-\cs_new_protected:Nn \@@_option_inner:n
+\cs_new_protected:Nn \@@_option_inner_set:n
 {
-  \cs_gset:Npn \@@_option_inner_:n ##1 { #1 }
+  \cs_gset:Npn \@@_option_inner:n ##1 { #1 }
+  \cs_generate_variant:Nn \@@_option_inner:n { e }
 }
 \cs_new_protected:Nn \@@_option_inner_default:n
 {
@@ -204,9 +197,9 @@
   { generic }
   { \exp_not:N\g@@_option_name_tl~undefined }
 }
-\cs_new_protected:Nn \@@_option_outer:n
+\cs_new_protected:Nn \@@_option_outer_set:n
 {
-  \cs_gset:Npn \@@_option_outer_:n ##1 { #1 }
+  \cs_gset:Npn \@@_option_outer:n ##1 { #1 }
 }
 \cs_new_protected:Nn \@@_option_outer_default:n
 {
@@ -239,7 +232,12 @@
 }
 \cs_new_protected:Nn \@@_prop_clear_new:n
 {
-  \prop_clear_new:c{ \@@_prop_name:n { #1 } }
+  \exp_args:No \prop_clear_new:c{ \@@_prop_name:n { #1 } }
+}
+\cs_new_protected:Nn \@@_prop_clear_new_map:n
+{
+  \seq_set_from_clist:Nn \g@@_aux_key_seq { #1 }
+  \seq_map_function:NN \g@@_aux_key_seq \@@_prop_clear_new:n
 }
 \cs_new:Nn \@@_prop_if_exist:nTF
 {
@@ -261,34 +259,6 @@
     \seq_gput_right:No #1 { \prop_item:cn{ #3 }{ ##1 } }
   }
   \seq_map_function:NN #2 \@@_seq_from_prop:n
-}
-\cs_new_protected:Nn \@@_test_a:n
-{
-  \OopsClear[Test]
-  \OopsNew{Test}[A:~]#1{ X = x, Y = y, Z = z }
-}
-\cs_new_protected:Nn \@@_test_b:n
-{
-  \OopsClear[Test]
-  \OopsNew{Test}[B:~]{ W = w, X = x }#1< Y = y, Z = z >
-}
-\tl_const:Nn \c@@_test_a { A }
-\tl_const:Nn \c@@_test_b { B }
-\cs_new:Nn \@@_test:nn
-{
-  \tl_set:Nn \l_tmpa_tl { #1 }
-  \tl_case:NnTF \l_tmpa_tl
-  {
-    \c@@_test_a { \@@_test_a:n{#2} }
-    \c@@_test_b { \@@_test_b:n{#2} }
-  }
-  { \c_empty_tl }
-  {
-    \msg_error:nnnn{ @@ }
-    { keywrong }
-    { \@@_test:n }
-    { #1 }
-  }
 }
 \keys_define:nn { @@ }
 {
@@ -324,14 +294,14 @@
   Outer .value_required:n = false,
   Outer .default:n = { \ensuremath{####1} },
   Outer .initial:n = { \ensuremath{####1} },
-  Save .code:n = {
+  Write .code:n = {
     \bool_if:nTF{#1}
     {\@@_log_open:}
     {\@@_log_close:}
   },
-  Save .value_required:n = false,
-  Save .default:n = \BooleanFalse,
-  Save .initial:n = \BooleanFalse,
+  Write .value_required:n = false,
+  Write .default:n = \BooleanFalse,
+  Write .initial:n = \BooleanFalse,
   Separ .code:n={
     \@@_option_separ_default:n{ #1 }
     \exp_last_unbraced:Nf
@@ -349,23 +319,19 @@
 \NewDocumentCommand{ \OopsClear }
 { O{\g@@_name_tl} }
 {
-  \@@_prop_clear_new:n{ #1 }
+  \@@_prop_clear_new_map:n{ #1 } % TODO record
 }
 \NewDocumentCommand{ \OopsOption }
 { m }
 {
-  \keys_set:nn{ @@ }{ #1 }
+  \keys_set:nn{ @@ }{ #1 } % TODO record
 }
-\NewDocumentCommand{\OopsRestore}
+\NewDocumentCommand{\OopsRead}
 {o}
 {
   \IfValueTF{#1}
-  {\@@_log_restore:e{#1}}
-  {\@@_log_restore:}
-}
-\NewDocumentCommand\OopsTest{mm}
-{
-  \@@_test:nn{ #1 }{ #2 }
+  {\@@_log_read:e{#1}}
+  {\@@_log_read:}
 }
 \ExplSyntaxOff
 %% 
@@ -383,7 +349,6 @@
 %% 
 %% This work consists of the file oops.dtx and the derived files:
 %% oops.sty, oops.pdf, ...
-%% 
 %% 
 %%
 %% End of file `oops.sty'.
