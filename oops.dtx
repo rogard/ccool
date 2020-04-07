@@ -75,7 +75,7 @@ oops.sty, oops.pdf, ...
 %<package> \ProvidesExplPackage
 %<package> {oops}                                                                                       % Package name
 %<package> {2020/04/06}                                                                                 % Release date
-%<package> {1.2}                                                                                        % Release version
+%<package> {1.3}                                                                                        % Release version
 %<package> {A tool for making macro definitions encoding mathematical notation}    % Description
 % 
 %<*driver> 
@@ -105,7 +105,6 @@ oops.sty, oops.pdf, ...
 \providecommand\docenvdoc{\env{document}}
 \providecommand\docenvpreamb{preamble}
 \providecommand\doceval[1]{\texttt{\char`\{}#1\texttt{\char`\}}}
-\providecommand\docinlcode{inline code}
 \providecommand\dockvl{keyval~list}
 \providecommand\docwarninp{\item[Input:~]}
 \providecommand\docwarnsymp{\item[Symptom:~]}
@@ -123,28 +122,28 @@ oops.sty, oops.pdf, ...
 \providecommand\doctl{token~list}
 \providecommand\docvers[2]{v#1.#2}
 \providecommand\docwarn{\noindent\textbf{Warning}:~}
-\providecommand\pkgpardefi{\texttt{keyval~list$_{1}$}}
-\providecommand\pkgpardefii{\texttt{keyval~list$_{2}$}} %^^A deprecated
-\providecommand\pkgparhead{\texttt{token~list$_{2}$}}
-\providecommand\pkgparinneri{\texttt{code$_{1}$}}
-\providecommand\pkgparinnerii{\texttt{code$_{3}$}} %^^A deprecated
-\providecommand\pkgparname{\texttt{token~list$_{1}$}}
+\providecommand\pkgpardefi{keyval~list$_{1}$}
+\providecommand\pkgpardefii{keyval~list$_{2}$} %^^A deprecated
+\providecommand\pkgparhead{token~list$_{2}$}
+\providecommand\pkgparinneri{code$_{1}$}
+\providecommand\pkgparinnerii{code$_{3}$} %^^A deprecated
+\providecommand\pkgparname{token~list$_{1}$}
 \providecommand\pkgparnamedefault{\docarg{Math}}
-\providecommand\pkgparouter{\texttt{code$_{2}$}}
+\providecommand\pkgparouter{code$_{2}$}
 \providecommand\pkgpars{\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
-\providecommand\pkgparsi{\texttt{token~list$_{3}$}}
-\providecommand\pkgparsii{\texttt{token~list$_{4}$}}
-\providecommand\pkgparsiii{\texttt{token~list$_{5}$}}
-\providecommand\pkgpartail{\texttt{token~list$_{6}$}} %^^A deprecated
+\providecommand\pkgparsi{token~list$_{3}$}
+\providecommand\pkgparsii{token~list$_{4}$}
+\providecommand\pkgparsiii{token~list$_{5}$}
+\providecommand\pkgpartail{token~list$_{6}$} %^^A deprecated
 \providecommand\pkgkeyin{\docarg{Inner}}
 \providecommand\pkgkeyna{\docarg{Name}}
 \providecommand\pkgkeyou{\docarg{Outer}}
 \providecommand\pkgkeywr{\docarg{Write}}
 \providecommand\pkgkeyse{\docarg{Separ}}
 \providecommand\pkgobj[1]{object identified by #1}
-\providecommand\pkgoptions{\texttt{kvl0}}
+\providecommand\pkgoptions{kvl0}
 \providecommand\pkgsep[1]{\Arg{#1}}
-\providecommand\pkgwrite{\cs{OopsNew}\doceval{\meta{\pkgparname}}\docopte{i}{\meta{\pkgparinneri}}\Arg{\pkgpardefi}}
+\providecommand\pkgwrite{\cs{Oops}\docarg{\meta{\pkgparname}}\docopte{i}{\meta{\pkgparinneri}}\Arg{\pkgpardefi}}
 \ExplSyntaxOff
 \begin{document}
 \DocInput{\jobname.dtx}
@@ -168,13 +167,13 @@ oops.sty, oops.pdf, ...
 %   \begin{abstract}\pkg{oops}~is a package for \LaTeX~(hence ``scribe'') for generating macro definitions as the need
 %     arises in the document, and to organize them along two dimensions: functions and objects, hence ``OO''.
 %     This is done using a minimalist interface built upon \pkg{xparse}\cite{xparse}.
-%     Specifically, \cs{OopsNew}\Arg{\pkgparname}, where \meta{\pkgparname}~identifies an object, begins a series of instructions
+%     Specifically, \cs{Oops}\docoptd{\meta{object}} begins a series of instructions
 %     alternating between `text' and definitions, that themselves optionally expand using predefined or inline rules.
 %     For example,\begin{Verbatim}[breaklines=true]
-%       \OopsNew{Math}[Let~]{Space=\Omega}*[~denote the sample space]{}
+%       \Oops<Math>[Let~]{Space=\Omega}*[~denote the sample space]{}
 %     \end{Verbatim}
-%     expands to: ``\OopsNew{Math}[Let~]{Space=\Omega}*[~denote the sample space]{}''.
-%     As a side effect, |$\Space[Math]$| encodes ``$\Space[Math]$''. \pkgparnamedefault being the default for \meta{\pkgparname}, |$\Space$| also works.
+%     expands to: ``\Oops<Math>[Let~]{Space=\Omega}*[~denote the sample space]{}''.
+%     As a side effect, |$\Space<Math>$| encodes``$\Space<Math>$''. \pkgparnamedefault~being the default for \meta{object}, it can be dropped.
 %     Optionally, the definitions can be written to a file, and restored, which
 %     can be useful for typesetting documents sharing the same notational conventions. Altogether, ``practical''. 
 %   \end{abstract}
@@ -192,7 +191,7 @@ oops.sty, oops.pdf, ...
 %   \begin{enumerate}
 %   \item Loosely, those of \cite{interface3} and \cite{xparse}, for example as to the meaning of \meta{\doctl} and \docargnoval. 
 %   \item If unspecified, the environment in which a function must be declared is \docenvdoc.
-%   \item Where \meta{\docarg{\pkgparname}} is an optional argument, its default is \pkgparnamedefault.
+%   \item Where \meta{\pkgparname} is an optional argument, its default is \pkgparnamedefault.
 
 %   \end{enumerate}
 %   
@@ -210,22 +209,11 @@ oops.sty, oops.pdf, ...
 %   \end{function}
 %   
 %   \addtocounter{section}{1}
-%   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsClear}}
-%   \begin{function}{\OopsClear}
-%     \begin{syntax}
-%       \cs{OopsClear}\docopto{\meta{\dockvl}}
-%     \end{syntax}
-%     \begin{description}
-%     \item[Semantics] Clears any data created by \cs{OopsNew}\Arg{\pkgparname}, for all \meta{\pkgparname} in \meta{\docarg{\dockvl}}
-%     \end{description}
-%   \end{function}
-%   
-%   \addtocounter{section}{1}
-%   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsNew}}
+%   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{Oops}}
 %   \setcounter{subsection}{0}
-%   \begin{function}{\OopsNew}
+%   \begin{function}{\Oops}
 %     \begin{syntax}
-%       \cs{OopsNew}\Arg{\pkgparname}
+%       \cs{Oops}\docoptd{\meta{\pkgparname}}
 %       \docopto{\meta{\pkgparhead}}
 %       \docopte{i}{\meta{\pkgparinneri}}
 %       \Arg{\pkgpardefi}
@@ -235,12 +223,12 @@ oops.sty, oops.pdf, ...
 %       \docopto{\meta{\pkgpartail}}
 %     \end{syntax}
 %     \begin{description}
-%     \item[Requirement] \meta{\pkgparname} and \meta{\pkgpardefi} are mandatory.
+%     \item[Requirement] \meta{\pkgpardefi} is mandatory.
 %     \end{description}
 %   \end{function}
 %   
 %   \addtocounter{subsection}{1}
-%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\Arg{\pkgparname}}
+%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docoptd{\meta{\pkgparname}}}
 %   \DescribeOption{\meta{\pkgparname}}
 %   
 %   \begin{description}
@@ -265,21 +253,21 @@ oops.sty, oops.pdf, ...
 %   \item[Example] |\mathbb{#1}|
 %   \item[Semantics]
 %     \begin{enumerate}
-%     \item \docassign{\meta{\docarg{val}_{\docarg{i}} } }
-%       { \meta{\pkgparinneri} applied to \meta{\docarg{val}_{\docarg{i}} } }
+%     \item \docassign{\meta{val_{i} } }
+%       { \meta{\pkgparinneri} applied to \meta{val_{i} } }
 %     \end{enumerate}
 %   \end{description}
 %   
 %   \addtocounter{subsection}{1}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\Arg{\pkgpardefi}}
-%   \DescribeOption{\meta{\pkgpardefi}}
+%   \DescribeOption{\meta{\pkgpardefi}}\label{par:defi}
 %   
 %   \begin{description}
 %   \item[Example] |Elems={\omega_1, \dots, \omega_n}, Sample=\Omega|
 %   \item[Semantics]
 %     \begin{enumerate}
 %       \setcounter{enumi}{1}
-%     \item \docassign{ \cs{\meta{key_{i}}}\docopto{\meta{\pkgparname}} }{ \meta{\docarg{val}_{\docarg{i}} } } defined in 1.
+%     \item \docassign{ \cs{\meta{key_{i}}}\docoptd{\meta{\pkgparname}} }{\meta{val_i}} defined in 1.
 %     \item If \pkgkeywr$=$\cs{BooleanTrue}, writes the definitions made in 2. to file \file{oops}\meta{digits}\file{.tex},\\
 %       where \meta{digits}=|\pdfdate|
 %     \end{enumerate}
@@ -322,7 +310,7 @@ oops.sty, oops.pdf, ...
 %   \DescribeOption{\meta{\pkgparouter}}
 %   
 %   \begin{description}
-%   \item[Example] |\text{#1}| 
+%   \item[Example] |$\left\{#1\right\}$| 
 %   \end{description}
 %   
 %   \addtocounter{subsection}{1}
@@ -330,8 +318,19 @@ oops.sty, oops.pdf, ...
 %   \DescribeOption{\meta{\pkgpartail}}
 %   \begin{description}
 %   \item[Semantics]
-%     \cs{OopsNew}\Arg{\pkgparname}\docopto{\meta{\pkgpartail}}
+%     \cs{Oops}\docoptd{\meta{\pkgparname}}\docopto{\meta{\pkgpartail}}
 %   \end{description}
+%   
+%   \addtocounter{section}{1}
+%   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsClear}}
+%   \begin{function}{\OopsClear}
+%     \begin{syntax}
+%       \cs{OopsClear}\docoptd{\meta{\dockvl}}
+%     \end{syntax}
+%     \begin{description}
+%     \item[Semantics] Clears any data created by \cs{Oops}\Arg{\pkgparname}, for all \meta{\pkgparname} in \meta{\dockvl}
+%     \end{description}
+%   \end{function}
 %   
 %   \addtocounter{section}{1}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsOption}}
@@ -340,7 +339,7 @@ oops.sty, oops.pdf, ...
 %       \cs{OopsOption}\Arg{\pkgoptions}
 %     \end{syntax} 
 %     \begin{description}
-%     \item[Semantics] Set default options for \cs{OopsNew}
+%     \item[Semantics] Set default options for \cs{Oops}
 %     \end{description}  
 %   \end{function}
 %   
@@ -381,7 +380,7 @@ oops.sty, oops.pdf, ...
 %   \begin{description}
 %   \item[Syntax] \meta{\docbool}
 %   \end{description}
-%
+%   
 %   \addtocounter{section}{1}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsRead}}
 %   \begin{function}{\OopsRead}
@@ -390,9 +389,10 @@ oops.sty, oops.pdf, ...
 %     \end{syntax} 
 %     \begin{description}
 %     \item[Semantics] \begin{enumerate}
-%       \item Reads the definitions in \meta{\docpath} 
+%       \item Reads the definitions in \meta{\docpath}.
 %       \item Writes to \file{oops.log}: `read from \meta{\docpath}'
 %       \end{enumerate}
+%     \item[Other] The default for \meta{\docpath} is the last write-file (see \meta{\pkgpardefi})
 %     \end{description}  
 %   \end{function}
 %   
@@ -434,31 +434,30 @@ oops.sty, oops.pdf, ...
 %     ^^A% spaces betw. inner and outer brackets matter!->
 %     Separ={{\ \char`@\ }{\%\ }{\ \char`@\ }}, 
 %     Outer={\char`^####1\$}}
-%     \OopsNew{Test}{ X =x, Y = y, Z = z }*
-%     \tab \X[Test]\Y[Test]\Z[Test]\\
-%     \OopsNew{Test}i{(#1)}{ X = x, Y = y, Z = z }*
-%     \tab \X[Test]\Y[Test]\Z[Test]\\
-%     \OopsNew{Test}{ X = x, Y = y, Z = z }*s{{\ \&\ }{,\ }{\ \&\ }}
-%     \tab \X[Test]\Y[Test]\Z[Test]\\
+%     \Oops<Test>{ X =x, Y = y, Z = z }*
+%     \tab \X<Test>\Y<Test>\Z<Test>\\
+%     \Oops<Test>i{(#1)}{ X = x, Y = y, Z = z }*
+%     \tab \X<Test>\Y<Test>\Z<Test>\\
+%     \Oops<Test>{ X = x, Y = y, Z = z }*s{{\ \&\ }{,\ }{\ \&\ }}
+%     \tab \X<Test>\Y<Test>\Z<Test>\\
 %     \OopsOption{ Write = \BooleanTrue }
-%     \OopsNew{Test}{ X = x, Y = y, Z = z }*o{\char`[#1\char`]}
-%     \tab \X[Test]\Y[Test]\Z[Test]\\
-%     \OopsClear[Test]
+%     \Oops<Test>{ X = x, Y = y, Z = z }*o{\char`[#1\char`]}
+%     \tab \X<Test>\Y<Test>\Z<Test>\\
+%     \OopsClear<Test>
 %     \OopsOption{ Write = \BooleanFalse }
 %   \end{listing}
-%   
-%   ^^A \OopsRead \tab \X[Test]\Y[Test]\Z[Test] ^^A% Hool 1.c (FAIL with 1.a)
+%   ^^A \OopsRead \tab \X<Test>\Y<Test>\Z<Test> ^^A% Hool 1.c (FAIL with 1.a)
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{test:ii}.}
 %   \begin{listing}[]
 %     {label=listing:test:ii}
-%     \OopsRead \tab \X[Test]\Y[Test]\Z[Test]
-%     \OopsClear[Test]
+%     \OopsRead \tab \X<Test>\Y<Test>\Z<Test>
+%     \OopsClear<Test>
 %   \end{listing}
 %   
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{proba:i}.}
 %   \begin{listing}[]
 %     {label=listing:proba:i}
-%     \OopsNew{Math}[We call~]{Elems={\omega_1, \dots, \omega_n}}*
+%     \Oops[We call~]{Elems={\omega_1, \dots, \omega_n}}*
 %     [~the elementary events, and ]{Space=\Omega}
 %     [\begin{equation*}\Space=(\Elems)\end{equation*}~the sample space.]
 %     {}
@@ -469,7 +468,7 @@ oops.sty, oops.pdf, ...
 %   \begin{listing}[]
 %     {label=listing:proba:ii}
 %     \OopsOption{ Write = \BooleanTrue }
-%     \OopsNew{Math}[Let ]
+%     \Oops[Let ]
 %     {Space=\Omega, SigmaField=\mathcal{F}, Measure=\mathcal{P}}
 %     *s{{,}{,}{,}}o{\ensuremath{\{#1\}}}
 %     [~denote the probability space, where $\SigmaField\subset 2^{\Space}$.]
@@ -485,14 +484,14 @@ oops.sty, oops.pdf, ...
 %     \OopsClear
 %   \end{listing}
 %   
-%   ^^A% {OffeneMenge={D}, Ci={C^{1}}, Strecke={[x_0,x]}} ^^A% Hook 2.a
-%   ^^A%      Strecke={\char`[x_0,x\char`]}  % PASS % Hook 2.b
-%   ^^A%      Strecke={\[x_0,x\]}            % FAIL % Hook 2.c
+%   ^^A%{OffeneMenge={D}, Ci={C^{1}}, Strecke={[x_0,x]}} ^^A% Hook 2.a
+%   ^^A%Strecke={\char`[x_0,x\char`]}  % PASS % Hook 2.b
+%   ^^A%Strecke={\[x_0,x\]}            % FAIL % Hook 2.c
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:i}.}
 %   \begin{listing}[]{label=listing:mvt:i}
 %     \OopsOption{ Write = \BooleanTrue }
 %     \newtheorem{theorem}{Theorem}
-%     \OopsNew{Math}i{\mathbb{#1}}
+%     \Oops i{\mathbb{#1}}
 %     { N = { N } , R = { R }, Grad = { \operatorname{grad} } }
 %     [\begin{theorem}
 %       [Mittelwertsatz f\"ur $n$ Variable]Es~sei~]
@@ -530,7 +529,7 @@ oops.sty, oops.pdf, ...
 %   \doclist{proba:i} and \doclist{proba:ii} are from \cite{shir95}.
 %   \doclist{mvt:i} is from \pkg{tcolbox}\cite[17.3]{tcolbox}.
 %   
-%   \section{Bug}\label{other:bug}
+%   \section{Issues}\label{other:bug}
 %   
 %   \begin{enumerate}
 %   \item \begin{description}
@@ -602,6 +601,8 @@ oops.sty, oops.pdf, ...
 %   \changes{\docvers{1}{2}}{2020/04/06}{Deleted: Listing~2-3 from \docvers{1}{1}.}
 %   \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Save} by \cs{Write}}
 %   \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Restore} by \cs{Read}}
+%   \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \cs{OopsNew} by \cs{Oops}}
+%   \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \Arg{\pkgparname} and \docopto{\meta{\pkgparname}} by \docoptd{\meta{\pkgparname}} }
 %   
 %   \clearpage
 %   \PrintChanges
@@ -619,6 +620,18 @@ oops.sty, oops.pdf, ...
 \ExplSyntaxOn
 %    \end{macrocode}
 % \section{\texttt{aux}}
+% \begin{macro}{\@@_aux_inner_set:n}
+%   \begin{arguments}
+%   \item \meta{code}
+%   \end{arguments}
+%    \begin{macrocode}
+\cs_new_protected:Nn \@@_aux_inner_set:n
+{
+  \cs_gset:Npn \@@_aux_inner:n ##1 { #1 }
+  \cs_generate_variant:Nn \@@_aux_inner:n { e }
+}
+%    \end{macrocode}
+% \end{macro}
 % \begin{macro}{\@@_aux_key:w }
 %   \begin{arguments}
 %   \item \meta{ key }
@@ -654,20 +667,14 @@ oops.sty, oops.pdf, ...
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\@@_aux_name:n}
+% \begin{macro}{\@@_aux_outer_set:n}
 %   \begin{arguments}
-%   \item \meta{ tl var name }
+%   \item \meta{ inline code }
 %   \end{arguments}
 %    \begin{macrocode}
-\cs_new:Nn \@@_aux_name:n
+\cs_new_protected:Nn \@@_aux_outer_set:n
 {
-  \tl_gset:Nn \g@@_name_tl{ #1 }
-}
-\@@_aux_name:n
-{  
-  \msg_error:nnx{ @@ }
-  { generic }
-  { \exp_not:N\g@@_name_tl~undefined }
+  \cs_gset:Npn \@@_aux_outer:n ##1 { #1 }
 }
 %    \end{macrocode}
 % \end{macro}
@@ -687,9 +694,9 @@ oops.sty, oops.pdf, ...
 {
   \@@_aux_prop:eo
   { \tl_trim_spaces:n{ #1 } }
-  { \@@_option_inner:e{ \tl_trim_spaces:n{ #2 } } }
+  { \@@_aux_inner:e{ \tl_trim_spaces:n{ #2 } } }
 % ^^A\prop_gput:Noo \g@@_aux_prop % v1.1, FAIL with N = N (OK with N= N)
-% ^^A  { \tl_trim_spaces:n{ #1 } } { \@@_option_inner:n{ #2 } }
+% ^^A  { \tl_trim_spaces:n{ #1 } } { \@@_aux_inner:n{ #2 } }
 }
 %    \end{macrocode}
 % \end{macro}
@@ -803,7 +810,7 @@ oops.sty, oops.pdf, ...
 {
   \exp_args:NNx
   \ProvideDocumentCommand{ #1 } 
-  { O{\g@@_name_tl} }
+  { D<>{\g@@_option_name_tl} }
   {
     \@@_prop_item:nn{ ##1 }{ #2 }
   }
@@ -834,22 +841,23 @@ oops.sty, oops.pdf, ...
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\@@_make_new:nnn}
+% \begin{macro}{\@@_make_new:nnnn}
 %   \begin{arguments}
+%   \item \meta{ token list }
 %   \item \meta{ seq_{1} }
 %   \item \meta{ seq_{2} } 
 %   \item \meta{ prop }
 %   \end{arguments}
 %    \begin{macrocode}
-\cs_new_protected:Npn \@@_make_new:nnn #1 #2 #3
+\cs_new_protected:Npn \@@_make_new:nnnn #1 #2 #3 #4
 {
-  \exp_args:NNx \DeclareDocumentCommand \OopsNew
-  { m +o E{ i }{ { #1 } } m s E{ s o }{ { #2 }{ #3 } } +o }
+  \exp_args:NNx \DeclareDocumentCommand \Oops
+  { D<>{#1} +o E{ i }{ { #2 } } m s E{ s o }{ { #3 }{ #4 } } +o }
   {
     \@@_prop_if_exist:nTF{ ##1 }
     { \c_empty_tl }
     { \@@_prop_new:n{ ##1 } }
-    \exp_args:No \@@_option_inner_set:n{ ##3 }
+    \exp_args:No \@@_aux_inner_set:n{ ##3 }
     \seq_set_from_clist:Nn \g@@_aux_keyval_seq { ##4 }
     \@@_aux_prop:N \g@@_aux_keyval_seq
     \@@_prop_append:Nn \g@@_aux_prop { ##1 }
@@ -859,15 +867,15 @@ oops.sty, oops.pdf, ...
     {%^^A https://tex.stackexchange.com/questions/536597
       \@@_log_write:n
       {
-        \begingroup \def \@@_log_entry { \OopsNew{ ##1 }i{##3}{ ##4 } } \expandafter \endgroup \@@_log_entry      
+        \begingroup \def \@@_log_entry { \Oops< ##1 >i{##3}{ ##4 } } \expandafter \endgroup \@@_log_entry      
       }
     }{\c_empty_tl}
     \IfValueT{ ##2 }{ ##2 }
     \IfBooleanT{ ##5 }
     {
       \@@_aux_val:Nn \g@@_aux_key_seq { ##1 }
-      \@@_option_outer_set:n{ ##7 }
-      \@@_option_outer:n
+      \@@_aux_outer_set:n{ ##7 }
+      \@@_aux_outer:n
       { 
         \exp_last_unbraced:NNo
         \seq_use:Nnnn
@@ -877,7 +885,7 @@ oops.sty, oops.pdf, ...
     }
     \IfValueT{ ##8 }
     {
-      \exp_not:n{ \OopsNew{ ##1 }[ ##8 ] }
+      \exp_not:n{ \Oops< ##1 >[ ##8 ] }
     }
   }
 }
@@ -892,21 +900,16 @@ oops.sty, oops.pdf, ...
 \msg_new:nnn {@@}{ unset }{ #1~unset }
 %    \end{macrocode}
 % \section{\texttt{option}}
-% \begin{macro}{\@@_option_inner_set:n}
+% \begin{macro}{\@@_aux_inner:n}
 %   \begin{arguments}
-%   \item \meta{\docinlcode}
+%   \item \meta{code}
 %   \end{arguments}
 %    \begin{macrocode}
-\cs_new_protected:Nn \@@_option_inner_set:n
-{
-  \cs_gset:Npn \@@_option_inner:n ##1 { #1 }
-  \cs_generate_variant:Nn \@@_option_inner:n { e }
-}
-\cs_new_protected:Nn \@@_option_inner_default:n
+\cs_new_protected:Nn \@@_option_inner:n
 {
   \tl_gset:Nn \g@@_option_inner_tl { #1 }
 }
-\@@_option_inner_default:n
+\@@_option_inner:n
 {
   \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_inner_tl }
 }
@@ -929,35 +932,31 @@ oops.sty, oops.pdf, ...
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\@@_option_outer_set:n, \@@_option_outer_default:n}
+% \begin{macro}{\@@_option_outer:n}
 %   \begin{arguments}
 %   \item \meta{ inline code }
 %   \end{arguments}
 %    \begin{macrocode}
-\cs_new_protected:Nn \@@_option_outer_set:n
-{
-  \cs_gset:Npn \@@_option_outer:n ##1 { #1 }
-}
-\cs_new_protected:Nn \@@_option_outer_default:n
+\cs_new_protected:Nn \@@_option_outer:n
 {
   \tl_gset:Nn \g@@_option_outer_tl { #1 }
 }
-\@@_option_outer_default:n
+\@@_option_outer:n
 {
   \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_outer_tl }
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\@@_option_separ_default:n}
+% \begin{macro}{\@@_option_separ:n}
 %   \begin{arguments}
 %   \item \Arg{ \doctl_{1} }\Arg{ \doctl_{2} }\Arg{ \doctl_{3} }
 %   \end{arguments}
 %    \begin{macrocode}
-\cs_new_protected:Nn \@@_option_separ_default:n
+\cs_new_protected:Nn \@@_option_separ:n
 {
   \cs_gset:Npn \g@@_option_separ_tl { #1 }
 }
-\@@_option_separ_default:n
+\@@_option_separ:n
 {
   \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_separ_tl }
 }
@@ -1083,58 +1082,70 @@ oops.sty, oops.pdf, ...
 \keys_define:nn { @@ }
 {
   Name .code:n={
-    \@@_aux_name:n{ #1 }
-  },
-  Name .value_required:n = false,
-  Name .default:n = { Math },
-  Name .initial:n = { Math },
-  Inner .code:n={
-    \@@_option_inner_default:n{ #1 }
-    \exp_last_unbraced:Nf 
-    \@@_make_new:nnn
-    {
-      { \g@@_option_inner_tl }
-      { \g@@_option_separ_tl }
-      { \g@@_option_outer_tl }
-    }
-  },
-  Inner .value_required:n = false,
-  Inner .default:n = { ####1 },
-  Inner .initial:n = { ####1 },
-  Outer .code:n={
-    \@@_option_outer_default:n{ #1 }
-    \exp_last_unbraced:Nf
-    \@@_make_new:nnn
-    {
-      { \g@@_option_inner_tl }
-      { \g@@_option_separ_tl }
-      { \g@@_option_outer_tl }
-    }
-  },
-  Outer .value_required:n = false,
-  Outer .default:n = { \ensuremath{####1} },
-  Outer .initial:n = { \ensuremath{####1} },
-  Write .code:n = {
-    \bool_if:nTF{#1}
-    {\@@_log_open:}
-    {\@@_log_close:}
-  },
-  Write .value_required:n = false,
-  Write .default:n = \BooleanFalse,
-  Write .initial:n = \BooleanFalse,
-  Separ .code:n={
-    \@@_option_separ_default:n{ #1 }
-    \exp_last_unbraced:Nf 
-    \@@_make_new:nnn
-    {
-      { \g@@_option_inner_tl }
-      { \g@@_option_separ_tl }
-      { \g@@_option_outer_tl }
-    }
-  },
-  Separ .value_required:n = false,
-  Separ .default:n = { { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } } },
-  Separ .initial:n = { { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } } }
+% ^^A    \@@_aux_name:n{ #1 }
+\@@_option_name:n{ #1 }
+\exp_last_unbraced:Nf 
+\@@_make_new:nnnn
+{
+  { \g@@_option_name_tl }
+  { \g@@_option_inner_tl }
+  { \g@@_option_separ_tl }
+  { \g@@_option_outer_tl }
+}
+},
+Name .value_required:n = false,
+Name .default:n = { Math },
+Name .initial:n = { Math },
+Inner .code:n={
+  \@@_option_inner:n{ #1 }
+  \exp_last_unbraced:Nf 
+  \@@_make_new:nnnn
+  {
+    { \g@@_option_name_tl }
+    { \g@@_option_inner_tl }
+    { \g@@_option_separ_tl }
+    { \g@@_option_outer_tl }
+  }
+},
+Inner .value_required:n = false,
+Inner .default:n = { ####1 },
+Inner .initial:n = { ####1 },
+Outer .code:n={
+  \@@_option_outer:n{ #1 }
+  \exp_last_unbraced:Nf 
+  \@@_make_new:nnnn
+  {
+    { \g@@_option_name_tl }
+    { \g@@_option_inner_tl }
+    { \g@@_option_separ_tl }
+    { \g@@_option_outer_tl }
+  }
+},
+Outer .value_required:n = false,
+Outer .default:n = { \ensuremath{####1} },
+Outer .initial:n = { \ensuremath{####1} },
+Write .code:n = {
+  \bool_if:nTF{#1}
+  {\@@_log_open:}
+  {\@@_log_close:}
+},
+Write .value_required:n = false,
+Write .default:n = \BooleanFalse,
+Write .initial:n = \BooleanFalse,
+Separ .code:n={
+  \@@_option_separ:n{ #1 }
+  \exp_last_unbraced:Nf 
+  \@@_make_new:nnnn
+  {
+    { \g@@_option_name_tl }
+    { \g@@_option_inner_tl }
+    { \g@@_option_separ_tl }
+    { \g@@_option_outer_tl }
+  }
+},
+Separ .value_required:n = false,
+Separ .default:n = { { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } } },
+Separ .initial:n = { { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } } }
 }
 %    \end{macrocode}
 % \begin{macro}{\OopsClear}
@@ -1143,9 +1154,9 @@ oops.sty, oops.pdf, ...
 %   \end{arguments}
 %    \begin{macrocode}
 \NewDocumentCommand{ \OopsClear }
-{ O{\g@@_name_tl} }
+{ D<>{\g@@_option_name_tl} }
 { 
-  \@@_prop_clear_new_map:n{ #1 } % TODO record
+  \@@_prop_clear_new_map:n{ #1 } 
 }
 %    \end{macrocode}
 % \end{macro}
