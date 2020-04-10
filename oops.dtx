@@ -198,7 +198,7 @@ oops.sty, oops.pdf, ...
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Convention}
 %   \section*{Convention}%\label{usage:conv}
 %   \begin{enumerate}
-%   \item Loosely, those of \cite{interface3} and \cite{xparse}, for example as to the meaning of \meta{\doctl} and \docargnoval. 
+%   \item Loosely, those of \cite{interface3} and \cite{xparse}, for example as to the meaning of \meta{\doctl}. 
 %   \item If unspecified, the environment in which a function must be declared is \docenvdoc.
 %   \item Where \meta{\pkgparname} is an optional argument, its default is \pkgparnamedefault.
 %   \end{enumerate}
@@ -651,17 +651,11 @@ oops.sty, oops.pdf, ...
 %   \section{Issue}\label{other:issue}
 %   
 %   \begin{enumerate}
-%   \item \begin{description}
-%     \item[\docissuedont] |\newtheorem{definition}{Definition}|;\\
-%       and \cs{Oops}|[\begin{definition}]{ | \meta{\pkgkey} | = |\meta{\pkgval}| }|
-%       \item[\docissuesymp] \texttt{ERROR: Undefined control sequence.} (not systematic) for \meta{\pkgkey}
-%       \item[\docissuedo] \cs{Oops}{ | \meta{\pkgkey} | = |\meta{\pkgval} | } |\begin{definition}]{ |
-%         \end{description}
-%       \item \begin{description}
+%       \item
+%         \begin{description}
 %         \item[\docissuedont] |Inner={\{####1\}|
 %         \item[\docissuesymp] \cs{OopsRead} fails
 %         \item[\docissuedo] |Inner={\char`{####1\char`}}|
-%         \item[\docsee] \doclist{test:i}
 %         \end{description}
 %       \end{enumerate}
 %       
