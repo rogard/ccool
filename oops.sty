@@ -11,16 +11,14 @@
 %% See http://www.latex-project.org/lppl.txt
 %% ----------------------------------------------------------------------------
 %% 
- \RequirePackage{datetime}
  \RequirePackage{etoolbox}
  \RequirePackage{l3keys2e}
  \RequirePackage{xparse}[2019/05/28]
  \ProvidesExplPackage
  {oops}                                                                                       % Package name
  {2020/04/10}                                                                                 % Release date
- {1.4}                                                                                        % Release version
+ {1.5}                                                                                        % Release version
  {A tool for encoding mathematical notation}    % Description
-
 \NeedsTeXFormat{LaTeX2e}[2019/10/01]
 \ExplSyntaxOn
 \cs_new_protected:Nn \@@_aux_inner_set:n
@@ -112,9 +110,10 @@
   \iow_close:N \g@@_log_iow
   \bool_gset_false:N \g@@_log_open_bool
 }
+\tl_new:N \g@@_log_file_tl
 \cs_new_protected:Nn \@@_log_open:
 {
-  \tl_gset:Nx \g@@_log_to_tl{oops\pdfdate}
+  \tl_gset:Nx \g@@_log_to_tl{\g@@_log_file_tl}
   \iow_open:Nn \g@@_log_iow {\g@@_log_to_tl}
   \bool_gset_true:N \g@@_log_open_bool
 }
@@ -319,6 +318,9 @@
   { \tl_gset_eq:NN \g@@_option_expans_tl \l_keys_choice_tl },
   Expans .default:n = { xo },
   Expans .initial:n = { xo },
+  File .code:n = { \tl_gset:Nn  \g@@_log_file_tl{ \exp_not:n{ #1 } } },
+  File .default:n = { oops\pdfcreationdate },
+  File .initial:n = { oops\pdfcreationdate },
   Name .code:n={
     \@@_option_name:n{#1}
     \exp_last_unbraced:Nf

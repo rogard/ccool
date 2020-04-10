@@ -69,25 +69,24 @@ oops.sty, oops.pdf, ...
 \expandafter\endgroup
 \fi
 %</internal> 
-%<package> \RequirePackage{datetime}
 %<package> \RequirePackage{etoolbox}
 %<package> \RequirePackage{l3keys2e}
 %<package> \RequirePackage{xparse}[2019/05/28]
 %<package> \ProvidesExplPackage
 %<package> {oops}                                                                                       % Package name
 %<package> {2020/04/10}                                                                                 % Release date
-%<package> {1.4}                                                                                        % Release version
+%<package> {1.5}                                                                                        % Release version
 %<package> {A tool for encoding mathematical notation}    % Description
 % 
 %<*driver> 
 \documentclass[full]{l3doc}
-% \documentclass[draft]{l3doc}
-\usepackage{oops}
 \usepackage{amsmath, amssymb}
+\usepackage{babel}
 \usepackage{bookmark}
 \usepackage{fancyvrb}
-\usepackage[T1]{fontenc}
+\usepackage[T1]{fontenc}% \char`[
 \usepackage{fvextra}
+\usepackage{oops}
 \usepackage{pdfpages}
 \usepackage{tabto}
 \usepackage{tcolorbox}
@@ -102,15 +101,18 @@ oops.sty, oops.pdf, ...
 \ExplSyntaxOn
 \providecommand\docargnoval{\c_novalue_tl}
 \providecommand\docassign[2]{#1~$\leftarrow$~#2}
-\providecommand\docbool{boolean}
-\providecommand\docconcept[1]{\textit{#1}}
-\providecommand\docdefaultfor{default~for~}
+\providecommand\docccept[1]{\textit{#1}}
+\providecommand\doccceptbool{boolean}
+\providecommand\doccceptgroup{local~group}
+\providecommand\doccceptkvl{keyval~list}
+\providecommand\doccceptpath{path}
+\providecommand\doccceptpipe{\textbar}
+\providecommand\doccceptpre{preamble}
+\providecommand\docccepttoken{token}
 \providecommand\docenvdoc{\env{document}}
-\providecommand\docenvpreamb{preamble}
+\providecommand\docdefaultfor{default~for~}
 \providecommand\doceval[1]{\texttt{\char`\{}#1\texttt{\char`\}}}
 \providecommand\docfillblank{\begin{minipage}[t]{\linewidth}\end{minipage}}
-\providecommand\docgroup{local~group}
-\providecommand\dockvl{keyval~list}
 \providecommand\docissuedo{Do: }
 \providecommand\docissuedont{Don't: }
 \providecommand\docissuesymp{Symptom: }
@@ -119,31 +121,29 @@ oops.sty, oops.pdf, ...
 \providecommand\docopte[2]{\texttt{#1}\doceval{#2}}
 \providecommand\docoptd[1]{\texttt{\textless}#1\texttt{\textgreater}}
 \providecommand\docarg[1]{\texttt{#1}} % fun[param] (macro) vs fun[arg] (eval)
-\providecommand\docpath{path}
 \cs_new:Nn \__oops_docu:n{\MakeUppercase #1}
-\providecommand\docpipe{\textbar}
 \providecommand\docstep[1]{step~\ref{step:#1}}
 \providecommand\docsee{See:~}
-\providecommand\doctl{token~list}
+\providecommand\docccepttl{token~list}
+\providecommand\doctip{\noindent\textbf{Tip}:~}
 \providecommand\docU[1]{\exp_args:Nx \__oops_docu:n{#1}}
 \providecommand\docvers[2]{v#1.#2}
 \providecommand\docwarn{\noindent\textbf{Warning}:~}
-\providecommand\pkgpardefi{kvl$_{1}$}
-\providecommand\pkgpardefii{kvl$_{2}$} %^^A deprecated
-\providecommand\pkgparhead{tl$_{2}$}
-\providecommand\pkgparinneri{code$_{1}$}
-\providecommand\pkgparinnerii{code$_{3}$} %^^A deprecated
-\providecommand\pkgparname{tl$_{1}$}
-\providecommand\pkgparnamedefault{\docarg{Math}}
-\providecommand\pkgparouter{code$_{2}$}
-\providecommand\pkgpars{\Arg{\pkgparsi}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
+\providecommand\pkgparde{kvl$_{1}$}%Adef
+\providecommand\pkgparhe{tl$_{2}$}%head
+\providecommand\pkgparin{code$_{1}$}%inner
+\providecommand\pkgparna{tl$_{1}$}%name
+\providecommand\pkgparnad{\docarg{Math}}%name default
+\providecommand\pkgparou{code$_{2}$}%outer
+\providecommand\pkgpars{\Arg{\pkgparsi}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}%separ
 \providecommand\pkgparsi{tl$_{3}$}
 \providecommand\pkgparsii{tl$_{4}$}
 \providecommand\pkgparsiii{tl$_{5}$}
-\providecommand\pkgpartail{tl$_{6}$} %^^A deprecated
+\providecommand\pkgparta{tl$_{6}$}%tail
 \providecommand\pkgkey{key$_{i}$}
 \providecommand\pkgval{val$_{i}$}
 \providecommand\pkgoptex{\docarg{Expans}}
+\providecommand\pkgoptfi{\docarg{File}}
 \providecommand\pkgoptin{\docarg{Inner}}
 \providecommand\pkgoptna{\docarg{Name}}
 \providecommand\pkgoptou{\docarg{Outer}}
@@ -152,7 +152,7 @@ oops.sty, oops.pdf, ...
 \providecommand\pkgobj[1]{object identified by #1}
 \providecommand\pkgoptions{kvl0}
 \providecommand\pkgsep[1]{\Arg{#1}}
-\providecommand\pkgwrite{\cs{Oops}\docarg{\meta{\pkgparname}}\docopte{i}{\meta{\pkgparinneri}}\Arg{\pkgpardefi}}
+\providecommand\pkgwrite{\cs{Oops}\docarg{\meta{\pkgparna}}\docopte{i}{\meta{\pkgparin}}\Arg{\pkgparde}}
 \ExplSyntaxOff
 \begin{document}
 \DocInput{\jobname.dtx}
@@ -182,7 +182,7 @@ oops.sty, oops.pdf, ...
 %       \Oops<Math>[Let~]{Space=\Omega}*[~denote the sample space]{}
 %     \end{Verbatim}
 %          expands to: ``\Oops<Math>[Let~]{Space=\Omega}*[~denote the sample space]{}''.
-%          As a side effect, |$\Space<Math>$| encodes``$\Space<Math>$''. \pkgparnamedefault~being the default for \meta{object}, it can be dropped. DEBUG
+%          As a side effect, |$\Space<Math>$| encodes``$\Space<Math>$''. \pkgparnad~being the default for \meta{object}, it can be dropped. 
 %     Optionally, the definitions can be written to a file, and restored, which
 %     can be useful for typesetting documents sharing the same notational conventions. Altogether, ``practical''. 
 %   \end{abstract}
@@ -191,19 +191,19 @@ oops.sty, oops.pdf, ...
 %   
 %   \part{Usage}\label{part:usage}
 %   \VerbatimFootnotes
-%   
-%   This part describes \label{impl:frontend}.
-%   
-%   \addtocounter{section}{1}
+% 
+% \setcounter{section}{0}
+% \label{usage:conv}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Convention}
-%   \section*{Convention}%\label{usage:conv}
+%   \section*{Convention}
 %   \begin{enumerate}
-%   \item Loosely, those of \cite{interface3} and \cite{xparse}, for example as to the meaning of \meta{\doctl}. 
+%   \item Loosely, those of \cite{interface3} and \cite{xparse}, for example as to the meaning of \meta{\docccepttl}. 
 %   \item If unspecified, the environment in which a function must be declared is \docenvdoc.
-%   \item Where \meta{\pkgparname} is an optional argument, its default is \pkgparnamedefault.
+%   \item Where \meta{\pkgparna} is an optional argument, its default is \pkgparnad.
 %   \end{enumerate}
-%   
-%   \addtocounter{section}{1}
+%
+%   \refstepcounter{section}
+%   \label{usage:load} 
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Loading the package}
 %   
 %   \begin{function}{\usepackage}
@@ -211,85 +211,93 @@ oops.sty, oops.pdf, ...
 %       \cs{usepackage}\doceval{\pkg{oops}}
 %     \end{syntax}
 %     \begin{description}
-%     \item[Environment] \docU{\docenvpreamb}
+%     \item[Environment] \docccept{\doccceptpre}
 %     \item[Requirement] \file{oops.sty} is in the path of the \LaTeX~engine. See \autoref{part:other}, \autoref{other:support}.
 %     \end{description}  
 %   \end{function}
 %   
-%   \addtocounter{section}{1}
+%   \refstepcounter{section}
+%   \label{usage:cs:oops}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{Oops}}
 %   \setcounter{subsection}{0}
 %   \begin{function}{\Oops}
 %     \begin{syntax}
-%       \cs{Oops}\docoptd{\meta{\pkgparname}}
-%       \docopto{\meta{\pkgparhead}}
-%       \docopte{i}{\meta{\pkgparinneri}}
-%       \Arg{\pkgpardefi}
+%       \cs{Oops}\docoptd{\meta{\pkgparna}}
+%       \docopto{\meta{\pkgparhe}}
+%       \docopte{i}{\meta{\pkgparin}}
+%       \Arg{\pkgparde}
 %       |+|
 %       |*|
 %       \docopte{s}{\pkgpars}
-%       \docopte{o}{\meta{\pkgparouter}}
-%       \docopto{\meta{\pkgpartail}}
+%       \docopte{o}{\meta{\pkgparou}}
+%       \docopto{\meta{\pkgparta}}
 %     \end{syntax}
 %     \begin{description}
-%     \item[Requirement] \meta{\pkgpardefi} is specified (all others optional).
+%     \item[Requirement] \meta{\pkgparde} is specified (all others optional).
 %     \end{description}
 %   \end{function}
 %   
-%   \addtocounter{subsection}{1}
-%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docoptd{\meta{\pkgparname}}}
-%   \DescribeOption{\meta{\pkgparname}}
+%   \refstepcounter{subsection}
+%   \label{usage:par:na}
+%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docoptd{\meta{\pkgparna}}}
+%   \DescribeOption{\meta{\pkgparna}}
 %   
 %   \begin{description}
-%   \item[Example] \pkgparnamedefault, |ModelA|, |ModelB|
+%   \item[Example] \pkgparnad, |ModelA|, |ModelB|
 %   \item[Semantics] Registers a new object, if applicable
 %   \end{description}
 %   
-%   \addtocounter{subsection}{1}
-%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopto{\meta{\pkgparhead}}}
-%   \DescribeOption{\meta{\pkgparhead}}
+%   \refstepcounter{subsection}
+%   \label{usage:par:he}
+%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopto{\meta{\pkgparhe}}}
+%   \DescribeOption{\meta{\pkgparhe}}
 %   
 %   \begin{description}
 %   \item[Example]|Let~|
-%   \item[Semantics] Expands~\meta{\pkgparhead}
+%   \item[Semantics] Expands~\meta{\pkgparhe}
 %   \end{description}
 %   
-%   \addtocounter{subsection}{1}
-%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopte{i}{\meta{\pkgparinneri}}}
-%   \DescribeOption{\meta{\pkgparinneri}}
+%   \refstepcounter{subsection}
+%   \label{usage:par:in}
+%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopte{i}{\meta{\pkgparin}}}
+%   \DescribeOption{\meta{\pkgparin}}
 %   
 %   \begin{description}
 %   \item[Example] |\mathbb{#1}|
 %   \item[Semantics]
 %     \begin{enumerate}
 %     \item \docassign{\meta{\pkgval} }
-%       { \meta{\pkgparinneri} applied to \meta{\pkgval} }\label{step:val}
+%       { \meta{\pkgparin} applied to \meta{\pkgval} }\label{step:val}
 %     \end{enumerate}
 %   \end{description}
 %   
-%   \addtocounter{subsection}{1}
-%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\Arg{\pkgpardefi}}
-%   \DescribeOption{\meta{\pkgpardefi}}\label{par:defi}
+%   \refstepcounter{subsection}
+%   \label{usage:par:de}
+%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\Arg{\pkgparde}}
+%   \DescribeOption{\meta{\pkgparde}}
 %   \begin{description}
 %   \item[Example] |Elems={\omega_1, \dots, \omega_n}, Sample=\Omega|
 %   \item[Semantics]
 %     \begin{enumerate}
 %       \setcounter{enumi}{1}
-%     \item \docassign{ \cs{\meta{\pkgkey}}\docoptd{\meta{\pkgparname}}}{\meta{val_i}} defined in step~\docstep{val}.\label{step:key}
+%     \item \docassign{ \cs{\meta{\pkgkey}}\docoptd{\meta{\pkgparna}}}{\meta{val_i}} defined in \docstep{val},
+%    using \autoref{usage:opt:ex} for expansion. \label{step:key}
 %     \item If \pkgoptwr$=$\cs{BooleanTrue}, writes the definitions made in \docstep{key} to file \file{oops}\meta{digits}\file{.tex},
-%       where \meta{digits}=|\pdfdate|\label{step:write}
+%       where \meta{digits}=|\pdfcreationdate|\label{step:write}
 %     \end{enumerate}
 %   \end{description}
 %   
-%   \addtocounter{subsection}{1}
+%   \refstepcounter{subsection}
+%   \label{usage:par:appto}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}+}
 %   \DescribeOption{+}
 %   \begin{description}
-%   \item[Other] Needed to make the side effect \cs{Oops}' within a \docgroup~persist thereafter
+%   \item[Other] Needed to make \cs{Oops}'side effect within a \docccept{\doccceptgroup}~persist thereafter
 %   \item[Semantics] Appends \docstep{key} and \docstep{write} to \cs{OopsHook}
 %   \end{description}
 %   
-%   \addtocounter{subsection}{1}
+%   \refstepcounter{subsection}
+%   \label{usage:par:expand}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}*}
 %   \DescribeOption{*}
 %   
@@ -297,67 +305,80 @@ oops.sty, oops.pdf, ...
 %   \item[Semantics]
 %     \begin{enumerate}
 %       \setcounter{enumi}{4}
-%     \item Expands~\meta{\pkgparouter} applied to the list created in \docstep{val},
-%       using the separator specified by \meta{\pkgparsi}, \meta{\pkgparsii}, and \meta{\pkgparsiii}.
+%     \item Expands~\meta{\pkgparou} applied to the list created in \docstep{val},
+%       using the separator specified by \autoref{usage:par:si}, \autoref{usage:par:sii}, \autoref{usage:par:siii}.
 %     \end{enumerate}
 %   \end{description}
 %   
-%   \addtocounter{subsection}{1}
+%   \refstepcounter{subsection}
+%   \label{usage:par:s}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopte{s}{\pkgpars}}
 %   
+%   \refstepcounter{subsubsection}
+%   \label{usage:par:si}
 %   \DescribeOption{\meta{\pkgparsi}}
 %   
 %   \begin{description}
 %   \item[Example] |{~\in~}|
 %   \end{description}
 %   
+%   \refstepcounter{subsubsection}
+%   \label{usage:par:sii}
 %   \DescribeOption{\meta{\pkgparsii}}
 %   
 %   \begin{description}
 %   \item[Example] |{,~}|
 %   \end{description}
+%
+%   \refstepcounter{subsubsection}
+%   \label{usage:par:siii}
 %   \DescribeOption{\meta{\pkgparsiii}}
 %   
 %   \begin{description}
 %   \item[Example] |{~\&~}|
 %   \end{description}
 %   
-%   \addtocounter{subsection}{1}
-%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopte{o}{\meta{\pkgparouter}}}
-%   \DescribeOption{\meta{\pkgparouter}}
+%   \refstepcounter{subsection}
+%   \label{usage:par:ou}
+%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopte{o}{\meta{\pkgparou}}}
+%   \DescribeOption{\meta{\pkgparou}}
 %   
 %   \begin{description}
 %   \item[Example] |$\left\{#1\right\}$| 
 %   \end{description}
 %   
-%   \addtocounter{subsection}{1}
-%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopto{\meta{\pkgpartail}}}
-%   \DescribeOption{\meta{\pkgpartail}}
+%   \refstepcounter{subsection}
+%   \label{usage:par:ta}
+%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopto{\meta{\pkgparta}}}
+%   \DescribeOption{\meta{\pkgparta}}
 %   \begin{description}
 %   \item[Semantics]
-%     \cs{Oops}\docoptd{\meta{\pkgparname}}\docopto{\meta{\pkgpartail}}
+%     \cs{Oops}\docoptd{\meta{\pkgparna}}\docopto{\meta{\pkgparta}}
 %   \end{description}
 %   
-%   \addtocounter{section}{1}
+%   \refstepcounter{section}
+%   \label{usage:cs:clear}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsClear}}
 %   \begin{function}{\OopsClear}
 %     \begin{syntax}
-%       \cs{OopsClear}\docoptd{\meta{\dockvl}}
+%       \cs{OopsClear}\docoptd{\meta{\doccceptkvl}}
 %     \end{syntax}
 %     \begin{description}
-%     \item[Semantics] Clears any data created by \cs{Oops}\Arg{\pkgparname}, for all \meta{\pkgparname} in \meta{\dockvl}
+%     \item[Semantics] Clears any data created by \cs{Oops}\Arg{\pkgparna}, for all \meta{\pkgparna} in \meta{\doccceptkvl}
 %     \end{description}
 %   \end{function}
 %   
-%   \addtocounter{section}{1}
+%   \refstepcounter{section}
+%   \label{usage:cs:debug}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsDebug}}
 %   \begin{function}{\OopsDebug}
 %     \begin{description}
 %     \item[Semantics] See \autoref{part:impl}
 %     \end{description}
 %   \end{function}
-
-%   \addtocounter{section}{1}
+%
+%   \refstepcounter{section}
+%   \label{usage:cs:hook}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsHook}}
 %   \begin{function}{\OopsHook}
 %     \begin{syntax}
@@ -368,81 +389,98 @@ oops.sty, oops.pdf, ...
 %     \end{description}
 %   \end{function}
 %   
-%   \addtocounter{section}{1}
+%   \refstepcounter{section}
+%   \label{usage:cs:option}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsOption}}
 %   \begin{function}{\OopsOption}
 %     \begin{syntax}
 %       \cs{OopsOption}\Arg{\pkgoptions}
 %     \end{syntax} 
 %     \begin{description}
-%     \item[Semantics] Set default options for \cs{Oops}
+%     \item[Semantics] Set default options for \autoref{usage:cs:oops}
 %     \end{description}  
 %   \end{function}
 %   
-%   \addtocounter{subsection}{1}
+%   \refstepcounter{subsection}
+%   \label{usage:opt:ex}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptex}
 %   \DescribeOption{\pkgoptex}
 %   \begin{description}
 %   \item[Default] |xo|
-%   \item[Semantics] Controls expansion in \docstep{key}
 %   \item[Syntax] Either of |eo, ee, ex, xe, xo, xe, xx|
 %   \end{description} 
 %   
-%   \addtocounter{subsection}{1}
+%   \refstepcounter{subsection}
+%   \label{usage:opt:ex}
+%   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptfi}
+%   \DescribeOption{\pkgoptfi}
+%   \begin{description}
+%   \item[Syntax] \docccept{\docccepttoken}
+%   \end{description} 
+%
+%   \refstepcounter{subsection}
+%   \label{usage:opt:in}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptin}
 %   \DescribeOption{\pkgoptin}
 %   \begin{description}
-%   \item[Semantics] \docU{\docdefaultfor}\meta{\pkgparinneri}
+%   \item[Semantics] \docU{\docdefaultfor}\autoref{usage:par:in}
 %   \item[Syntax] Use |####1| as the argument to be replaced
 %   \end{description} 
 %   
-%   \addtocounter{subsection}{1}
+%   \refstepcounter{subsection}
+%   \label{usage:opt:na}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptna}
 %   \DescribeOption{\pkgoptna}
 %   \begin{description}
-%   \item[Semantics] \docU{\docdefaultfor}\meta{\pkgparname}
+%   \item[Semantics] \docU{\docdefaultfor}\autoref{usage:par:na}
 %   \end{description} 
 %   
-%   \addtocounter{subsection}{1}
+%   \refstepcounter{subsection}
+%   \label{usage:opt:ou}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptou}
 %   \DescribeOption{Outer}
 %   \begin{description}
-%   \item[Semantics] \docU{\docdefaultfor}\meta{\pkgparouter}
+%   \item[Semantics] \docU{\docdefaultfor}\autoref{usage:par:ou}
 %   \item[Syntax] Use |####1| as the argument to be replaced
 %   \end{description}
 %   
-%   \addtocounter{subsection}{1}
+%   \refstepcounter{subsection}
+%   \label{usage:opt:se}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptse}
 %   \DescribeOption{\pkgoptse}
 %   \begin{description}
-%   \item[Semantics] \docU{\docdefaultfor}\pkgpars
+%   \item[Semantics] \docU{\docdefaultfor}\autoref{usage:par:s}
 %   \item[Syntax] That of `separators' in \cite[Section 8 of \pkg{l3seq}]{interface3}
 %   \end{description}
 %   
 %   \addtocounter{subsection}{1}
+%   \label{usage:opt:wr}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptwr}
 %   \DescribeOption{\pkgoptwr}
 %   \begin{description}
-%   \item[Syntax] \meta{\docbool}
+%   \item[Syntax] \docccept{\docU{\doccceptbool}}
 %   \end{description}
 %   
-%   \addtocounter{section}{1}
+%   \refstepcounter{section}
+%   \label{usage:cs:read}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{OopsRead}}
 %   \begin{function}{\OopsRead}
 %     \begin{syntax}
-%       \cs{OopsRead}\docopto{\meta{\docpath}}
+%       \cs{OopsRead}\docopto{\meta{\doccceptpath}}
 %     \end{syntax} 
 %     \begin{description}
-%     \item[Other] The default for \meta{\docpath} is the last write-file (see \meta{\pkgpardefi})
+%     \item[Other] The default for \meta{\doccceptpath} is the last write-file (see \meta{\pkgparde})
 %     \item[Semantics] \begin{enumerate}
-%       \item Reads the definitions in \meta{\docpath}.
-%       \item Writes to \file{oops.log}: `read from \meta{\docpath}'
+%       \item Reads the definitions in \meta{\doccceptpath}.
+%       \item Writes to \file{oops.log}: `read from \meta{\doccceptpath}'
 %       \end{enumerate}
 %     \end{description}  
 %   \end{function}
 %   
+%   \refstepcounter{section}
+%   \label{usage:dosdont}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Do's and dont's}
-%   \section*{Do's and dont's}\label{usage:dosdont}
+%   \section*{Do's and dont's}
 %   
 %   \begin{enumerate}
 %   \item \docfillblank
@@ -488,13 +526,9 @@ oops.sty, oops.pdf, ...
 % }
 %   ^^A\pagestyle{empty} ^^A% only for bench.tex
 %   
-%   \docwarn To reproduce the listings in a \LaTeX~document,
-%   use the same setting as thoat of the documentation portion of \file{oops.dtx}
-%   (such as \cs{documentclass}, \cs{usepackage}, and \cs{newtcblisting}), and remove any |^||^A|.
-%   Any deviation from the original may require tinkering.\footnote{For instance, in testing \docvers{1}{1},
-%   I realized |\usepackage[T1]{fontenc}| was needed,
-%   to work with |\documentclass{article}| in place of |\documentclass[full]{l3doc}|,
-%   hence added it to the documentation portion of \file{oops.dtx}}
+%   \doctip To replicate the listings in a \LaTeX~document,
+%   use the same setting as that of the documentation portion of \file{oops.dtx}
+%   (\cs{documentclass}, \cs{usepackage}, \cs{newtcblisting}, \dots), and remove any |^||^A|.
 %   
 %   ^^A   \begin{listing}[]
 %     ^^A     {label=listing:debug}
@@ -539,7 +573,6 @@ oops.sty, oops.pdf, ...
 %     { KeyU = {\%}, KeyV = {\%}, KeyW = {\%} }[] 
 %     { KeyX = {\%}, KeyY = {\%}, KeyZ = {\KeyB<Test>} }\nobreak
 %     \KeyL<Test>\KeyD<Test>\KeyZ<Test>\KeyN<Test>\\
-%     \OopsClear
 %     \OopsOption{ Write = \BooleanFalse }
 %   \end{listing}
 %   
@@ -559,18 +592,15 @@ oops.sty, oops.pdf, ...
 %     \KeyD<Test>\nobreak
 %     \KeyZ<Test>\nobreak
 %     \KeyN<Test>\nobreak
-%     \OopsClear<Test>
 %   \end{listing}
 %   
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{proba:i}.}
 %   \begin{listing}[]
 %     {label=listing:proba:i}
-%     \OopsOption{Inner, Separ, Outer}
 %     \Oops[We call~]{Elems={{\omega_{1}}, {\dots}, {\omega_{n}}}}*
 %     [~the elementary events, and ]{Space=\Omega}
 %     [\begin{equation*}\Space=(\Elems)\end{equation*}~the sample space.]
 %     {}
-%     \OopsClear
 %   \end{listing}
 %   
 %   \begin{listing}[]
@@ -581,7 +611,6 @@ oops.sty, oops.pdf, ...
 %     *s{{,}}o{$\{#1\}$}
 %     [~denote the probability space, where $\Field\subset 2^{\Space}$.]
 %     {}
-%     \OopsClear
 %     \OopsOption{ Write = \BooleanFalse }
 %   \end{listing}
 % 
@@ -589,7 +618,6 @@ oops.sty, oops.pdf, ...
 %    \begin{listing}[]
 %        {label=listing:proba:iii}
 %           \OopsRead \tab $\Omega$ $\Field$ $\Meas$
-%           \OopsClear
 %      \end{listing}
 %^^A^^A      
 %^^A^^A     ^^A%{OffeneMenge={D}, Ci={C^{1}}, Strecke={[x_0,x]}} ^^A% Hook 2.a
@@ -615,7 +643,6 @@ oops.sty, oops.pdf, ...
 %         \end{equation*}
 %       \end{theorem}]
 %       {}
-%       \OopsClear
 %       \OopsOption{ Write = \BooleanFalse }
 %     \end{listing}
 %   
@@ -686,7 +713,7 @@ oops.sty, oops.pdf, ...
 %       
 %       \changes{\docvers{1}{0}}{2020/03/08}{Initial version}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Revamped: much of the implementation}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \Arg{\pkgpardefii}~by~\docoptd{\pkgpardefii}~given that option type \texttt{G} not recommended\cite{xparse}}
+%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \Arg{kvl_{2}}~by~\docoptd{kvl_{2}}~given that option type \texttt{G} not recommended\cite{xparse}}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \cs{OopsOptions}~by~\cs{OopsOption}}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \docarg{GenericObject} by~\docarg{Name}}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \docarg{Separators}~by~\docarg{Separ}}
@@ -696,24 +723,26 @@ oops.sty, oops.pdf, ...
 %       \changes{\docvers{1}{1}}{2020/04/04}{Deleted: Listing 1-5 from \docvers{1}{0}}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Added: Listing~1., 2., 3., 4., 6., and 9.}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Fixed: apparent anomaly in \docvers{1}{0}'s Listing~4, see \doclist{test:i}}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Added: optional |*| to \cs{OopsNew} as instruction to expand \pkgpardefi}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{OopsClear}\Arg{\pkgparname} by \cs{OopsClear}\docopto{\meta{\dockvl}}}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \pkgpardefii~and~\pkgparinnerii}
+%       \changes{\docvers{1}{2}}{2020/04/06}{Added: optional |*| to \cs{OopsNew} as instruction to expand \pkgparde}
+%       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{OopsClear}\Arg{\pkgparna} by \cs{OopsClear}\docopto{\meta{\doccceptkvl}}}
+%       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \meta{kvl_{2}}~and~\meta{code_{2}}}
 %       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \cs{OopsTest}}
 %       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: Listing~2-3 from \docvers{1}{1}.}
 %       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Save} by \cs{Write}}
 %       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Restore} by \cs{Read}}
 %       \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \cs{OopsNew} by \cs{Oops}}
-%       \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \Arg{\pkgparname} and \docopto{\meta{\pkgparname}} by \docoptd{\meta{\pkgparname}} }
+%       \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \Arg{\pkgparna} and \docopto{\meta{\pkgparna}} by \docoptd{\meta{\pkgparna}} }
 %       \changes{\docvers{1}{4}}{2020/04/10}{Replaced: \docopte{s}{\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
-%       by \docopte{s}{\Arg{\pkgparsi}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}}
+%       by \docopte{s}{\Arg{\pkgparsi}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}}
 %       \changes{\docvers{1}{4}}{2020/04/10}{Added:optional |+| to \cs{OopsNew} to make side effects presist beyond local group}
 %       \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{OopsHook}}
 %       \changes{\docvers{1}{4}}{2020/04/10}{Deleted: Listing~1., and 2. }
 %       \changes{\docvers{1}{4}}{2020/04/10}{Added: Listing~1., 2., and 3. }
 %       \changes{\docvers{1}{4}}{2020/04/10}{Added: \docarg{Expans} (for debugging' sake, but...) }
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \nameref{usage:dosdont} }
+%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \autoref{usage:dosdont} }
 %       \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{OopsDebug} }
+%       \changes{\docvers{1}{5}}{2020/04/10}{Deleted: dependence on \pkg{datetime} }
+%       \changes{\docvers{1}{5}}{2020/04/10}{Added: \pkgoptfi }
 %
 %       \clearpage
 %       \PrintChanges
@@ -789,11 +818,7 @@ oops.sty, oops.pdf, ...
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\@@_aux_prop:w}
-%   \begin{arguments}
-%   \item \meta{ key }
-%   \item \meta{ value }
-%   \end{arguments}
+% \begin{macro}{\@@_aux_prop:nn}
 %    \begin{macrocode}
 \prop_new:N \g@@_aux_prop
 \cs_new_protected:Nn \@@_aux_prop:nn 
@@ -801,6 +826,14 @@ oops.sty, oops.pdf, ...
   \prop_gput:Nnn \g@@_aux_prop{#1}{#2}
 }
 \cs_generate_variant:Nn \@@_aux_prop:nn { eo, ee, ex, xo, xe, xx }
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@@_aux_prop:w}
+%   \begin{arguments}
+%   \item \meta{ key }
+%   \item \meta{ value }
+%   \end{arguments}
+%    \begin{macrocode}
 \tl_new:N \g@@_option_expans_tl
 \cs_new_protected:Npn \@@_aux_prop:w #1 = #2 \q_stop
 {
@@ -825,7 +858,7 @@ oops.sty, oops.pdf, ...
 % \end{macro}
 % \begin{macro}{\@@_aux_prop:N}
 %   \begin{arguments}
-%   \item \meta{\dockvl}
+%   \item \meta{keyval list}
 %   \end{arguments}
 %    \begin{macrocode}
 \cs_new_protected:Nn \@@_aux_prop:N
@@ -909,9 +942,10 @@ oops.sty, oops.pdf, ...
 % \end{macro}
 % \begin{macro}{\@@_log_open:}
 %    \begin{macrocode}
+\tl_new:N \g@@_log_file_tl
 \cs_new_protected:Nn \@@_log_open:
 {
-  \tl_gset:Nx \g@@_log_to_tl{oops\pdfdate}
+  \tl_gset:Nx \g@@_log_to_tl{\g@@_log_file_tl}
   \iow_open:Nn \g@@_log_iow {\g@@_log_to_tl}
   \bool_gset_true:N \g@@_log_open_bool
 }
@@ -919,7 +953,7 @@ oops.sty, oops.pdf, ...
 % \end{macro}
 % \begin{macro}{\@@_log_read:n}
 %   \begin{arguments}
-%   \item \meta{\docpath}
+%   \item \meta{path}
 %   \end{arguments}
 %    \begin{macrocode}
 \cs_new_protected:Nn \@@_log_read:n
@@ -1110,7 +1144,7 @@ oops.sty, oops.pdf, ...
 % \end{macro}
 % \begin{macro}{\@@_option_name:n}
 %   \begin{arguments}
-%   \item \meta{\doctl}
+%   \item \meta{token list}
 %   \end{arguments}
 %    \begin{macrocode}
 \cs_new:Nn \@@_option_name:n
@@ -1142,7 +1176,7 @@ oops.sty, oops.pdf, ...
 % \end{macro}
 % \begin{macro}{\@@_option_separ:n}
 %   \begin{arguments}
-%   \item \Arg{ \doctl_{1} }\Arg{ \doctl_{2} }\Arg{ \doctl_{3} }
+%   \item \Arg{ tl_{1} }\Arg{ tl_{2} }\Arg{ tl_{3} }
 %   \end{arguments}
 %    \begin{macrocode}
 \cs_new_protected:Nn \@@_option_separ:n
@@ -1156,7 +1190,7 @@ oops.sty, oops.pdf, ...
 %    \end{macrocode}
 % \end{macro}
 % \section{\texttt{prop}}
-% \begin{macro}{\@@_prop_append:NN,\@@_prop_append:cN}
+% \begin{macro}{\@@_prop_append:NN}
 %   \begin{arguments}
 %   \item \meta{ prop_{1} }
 %   \item \meta{ prop_{2} }
@@ -1210,9 +1244,9 @@ oops.sty, oops.pdf, ...
 % \end{macro}
 % \begin{macro}{\@@_prop_if_exist:nTF}
 %   \begin{arguments}
-%   \item \meta{\doctl_{1}}
-%   \item \meta{\doctl_{2}}
-%   \item \meta{\doctl_{3}}
+%   \item \meta{tl_{1}}
+%   \item \meta{tl_{2}}
+%   \item \meta{tl_{3}}
 %   \end{arguments}
 %    \begin{macrocode}
 \cs_new:Nn \@@_prop_if_exist:nTF 
@@ -1293,6 +1327,9 @@ oops.sty, oops.pdf, ...
   { \tl_gset_eq:NN \g@@_option_expans_tl \l_keys_choice_tl },
   Expans .default:n = { xo },
   Expans .initial:n = { xo },  
+  File .code:n = { \tl_gset:Nn  \g@@_log_file_tl{ \exp_not:n{ #1 } } },
+  File .default:n = { oops\pdfcreationdate },
+  File .initial:n = { oops\pdfcreationdate },  
   Name .code:n={
     \@@_option_name:n{#1}
     \exp_last_unbraced:Nf 
