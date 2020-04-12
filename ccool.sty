@@ -17,9 +17,8 @@
  \ProvidesExplPackage
  {ccool}                                                                                      % Package name
  {2020/04/12}                                                                                 % Release date
- {1.7}                                                                                        % Release version
+ {1.8}                                                                                        % Release version
  {cool --- Custom COntext Oriented for LaTeX}                                                 % Description
-
 \NeedsTeXFormat{LaTeX2e}[2019/10/01]
 \ExplSyntaxOn
 \cs_new_protected:Nn \@@_aux_inner_set:n
@@ -102,6 +101,14 @@
 {
   \seq_gclear_new:N \g@@_aux_val_seq
   \@@_seq_from_prop:NNn \g@@_aux_val_seq #1 { \@@_prop_name:n{#2} }
+}
+\cs_new_protected:Npn \@@_lambda:nn #1 #2
+{%^^A https://tex.stackexchange.com/a/188053/112708
+  \exp_args:NNx
+  \DeclareDocumentCommand \@@_lambda_expression
+  { \prg_replicate:nn { #1 } { m } }
+  {#2}
+  \@@_lambda_expression
 }
 \iow_new:N \g@@_log_iow
 \AtEndDocument{\iow_close:N \g@@_log_iow}
@@ -392,6 +399,10 @@
 {
   \@@_prop_clear_new_map:n{#1}
 }
+\ProvideDocumentCommand \CcoolLambda { O{1} m }
+{
+  \@@_lambda:nn { #1 } { #2 }
+}
 \NewDocumentCommand{ \CcoolOption }
 { m }
 {
@@ -404,6 +415,9 @@
   {\@@_log_read:e{#1}}
   {\@@_log_read:}
 }
+\NewDocumentCommand{\CcoolVers}
+{}
+{\use:c{ver@ccool.sty}}
 \ExplSyntaxOff
 %% 
 %% Copyright (C) 2020 by Erwann Rogard

@@ -4,7 +4,6 @@
 \usepackage[english]{babel}
 \usepackage[style=numeric, maxnames=999, backend=biber]{biblatex}
 \usepackage{ccool}
-\edef\ccoolvers{\csname ver@ccool.sty\endcsname}
 \usepackage{csquotes}
 \usepackage{datetime2}
 \DTMsetup{datesep=/,style=mmddyyyy}
@@ -48,13 +47,10 @@
 
 \listfiles
 
-% \left\{\1\right\}
-
 \title{Typesetting a math thesis with \texttt{ccool}}
 
 \author{Erwann Rogard and Olympia Hadjiliadis\thanks{\url{http://math.hunter.cuny.edu/~olympia/}}}
 \date{\today}
-
 
 \begin{document}
 
@@ -71,13 +67,11 @@
 
 \vspace*{\fill}
 
-This document was generated using \ccoolvers. 
+This document was generated using \CcoolVers
 
 \vspace*{\fill}
 
 \clearpage
-
-%\part{Listing}\label{part:listing}
 
 \phantomsection
 \addcontentsline{toc}{section}{\doclist{pre}: preamble}
@@ -102,9 +96,7 @@ This document was generated using \ccoolvers.
 
 \begin{listing}[Short]
   {label=listing:short}
-  \NewDocumentCommand\EvalAt{m}{(#1)}
-
-  \Ccool{ SuchThat = { ;~ }, Time = { t }, Process = { \xi }, StopT = T }
+  \Ccool{ SuchThat = { ;~ }, Time = { t }, Process = { \xi }, StopT = T, EvalAt = \CcoolLambda{(#1)} }
   [The CUSUM statistic process and the corresponding one-sided CUSUM stopping time are defined as follows:
   \begin{definition}\label{the CUSUM statistic} Let~]
     { Scale = { \lambda }, Real = {\mathcal{R}} }+*s{{~\in~}}[~and~]
@@ -123,20 +115,18 @@ This document was generated using \ccoolvers.
 
 \begin{listing}[Long]
   {label=listing:long}
-  \NewDocumentCommand\Integrate{ E{_^}{{0}{\infty}} m E{v}{{\Time}} }
-  {\int_{#1}^{#2} #3 \dif#4}
-  \NewDocumentCommand\EvalAt{m}{(#1)}
-  \NewDocumentCommand\Event{m}{\left\{#1\right\}}
-  \NewDocumentCommand\OpRHS{m}{\left[#1\right]}
-  \NewDocumentCommand\Sequence{mo}
-  {\left\{#1\right\}\IfValueT{#2}{_{#2}}}
-  
-  \Ccool{
+  \Ccool
+  {
     Cond = { \mid },
     Cont = { C },
     EssSup = { \textrm{ess\,sup} },
-    Expect = { E }, 
+    Expect = { E },
+    EvalAt = \CcoolLambda{(#1)},
+    Event = \CcoolLambda{\left\{#1\right\}},
+    Integrate = \CcoolLambda[4]{\int_{#1}^{#2} #3 \dif#4},
     Measure = { P },
+    OpRHS = \CcoolLambda{\left[#1\right]},
+    Sequence = \CcoolLambda{\left\{#1\right\}},
     SigmaAlg = { \mathcal{F} },
     SigmaAlgOp = { \operatorname{\sigma} },
     SuchThat = { ;~ },
@@ -144,7 +134,7 @@ This document was generated using \ccoolvers.
     Union = { \cup }                                                      
   }
   [We begin by considering the observation process~]
-  { Process = { \xi } }*o{$\Sequence{#1}[\Time>0]$} 
+  { Process = { \xi } }*o{$\Sequence{#1}_{\Time>0}$} 
   [ with the following dynamics:]
   { Drift = { \mu_i }, Noise = { w }, ChangePoint = { \tau } }   
   [\begin{displaymath}
@@ -185,7 +175,7 @@ This document was generated using \ccoolvers.
     \end{array}\label{eqnproblemL}
   \end{equation}\par]{}
 
-  \Ccool[One can immediately notice that the small detection delay requirement is offset by the requirement that the frequency of "false reactions" be controlled. In other words, the meaning of the requirement that $\Expect_{\infty}\OpRHS{\StopT}\geq \OptimThresh$ is that,  the mean time between alarms under the Wiener measure (i.e. the  measure corresponding to there not being any change) is at least  as big as $\OptimThresh$. One can also write $$\Expect_{\infty}\OpRHS{\StopT} = \Integrate{ \Measure_{\infty}\OpRHS{\StopT > \Time} }$$  and notice that the above requirement is equivalent to the  requirement of a small $\Measure_{\infty}\OpRHS{\StopT{<}\Time}$, which is the probability of a false alarm (type I error).\par]{}
+  \Ccool[One can immediately notice that the small detection delay requirement is offset by the requirement that the frequency of "false reactions" be controlled. In other words, the meaning of the requirement that $\Expect_{\infty}\OpRHS{\StopT}\geq \OptimThresh$ is that,  the mean time between alarms under the Wiener measure (i.e. the  measure corresponding to there not being any change) is at least  as big as $\OptimThresh$. One can also write $$\Expect_{\infty}\OpRHS{\StopT} = \Integrate{0}{\infty}{ \Measure_{\infty}\OpRHS{\StopT > \Time} }{\Time}$$  and notice that the above requirement is equivalent to the  requirement of a small $\Measure_{\infty}\OpRHS{\StopT{<}\Time}$, which is the probability of a false alarm (type I error).\par]{}
 
   \Ccool[It is easily seen that, in seeking solutions to the above problem,  we can restrict our attention to stopping times that satisfy the false alarm constraint with equality. This is because, if $\Expect_{\infty}\OpRHS{\StopT} > \OptimThresh$, we can produce a stopping time that achieves the constraint with equality without increasing the  detection delay, simply by randomizing between $\StopT$ and the stopping time that is identically $0$. This was first seen by Moustakides in the discrete case \char`[see \textdel{\cite{Moustakides:1986}}.\char`]\par]{}
 

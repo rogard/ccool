@@ -74,7 +74,7 @@ ccool.sty, and ccool.pdf.
 %<package> \ProvidesExplPackage
 %<package> {ccool}                                                                                      % Package name
 %<package> {2020/04/12}                                                                                 % Release date
-%<package> {1.7}                                                                                        % Release version
+%<package> {1.8}                                                                                        % Release version
 %<package> {cool --- Custom COntext Oriented for LaTeX}                                                 % Description
 % 
 %<*driver> 
@@ -105,6 +105,8 @@ ccool.sty, and ccool.pdf.
 \providecommand\docassign[2]{#1~$\leftarrow$~#2}
 \providecommand\docccept[1]{\textit{#1}}
 \providecommand\doccceptbool{boolean}
+\providecommand\doccceptcode{code}
+\providecommand\doccceptint{integer}
 \providecommand\doccceptgroup{local~group}
 \providecommand\doccceptkvl{keyval~list}
 \providecommand\doccceptpath{path}
@@ -163,7 +165,7 @@ ccool.sty, and ccool.pdf.
 % \fi
 % 
 % \GetFileInfo{\jobname.sty}
-% 
+% \begin{documentation}
 % \title{The \pkg{ccool} package\thanks{^^A
 % This file describes version \fileversion, last revised \filedate.^^A
 % }^^A
@@ -173,7 +175,7 @@ ccool.sty, and ccool.pdf.
 %   \date{Released \filedate}
 %   
 %   \maketitle
-%
+%   
 %   \begin{abstract} \pkg{ccool} stands for Custom COntent Oriented for \LaTeX,
 %     a concept pioneered by \pkg{cool}\cite{cool}\footnote{Whereas \pkg{cool} provided predefined macros, \pkg{ccool} is tool for making custom macros.}.
 %     This is done using a minimalist interface built upon \pkg{xparse}\cite{xparse}.\nobreak
@@ -193,16 +195,16 @@ ccool.sty, and ccool.pdf.
 %   
 %   \part{Usage}\label{part:usage}
 %   \VerbatimFootnotes
-% 
-% \setcounter{section}{0}
-% \label{usage:conv}
+%   
+%   \setcounter{section}{0}
+%   \label{usage:conv}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Convention}
 %   \section*{Convention}
 %   \begin{enumerate}
 %   \item Loosely, those of \cite{interface3} and \cite{xparse}, for example as to the meaning of \meta{\docccepttl}. 
 %   \item If unspecified, the environment in which a macro must be declared is \docenvdoc.
 %   \end{enumerate}
-%
+%   
 %   \refstepcounter{section}
 %   \label{usage:load} 
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Loading the package}
@@ -216,7 +218,7 @@ ccool.sty, and ccool.pdf.
 %     \item[Requirement] \file{ccool.sty} is in the path of the \LaTeX~engine. See \autoref{part:other}, \autoref{other:support}.
 %     \end{description}  
 %   \end{function}
-%
+%   
 %   \leavevmode
 %   \refstepcounter{section}
 %   \docsetnameref{\cs{Ccool}}
@@ -292,7 +294,7 @@ ccool.sty, and ccool.pdf.
 %     \begin{enumerate}
 %       \setcounter{enumi}{1}
 %     \item \docassign{ \cs{\meta{\pkgkey}}\docoptd{\meta{\pkgparna}}}{\meta{val_i}} defined in \docstep{val},
-%    using \nameref{usage:opt:ex} for expansion. \label{step:key}
+%       using \nameref{usage:opt:ex} for expansion. \label{step:key}
 %     \item If \nameref{usage:opt:wr}, writes the input used by \docstep{key} to \nameref{usage:opt:fi}\label{step:write}
 %     \end{enumerate}
 %   \end{description}
@@ -329,7 +331,7 @@ ccool.sty, and ccool.pdf.
 %   \docsetnameref{separators' parameter}
 %   \label{usage:par:s}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopte{s}{\pkgpars}}
-%
+%   
 %   \leavevmode
 %   \refstepcounter{subsubsection}
 %   \docsetnameref{\meta{\pkgparsi}}
@@ -349,7 +351,7 @@ ccool.sty, and ccool.pdf.
 %   \begin{description}
 %   \item[Example] |{,~}|
 %   \end{description}
-%
+%   
 %   \leavevmode
 %   \refstepcounter{subsubsection}
 %   \docsetnameref{\meta{\pkgparsiii}}
@@ -409,7 +411,22 @@ ccool.sty, and ccool.pdf.
 %     \item[Example] |\AfterEndEnvironment{theorem}{\CcoolHook}|
 %     \end{description}
 %   \end{function}
-%
+%   
+%   \leavevmode
+%   \refstepcounter{section}
+%   \docsetnameref{\cs{CcoolLambda}}
+%   \label{usage:cs:lambda}
+%   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{CcoolLambda}}
+%   \begin{function}{\CcoolLambda}
+%     \begin{syntax}
+%       \cs{CcoolLambda}\docopto{\meta{\doccceptint}}\Arg{\doccceptcode}
+%     \end{syntax}
+%     \begin{description}
+%     \item[Example] |\Ccool{ EvalAt = \CcoolLambda{(#1)} }|
+%     \item[Semantics] Creates a lambda expression with \meta{\doccceptint} arguments for \meta{\doccceptcode}
+%     \end{description}
+%   \end{function}
+%   
 %   \leavevmode
 %   \refstepcounter{section}
 %   \docsetnameref{\cs{CcoolOption}}
@@ -423,7 +440,7 @@ ccool.sty, and ccool.pdf.
 %     \item[Semantics] Set default options for \nameref{usage:cs:ccool}
 %     \end{description}  
 %   \end{function}
-%
+%   
 %   \leavevmode
 %   \refstepcounter{subsection}
 %   \docsetnameref{\pkgoptex}
@@ -445,7 +462,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Default] |ccool\pdfcreationdate|
 %   \item[Syntax] Expands to a valid \docccept{\doccceptpath}
 %   \end{description} 
-%
+%   
 %   \leavevmode
 %   \refstepcounter{subsection}
 %   \docsetnameref{\pkgoptin}
@@ -516,7 +533,7 @@ ccool.sty, and ccool.pdf.
 %     \begin{description}
 %     \item[Other] The default for \meta{\doccceptpath} is the last write-file (see \nameref{usage:par:de})
 %     \item[Semantics]\docfillblank
-%      \begin{enumerate}
+%       \begin{enumerate}
 %       \item Reads the definitions in \meta{\doccceptpath}.
 %       \item Writes to \file{ccool.log}: `read from \meta{\doccceptpath}'
 %       \end{enumerate}
@@ -524,6 +541,20 @@ ccool.sty, and ccool.pdf.
 %   \end{function}
 %   
 %   \leavevmode
+%   \refstepcounter{section}
+%   \docsetnameref{\cs{CcoolVers}}
+%   \label{usage:cs:vers}
+%   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{CcoolVers}}
+%   \begin{function}{\CcoolVers}
+%     \begin{syntax}
+%     \cs{CcoolVers}
+%     \end{syntax} 
+%     \begin{description}
+%     \item[Semantics] Expands to the package's version
+%     \end{description}  
+%   \end{function}
+%
+%       \leavevmode
 %   \refstepcounter{section}
 %   \docsetnameref{Section~Do's and dont's}
 %   \label{usage:dosdont}
@@ -545,11 +576,11 @@ ccool.sty, and ccool.pdf.
 %     \begin{itemize}
 %     \item[\docissuedont] \docopto{[a, b)}.
 %     \item[\docissuedo] |{{[}a, b{)}}|
-%   \end{itemize}
+%     \end{itemize}
 %   \item \docfillblank
 %     \begin{itemize}
-%     \item[\docissuedont] | F = \cal F |.
-%     \item[\docissuedo] | F = \cal{F} | or | F = \mathcal{F} |
+%     \item[\docissuedont] |\Ccool{ F = \cal F }|.
+%     \item[\docissuedo] | \Ccool{ F = \cal{F} } | or | \Ccool{ F = \mathcal{F} } |
 %     \end{itemize}
 %   \item Also see \autoref{part:other}, \autoref{other:issue}
 %   \end{enumerate}
@@ -570,18 +601,23 @@ ccool.sty, and ccool.pdf.
 %   outer arc=0pt,
 %   boxrule=1pt,
 %   listing and text,
-%   ^^Atext only, ^^A% only for bech.tex
 %   #2
 % }
-%   ^^A\pagestyle{empty} ^^A% only for bench.tex
-%   
+%
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{vers}. Version.}
+%   \begin{listing}[]
+%     {label=listing:vers}
+%     \CcoolVers
+%   \end{listing}
+%
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{pre}. Preamble.}
-%   \begin{listing}[Preamble\footnote{Check the documentation portion of the source file, |ccool.dtx|, for exhaustive settings}]
+%   \begin{listing}[Preamble\footnote{These are the settings to replicate the listings.
+%     For exhaustivity, check the \env{documentation} section of \pkg{ccool}\texttt{.dtx}.}]
 %     {label=listing:pre, listing only}
 %     \usepackage{amsmath, amsthm, commath}
 %     \usepackage[T1]{fontenc}% \char`[
 %   \end{listing}
-%
+%   
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{test:i}. Separators.}
 %   \begin{listing}[Separators]
 %     {label=listing:test:i}
@@ -596,7 +632,7 @@ ccool.sty, and ccool.pdf.
 %     { X = x, Y = y, Z = z }*s{{\ \&\ }{,\ }}[\\]
 %     { X = x, Y = y, Z = z }*s{{\ \&\ }{,\ }{\ \&\ }}\\
 %   \end{listing}
-%
+%   
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{test:ii}. Hello, world!}
 %   \begin{listing}[Hello, world!\footnote{If this looks arcane, it's for the purpose of testing.}]
 %     {label=listing:test:ii}
@@ -646,83 +682,101 @@ ccool.sty, and ccool.pdf.
 %     {}
 %     \CcoolOption{ Write = \BooleanFalse }
 %   \end{listing}
-% 
-%    \phantomsection\addcontentsline{toc}{section}{\doclist{proba:ii}. \doclist{proba:i} read from file.}
-%    \begin{listing}[\doclist{proba:i} read from file.]
-%        {label=listing:proba:ii}
-%           \CcoolRead \tab $\Omega$ $\Field$ $\Meas$
-%      \end{listing}
-%      
-%     ^^A%{OffeneMenge={D}, Ci={C^{1}}, Strecke={[x_0,x]}} ^^A% Hook 2.a
-%     ^^A%Strecke={\char`[x_0,x\char`]}  % PASS % Hook 2.b
-%     ^^A%Strecke={\[x_0,x\]}            % FAIL % Hook 2.c
-%     \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:i}. Mittelwertsatz f\"ur $n$ Variable.}
-%     \begin{listing}[Mittelwertsatz f\"ur $n$ Variable]
-%      {label=listing:mvt:i}
-%       \CcoolOption{ Write = \BooleanTrue }
-%       \newtheorem{theorem}{Theorem}
-%       \AfterEndEnvironment{theorem}{\CcoolHook}
-%       \Ccool i{\mathbb{#1}}
-%       { N = { N } , R = { R } }+[]
-%       { Grad = { \operatorname{grad} } }+
-%       [\begin{theorem}
-%         [Mittelwertsatz f\"ur $n$ Variable]Es~sei~]
-%         { OffMenge = {D}, Ci = {C^{1}}, Strecke = { [x_0,x] } }+
-%         [$n\in\N$,~$\OffMenge\subseteq\N^n$ eine offene Menge und $f\in\Ci(\OffMenge,\R)$.
-%         Dann gibt es auf jeder Strecke $\Strecke\subset\OffMenge$ einen Punkt $\xi\in\Strecke$,~]
-%         { Steig = { \frac{ f(x)-f(x_0) }{ x-x_0 } }, Punkt = { \xi } }+
-%         [so dass gilt
-%         \begin{equation*}
-%           \Steig = \Grad f(\Punkt)^{\top}
-%         \end{equation*}
-%       \end{theorem}]
-%       {}
-%       (Check: $\N$, $\Punkt$)
-%       \CcoolOption{ Write = \BooleanFalse }
-%     \end{listing}
 %   
-%     \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:ii}. \doclist{mvt:i} read from file.}
-%     \begin{listing}[\doclist{mvt:i} read from file.]
-%       {label=listing:mvt:ii}
-%       \CcoolRead \tab $\N$ $\R$ $\OffMenge$ $\Ci$ $\Strecke$ 
-%     \end{listing}
-%
-%     \phantomsection\addcontentsline{toc}{section}{\doclist{cusum}. CUSUM statistic}
-%     \begin{listing}[CUSUM statistic\cite{ccool-thesis}]
-%       {label=listing:cusum}
-%       \newtheorem{definition}{Definition}
-%       \AfterEndEnvironment{definition}{\CcoolHook}
-%       \NewDocumentCommand\EvalAt{m}{(#1)}
-%       
-%       \Ccool{ SuchThat = { ;~ }, Time = { t }, Process = { \xi }, StopT = T }
-%       [The CUSUM statistic process and the corresponding one-sided CUSUM stopping time are defined as follows:
-%       \begin{definition}\label{the CUSUM statistic} Let~]
-%         { Scale = { \lambda }, Real = {\mathcal{R}} }+*s{{~\in~}}[~and~]
-%         { CUSUMthresh = { \nu } }+*o{$#1\in\Real^{+}$.}
-%         [~Define the following processes:]
-%         { LogWald = { u },  CUSUMst = { \StopT_{c} }, CUSUM = { y }, LogWaldInf = { m } }+
-%         [\begin{enumerate}
-%         \item{$\LogWald_{\Time}\EvalAt{ \Scale } = \Scale\Process_{\Time} - \frac{1}{2}\Scale^2\Time$;
-%           $\LogWaldInf_{\Time}\EvalAt{ \Scale } = \inf_{ 0\le s \le \Time }\CUSUM_{s} \EvalAt{ \Scale }$.}
-%         \item{$\CUSUM_{\Time}\EvalAt{ \Scale } = \LogWaldInf_{\Time}\EvalAt{ \Scale } - \LogWald_{\Time}\EvalAt{ \Scale }\ge0$, which is the CUSUM statistic process.}
-%         \item{$\CUSUMst \EvalAt{ \Scale, \LogWaldInf } = \inf\left[ \Time \ge 0 \SuchThat \CUSUM_{\Time}\EvalAt{\Scale} \ge \LogWaldInf \right]$, which is the CUSUM stopping time.} \end{enumerate}\end{definition}\par]{}
-%
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{proba:ii}. \doclist{proba:i} read from file.}
+%   \begin{listing}[\doclist{proba:i} read from file.]
+%     {label=listing:proba:ii}
+%     \CcoolRead \tab $\Omega$ $\Field$ $\Meas$
+%   \end{listing}
+%   
+%   ^^A%{OffeneMenge={D}, Ci={C^{1}}, Strecke={[x_0,x]}} ^^A% Hook 2.a
+%   ^^A%Strecke={\char`[x_0,x\char`]}  % PASS % Hook 2.b
+%   ^^A%Strecke={\[x_0,x\]}            % FAIL % Hook 2.c
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:i}. Mittelwertsatz f\"ur $n$ Variable.}
+%   \begin{listing}[Mittelwertsatz f\"ur $n$ Variable]
+%     {label=listing:mvt:i}
+%     \CcoolOption{ Write = \BooleanTrue }
+%     \newtheorem{theorem}{Theorem}
+%     \AfterEndEnvironment{theorem}{\CcoolHook}
+%     \Ccool i{\mathbb{#1}}
+%     { N = { N } , R = { R } }+[]
+%     { Grad = { \operatorname{grad} } }+
+%     [\begin{theorem}
+%       [Mittelwertsatz f\"ur $n$ Variable]Es~sei~]
+%       { OffMenge = {D}, Ci = {C^{1}}, Strecke = { [x_0,x] } }+
+%       [$n\in\N$,~$\OffMenge\subseteq\N^n$ eine offene Menge und $f\in\Ci(\OffMenge,\R)$.
+%       Dann gibt es auf jeder Strecke $\Strecke\subset\OffMenge$ einen Punkt $\xi\in\Strecke$,~]
+%       { Steig = { \frac{ f(x)-f(x_0) }{ x-x_0 } }, Punkt = { \xi } }+
+%       [so dass gilt
+%       \begin{equation*}
+%         \Steig = \Grad f(\Punkt)^{\top}
+%       \end{equation*}
+%     \end{theorem}]
+%     {}
+%     (Check: $\N$, $\Punkt$)
+%     \CcoolOption{ Write = \BooleanFalse }
+%   \end{listing}
+%   
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:ii}. \doclist{mvt:i} read from file.}
+%   \begin{listing}[\doclist{mvt:i} read from file.]
+%     {label=listing:mvt:ii}
+%     \CcoolRead \tab $\N$ $\R$ $\OffMenge$ $\Ci$ $\Strecke$ 
+%   \end{listing}
+%   
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{lambda:i}. Lambda expression.}
+%   \begin{listing}[Lambda expression.]
+%     {label=listing:lambda:i}
+%     \CcoolOption{ Write = \BooleanTrue }
+%     \Ccool{ EvalAt = \CcoolLambda{(#1)}, ApplyOp = \CcoolLambda[2]{#1[#2]} }
+%     [Supposons une fonction $f\EvalAt{t}$, et \'etudions le probl\`eme o\`u la fonctionnelle $\ApplyOp{S}{f}$ est donn\'ee par\dots]{}
+%     \CcoolOption{ Write = \BooleanFalse }
+%   \end{listing}
+%   
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{lambda:ii}. \doclist{lambda:i} read from file.}
+%   \begin{listing}[Lambda expression.]
+%     {label=listing:lambda:ii}
+%     \CcoolRead \tab $f\EvalAt{t}$, $\ApplyOp{S}{f}$
+%   \end{listing}
+%   
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{cusum:i}. CUSUM statistic.}
+%   \begin{listing}[CUSUM statistic\cite{ccool-thesis}]
+%     {label=listing:cusum:i}
+%     \newtheorem{definition}{Definition}
+%     \AfterEndEnvironment{definition}{\CcoolHook}
+%     
+%     \CcoolOption{ Write = \BooleanTrue }
+%     \Ccool{ SuchThat = { ;~ }, Time = { t }, Process = { \xi }, StopT = { T }, EvalAt = \CcoolLambda{(#1)}  }
+%     [The CUSUM statistic process and the corresponding one-sided CUSUM stopping time are defined as follows:
+%     \begin{definition}\label{the CUSUM statistic}. Let~]
+%       { Scale = { \lambda }, Real = {\mathcal{R}} }+*s{{~\in~}}[~and~]
+%       { CUSUMthresh = { \nu } }+*o{$#1\in\Real^{+}$.}
+%       [~Define the following processes:]
+%       { LogWald = { u },  CUSUMst = { \StopT_{c} }, CUSUM = { y }, LogWaldInf = { m } }+
+%       [\begin{enumerate}
+%       \item{$\LogWald_{\Time}\EvalAt{ \Scale } = \Scale\Process_{\Time} - \frac{1}{2}\Scale^2\Time$;
+%         $\LogWaldInf_{\Time}\EvalAt{ \Scale } = \inf_{ 0\le s \le \Time }\CUSUM_{s} \EvalAt{ \Scale }$.}
+%       \item{$\CUSUM_{\Time}\EvalAt{ \Scale } = \LogWaldInf_{\Time}\EvalAt{ \Scale } - \LogWald_{\Time}\EvalAt{ \Scale }\ge0$, which is the CUSUM statistic process.}
+%       \item{$\CUSUMst \EvalAt{ \Scale, \LogWaldInf } = \inf\left[ \Time \ge 0 \SuchThat \CUSUM_{\Time}\EvalAt{\Scale} \ge \LogWaldInf \right]$, which is the CUSUM stopping time.} \end{enumerate}\end{definition}\par]{}
+%     
 %     (Check: $\Scale$, $\CUSUM$)
-%     \end{listing}
-
-%^^A   
-%^^A   ^^A   \StopEventually{^^A
-%^^A   ^^A   \PrintChanges
-%^^A   ^^A   \PrintIndex
-%^^A   ^^A }
+%     \CcoolOption{ Write = \BooleanFalse }
+%   \end{listing}
+%   
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{cusum:ii}. \doclist{cusum:i} read from file.}
+%   \begin{listing}[\doclist{cusum:i} read from file.]
+%     {label=listing:cusum:ii}
+%     \CcoolRead \tab $\Time $ $\Process$ $\Scale$ $\Real$ $\CUSUMthresh$ $\LogWald$  $\CUSUMst$ $\CUSUM$ $\LogWaldInf$ 
+%   \end{listing}
+%   
 %   \clearpage
 %   \part{Other}\label{part:other}
 %   
 %   \section{Acknowledgment}\label{other:acknowl} 
 %   
-%   This work has benefited from Q\&A's from the \LaTeX community, see here: \url{https://tex.stackexchange.com/users/112708/erwann?tab=questions}.
-%   Specific references are made in \autoref{part:impl}.
-%   \doclist{proba:i} and \doclist{proba:ii} are from \cite{shir95}.
+%   This work has benefited from Q\&A's from the \LaTeX community\cite{stackex-erw}.
+%   The implementations of \nameref{usage:cs:lambda} and \nameref{usage:opt:wr} are based on answers by
+%   \href{https://tex.stackexchange.com/users/17423/sean-allred}{\@{}sean-allred}\cite{stackex-188053} and
+%   \href{https://tex.stackexchange.com/users/73317/frougon}{\@{}frougon}\cite{stackex-536597}, respectively.
 %   \doclist{mvt:i} is from \pkg{tcolbox}\cite[17.3]{tcolbox}.
 %   
 %   \section{Install}\label{other:install}
@@ -732,98 +786,109 @@ ccool.sty, and ccool.pdf.
 %   \section{Issue}\label{other:issue}
 %   
 %   \begin{enumerate}
-%       \item
-%         \begin{description}
-%         \item[\docissuedont] |Inner={\{####1\}|
-%         \item[\docissuesymp] \cs{CcoolRead} fails
-%         \item[\docissuedo] |Inner={\char`{####1\char`}}|
-%         \end{description}
-%       \end{enumerate}
-%       
-%       \section{Support}\label{other:support}
-%       
-%       This package is available from \url{https://www.ctan.org/pkg/ccool} and \url{https://github.com/rogard/ccool}.
-%       
-%       \section{Testing}\label{other:testing}
-%       
-%       It's not possible to check the expansion of a certain class of macros against predefined values\cite{534100}. 
-%       Instead, one can check that \autoref{part:listing},
-%       as generated in \autoref{other:install} on one's own machine,
-%       agrees with \file{bench.pdf} available at \url{https://github.com/rogard/ccool},
+%   \item
+%     \begin{description}
+%     \item[\docissuedont] |Inner={\{####1\}|
+%     \item[\docissuesymp] \cs{CcoolRead} fails
+%     \item[\docissuedo] |Inner={\char`{####1\char`}}|
+%     \end{description}
+%   \end{enumerate}
+%   
+%   \section{Support}\label{other:support}
+%   
+%   This package is available from \url{https://www.ctan.org/pkg/ccool} and \url{https://github.com/rogard/ccool}.
+%   
+%   \section{Testing}\label{other:testing}
 %
-%       \begin{thebibliography}{1}
-%       \bibitem{shir95} A.N. Shiryaev  {\em Probability} Springer, 1995
-%       \bibitem{cool} Nick Setzer {\em The \pkg{cool} package}, 2005, \url{https://www.ctan.org/pkg/cool}
-%       \bibitem{oh-2005} Olympia Hadjiliadis
-%         {\em Change--point detection of two--sided alternatives in the Brownian motion model and its connection
-%         to the gambler's ruin problem with relative wealth perception}. PhD thesis. Columbia University, 2005
-%       \bibitem{interface3} The \LaTeX3 Project Team {\em The \LaTeX3 interfaces}, 2019,
-%         \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3kernel/interface3.pdf}
-%       \bibitem{tcolbox} Thomas F. Sturm {\em The \pkg{tcolorbox} package}, 2019,
-%         \url{http://www.texdoc.net/texmf-dist/doc/latex/tcolorbox/tcolorbox.pdf}
-%       \bibitem{xparse} The \LaTeX3 Project Team {\em The \pkg{xparse} package}, 2020,
-%         \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3packages/xparse.pdf}
-%       \bibitem{ccool-thesis} Erwann Rogard and Olympia Hadjiliadis {\em Typesetting a math thesis with \pkg{ccool}}, 2020,
-%       \url{https://github.com/rogard/ccool/blob/master/thesis.pdf}
-%       \bibitem{534100} \url{https://tex.stackexchange.com/a/534100/112708}
-%       \end{thebibliography}
-%       
-%       \changes{\docvers{1}{0}}{2020/03/08}{Initial version}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Revamped: much of the implementation}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \Arg{kvl_{2}}~by~\docoptd{kvl_{2}}~given that option type \texttt{G} not recommended\cite{xparse}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \cs{OopsOptions}~by~\cs{OopsOption}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \docarg{GenericObject}~by~\docarg{Name}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \docarg{Separators}~by~\docarg{Separ}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Added:\cs{OopsTest}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Added:\cs{OopsRestore}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Added: \docarg{Save}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Deleted: Listing 1-5 from \docvers{1}{0}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Added: Listing~1., 2., 3., 4., 6., and 9.}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Fixed: apparent anomaly in \docvers{1}{0}'s Listing~4, see \doclist{test:i}}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Added: optional |*| to \cs{OopsNew} as instruction to expand \pkgparde}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{OopsClear}\Arg{\pkgparna} by \cs{OopsClear}\docopto{\meta{\doccceptkvl}}}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \meta{kvl_{2}}~and~\meta{code_{2}}}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \cs{OopsTest}}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: Listing~2-3 from \docvers{1}{1}.}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Save} by \cs{Write}}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Restore} by \cs{Read}}
-%       \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \cs{OopsNew} by \cs{Oops}}
-%       \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \Arg{\pkgparna} and \docopto{\meta{\pkgparna}} by \docoptd{\meta{\pkgparna}} }
-%       \changes{\docvers{1}{4}}{2020/04/10}{Replaced: \docopte{s}{\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
-%       by \docopte{s}{\Arg{\pkgparsi}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}}
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added:optional |+| to \cs{OopsNew} to make side effects presist beyond local group}
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{OopsHook}}
-%       \changes{\docvers{1}{4}}{2020/04/10}{Deleted: Listing~1., and 2. }
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added: Listing~1., 2., and 3. }
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \docarg{Expans} (for debugging' sake, but...) }
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \autoref{usage:dosdont} }
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{OopsDebug} }
-%       \changes{\docvers{1}{5}}{2020/04/10}{Deleted: dependence on \pkg{datetime} }
-%       \changes{\docvers{1}{5}}{2020/04/10}{Added: \pkgoptfi }
-%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \pkg{oops} to \pkg{ccool} (better describes the purpose) }
-%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{Oops} to \cs{Ccool}}
-%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsClear} to \cs{CcoolClear}}
-%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsDebug} to \cs{CcoolDebug}}
-%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsHook} to \cs{CcoolHook}}
-%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsOption} to \cs{CcoolOption}}
-%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsRead} to \cs{CcoolRead}}
-%       \changes{\docvers{1}{6}}{2020/04/10}{Added: \doclist{pre} (preamble) }
-%       \changes{\docvers{1}{7}}{2020/04/11}{Added: \doclist{cusum} (CUSUM) }
-%       \changes{\docvers{1}{7}}{2020/04/11}{Added: Legends to listings }
-%       \changes{\docvers{1}{7}}{2020/04/11}{Added: Co-author}
-%       \changes{\docvers{1}{7}}{2020/04/11}{Removed: \cs{CcoolDebug} }
-%       \changes{\docvers{1}{7}}{2020/04/11}{Removed: Listing~5 from \docvers{1}{6} }
-%
-%       \clearpage
-%       \PrintChanges
-%       \PrintIndex
-%       \part{Implementation}\label{part:impl}
-%       \StopEventually{}
-%       \begin{implementation}
-%         
-%         \iffalse
-%<*package>         
-%         \fi
+%   \begin{itemize}
+%   \item[General] Not possible to compile-check the expansion of a certain class of macros against predefined values\cite{stackex-534100}. 
+%     Instead, one can visually check \autoref{part:listing}, as generated in \autoref{other:install} on one's own machine,
+%     against that \href{https://github.com/rogard/ccool}{of the repository} for the same version.
+%   \item[Unix] \pkg{ccool} v1.8 satisfactory on
+%     \begin{enumerate}
+%     \item |Linux version 4.15.0-20-generic (buildd@lgw01-amd64-039)|\footnote{\texttt{\${}cat /proc/version}}, with
+%     \item |pdfTeX 3.14159265-2.6-1.40.20 (TeX Live 2019)|
+%     \end{enumerate}
+%   \end{itemize}
+%   
+%   \begin{thebibliography}{1}
+%   \bibitem{cool} Nick Setzer {\em The \pkg{cool} package}, 2005, \url{https://www.ctan.org/pkg/cool}
+%   \bibitem{interface3} The \LaTeX3 Project Team {\em The \LaTeX3 interfaces}, 2019,
+%     \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3kernel/interface3.pdf}
+%   \bibitem{tcolbox} Thomas F. Sturm {\em The \pkg{tcolorbox} package}, 2019,
+%     \url{http://www.texdoc.net/texmf-dist/doc/latex/tcolorbox/tcolorbox.pdf}
+%   \bibitem{xparse} The \LaTeX3 Project Team {\em The \pkg{xparse} package}, 2020,
+%     \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3packages/xparse.pdf}
+%   \bibitem{ccool-thesis} Erwann Rogard and Olympia Hadjiliadis {\em Typesetting a math thesis with \pkg{ccool}}, 2020,
+%     \url{https://github.com/rogard/ccool/blob/master/thesis.pdf}
+%   \bibitem{stackex-erw} Erwann Rogard's questions at \href{https://tex.stackexchange.com}{tex.stackexchange.com}, \url{https://tex.stackexchange.com/users/112708/erwann?tab=questions}
+%   \bibitem{stackex-188053} ``How to create lambda expressions?'', \url{https://tex.stackexchange.com/a/188053/112708}
+%   \bibitem{stackex-534100} ``You can only carry out a string comparison for expandable material.'', \url{https://tex.stackexchange.com/a/534100/112708}
+%   \bibitem{stackex-536597} ``Checking a function's expansion against a string'', \url{https://tex.stackexchange.com/questions/536597}
+%   \end{thebibliography}
+%   
+%   \changes{\docvers{1}{0}}{2020/03/08}{Initial version}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Revamped: much of the implementation}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \Arg{kvl_{2}}~by~\docoptd{kvl_{2}}~given that option type \texttt{G} not recommended\cite{xparse}}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \cs{OopsOptions}~by~\cs{OopsOption}}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \docarg{GenericObject}~by~\docarg{Name}}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \docarg{Separators}~by~\docarg{Separ}}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Added:\cs{OopsTest}}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Added:\cs{OopsRestore}}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Added: \docarg{Save}}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Deleted: Listing 1-5 from \docvers{1}{0}}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Added: Listing~1., 2., 3., 4., 6., and 9.}
+%   \changes{\docvers{1}{1}}{2020/04/04}{Fixed: apparent anomaly in \docvers{1}{0}'s Listing~4, see \doclist{test:i}}
+%   \changes{\docvers{1}{2}}{2020/04/06}{Added: optional |*| to \cs{OopsNew} as instruction to expand \pkgparde}
+%   \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{OopsClear}\Arg{\pkgparna} by \cs{OopsClear}\docopto{\meta{\doccceptkvl}}}
+%   \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \meta{kvl_{2}}~and~\meta{code_{2}}}
+%   \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \cs{OopsTest}}
+%   \changes{\docvers{1}{2}}{2020/04/06}{Deleted: Listing~2-3 from \docvers{1}{1}.}
+%   \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Save} by \cs{Write}}
+%   \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Restore} by \cs{Read}}
+%   \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \cs{OopsNew} by \cs{Oops}}
+%   \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \Arg{\pkgparna} and \docopto{\meta{\pkgparna}} by \docoptd{\meta{\pkgparna}} }
+%   \changes{\docvers{1}{4}}{2020/04/10}{Replaced: \docopte{s}{\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
+%   by \docopte{s}{\Arg{\pkgparsi}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}}
+%   \changes{\docvers{1}{4}}{2020/04/10}{Added:optional |+| to \cs{OopsNew} to make side effects presist beyond local group}
+%   \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{OopsHook}}
+%   \changes{\docvers{1}{4}}{2020/04/10}{Deleted: Listing~1., and 2. }
+%   \changes{\docvers{1}{4}}{2020/04/10}{Added: Listing~1., 2., and 3. }
+%   \changes{\docvers{1}{4}}{2020/04/10}{Added: \docarg{Expans} (for debugging' sake, but...) }
+%   \changes{\docvers{1}{4}}{2020/04/10}{Added: \autoref{usage:dosdont} }
+%   \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{OopsDebug} }
+%   \changes{\docvers{1}{5}}{2020/04/10}{Deleted: dependence on \pkg{datetime} }
+%   \changes{\docvers{1}{5}}{2020/04/10}{Added: \pkgoptfi }
+%   \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \pkg{oops} to \pkg{ccool} (better describes the purpose) }
+%   \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{Oops} to \cs{Ccool}}
+%   \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsClear} to \cs{CcoolClear}}
+%   \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsDebug} to \cs{CcoolDebug}}
+%   \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsHook} to \cs{CcoolHook}}
+%   \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsOption} to \cs{CcoolOption}}
+%   \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsRead} to \cs{CcoolRead}}
+%   \changes{\docvers{1}{6}}{2020/04/10}{Added: \doclist{pre} (preamble) }
+%   \changes{\docvers{1}{7}}{2020/04/11}{Added: \doclist{cusum:i} (CUSUM) }
+%   \changes{\docvers{1}{7}}{2020/04/11}{Added: Legends to listings }
+%   \changes{\docvers{1}{7}}{2020/04/11}{Added: Co-author}
+%   \changes{\docvers{1}{7}}{2020/04/11}{Deleted: \cs{CcoolDebug} }
+%   \changes{\docvers{1}{7}}{2020/04/11}{Deleted: Listing~5 from \docvers{1}{6} }
+%   \changes{\docvers{1}{8}}{2020/04/12}{Added: \cs{CcoolLambda} }
+%   \changes{\docvers{1}{8}}{2020/04/12}{Added: \doclist{lambda:i}, \doclist{lambda:ii} }
+%   \changes{\docvers{1}{8}}{2020/04/12}{Added: \cs{CcoolVers} }
+%   \changes{\docvers{1}{8}}{2020/04/12}{Added: \doclist{vers} }
+%   
+%   \clearpage
+%   \StopEventually{
+%   \PrintChanges
+%   \PrintIndex
+% }
+% \end{documentation}
+% \begin{implementation}
+%     \part{Implementation}\label{part:impl}
+%     
+%     \iffalse
+%<*package>     
+%     \fi
 %    \begin{macrocode}
 %<@@=ccool>      
 \NeedsTeXFormat{LaTeX2e}[2019/10/01]
@@ -993,6 +1058,19 @@ ccool.sty, and ccool.pdf.
 {
   \seq_gclear_new:N \g@@_aux_val_seq
   \@@_seq_from_prop:NNn \g@@_aux_val_seq #1 { \@@_prop_name:n{#2} } 
+}
+%    \end{macrocode}
+% \end{macro}
+% \section{\texttt{lambda}}
+% \begin{macro}{\@@_lambda:nn}
+%    \begin{macrocode}
+\cs_new_protected:Npn \@@_lambda:nn #1 #2 
+{%^^A https://tex.stackexchange.com/a/188053/112708
+  \exp_args:NNx 
+  \DeclareDocumentCommand \@@_lambda_expression 
+  { \prg_replicate:nn { #1 } { m } }
+  {#2}
+  \@@_lambda_expression
 }
 %    \end{macrocode}
 % \end{macro}
@@ -1477,6 +1555,14 @@ ccool.sty, and ccool.pdf.
 }
 %    \end{macrocode}
 % \end{macro}
+% \begin{macro}{\CcoolLambda}
+%    \begin{macrocode}
+\ProvideDocumentCommand \CcoolLambda { O{1} m }
+{
+  \@@_lambda:nn { #1 } { #2 }
+}
+%    \end{macrocode}
+% \end{macro}
 % \begin{macro}{\CcoolOption}
 %    \begin{macrocode}
 \NewDocumentCommand{ \CcoolOption }
@@ -1495,6 +1581,13 @@ ccool.sty, and ccool.pdf.
   {\@@_log_read:e{#1}}
   {\@@_log_read:}
 }
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\CcoolVers}
+%    \begin{macrocode}
+\NewDocumentCommand{\CcoolVers}
+{}
+{\use:c{ver@ccool.sty}}
 %    \end{macrocode}
 % \end{macro}
 % \section{Misc}
