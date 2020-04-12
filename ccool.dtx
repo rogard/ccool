@@ -182,13 +182,14 @@ ccool.sty, and ccool.pdf.
 %     ~Specifically, \nameref{usage:cs:ccool}\docoptd{\meta{name}} begins a series of instructions
 %     alternating between `text' and macro definitions, that themselves optionally expand using predefined or inline rules.
 %     For example,\begin{Verbatim}[breaklines=true]
-%       \Ccool<Math>[Let~]i{\mathbb{#1}}{ Nat = N, Real = R }*s{{~and~}}
+%       \Ccool<Math>[Let~]
+%       i{\mathbb{#1}}{ Nat = N, Real = R }*s{{~\rm{and}~}}
 %       [~denote the natural and real numbers.]{}
 %     \end{Verbatim}
 %     expands to: ``\Ccool<Math>[Let~]i{\mathbb{#1}}{Nat = N, Real = R}*s{{~\rm{and}~}}[~denote the natural and real numbers.]{}''
 %     As a side effect, |$\Nat<Math>$|~encodes~``$\Nat<Math>$'' (and likewise for |\Real|). \pkgoptnad~being the default for \meta{name}, |<Math>| can be dropped. 
 %     Optionally, the macros can be written to a file, and read, which
-%     can be useful for typesetting documents sharing the same notation.
+%     can be useful for typesetting documents sharing the same notation. 
 %   \end{abstract}
 %   
 %   \tableofcontents 
