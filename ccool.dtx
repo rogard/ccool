@@ -5,7 +5,7 @@
 %</internal> 
 %<*readme> 
 ----------------------------------------------------------------
-##### ccool --- A tool for encoding mathematical notation
+##### ccool --- Custom COntext Oriented for LaTeX
 - Source repository: https://github.com/rogard/ccool
 - Released under the LaTeX Project Public License v1.3c or later
 - See http://www.latex-project.org/lppl.txt
@@ -25,7 +25,7 @@
 \askforoverwritefalse
 \preamble
 ----------------------------------------------------------------------------
-ccool --- A tool for encoding mathematical notation
+ccool --- Custom COntext Oriented for LaTeX
 Released under the LaTeX Project Public License v1.3c or later
 See http://www.latex-project.org/lppl.txt
 ----------------------------------------------------------------------------
@@ -46,7 +46,7 @@ This work is "maintained" (as per LPPL maintenance status) by
 Erwann Rogard.
 
 This work consists of the file ccool.dtx and the derived files:
-ccool.sty, ccool.pdf, ...
+ccool.sty, and ccool.pdf.
 
 \endpostamble
 \generate{
@@ -73,14 +73,14 @@ ccool.sty, ccool.pdf, ...
 %<package> \RequirePackage{xparse}[2019/05/28]
 %<package> \ProvidesExplPackage
 %<package> {ccool}                                                                                      % Package name
-%<package> {2020/04/10}                                                                                 % Release date
-%<package> {1.6}                                                                                        % Release version
-%<package> {A tool for encoding mathematical notation}                                                  % Description
+%<package> {2020/04/12}                                                                                 % Release date
+%<package> {1.7}                                                                                        % Release version
+%<package> {cool --- Custom COntext Oriented for LaTeX}                                                 % Description
 % 
 %<*driver> 
 \documentclass[full]{l3doc}
 \usepackage{amsmath, amssymb}
-\usepackage{babel}
+\usepackage[english]{babel}
 \usepackage{bookmark}
 \usepackage{fancyvrb}
 \usepackage[T1]{fontenc}% \char`[
@@ -90,6 +90,9 @@ ccool.sty, ccool.pdf, ...
 \usepackage{tabto}
 \usepackage{tcolorbox}
 \tcbuselibrary{listings, breakable}
+\makeatletter
+\newcommand*{\docsetnameref}{\def\@currentlabelname}%https://tex.stackexchange.com/questions/537751
+\makeatother
 \ExplSyntaxOn
 \tl_gset:Nn \partname {Part}
 \ExplSyntaxOff
@@ -132,7 +135,6 @@ ccool.sty, ccool.pdf, ...
 \providecommand\pkgparhe{tl$_{2}$}%head
 \providecommand\pkgparin{code$_{1}$}%inner
 \providecommand\pkgparna{tl$_{1}$}%name
-\providecommand\pkgparnad{\docarg{Math}}%name default
 \providecommand\pkgparou{code$_{2}$}%outer
 \providecommand\pkgpars{\Arg{\pkgparsi}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}%separ
 \providecommand\pkgparsi{tl$_{3}$}
@@ -145,6 +147,7 @@ ccool.sty, ccool.pdf, ...
 \providecommand\pkgoptfi{\docarg{File}}
 \providecommand\pkgoptin{\docarg{Inner}}
 \providecommand\pkgoptna{\docarg{Name}}
+\providecommand\pkgoptnad{\docarg{Math}}%default
 \providecommand\pkgoptou{\docarg{Outer}}
 \providecommand\pkgoptwr{\docarg{Write}}
 \providecommand\pkgoptse{\docarg{Separ}}
@@ -161,29 +164,28 @@ ccool.sty, ccool.pdf, ...
 % 
 % \GetFileInfo{\jobname.sty}
 % 
-% \title{^^A
-% \pkg{ccool}, a package for encoding mathematical notation\thanks{^^A
+% \title{The \pkg{ccool} package\thanks{^^A
 % This file describes version \fileversion, last revised \filedate.^^A
 % }^^A
 % }
-%   \author{Erwann Rogard\thanks{firstname dot lastname AusTria gmail dot com}}
+%   \author{Erwann Rogard\thanks{firstname dot lastname AusTria gmail dot com}~and~Olympia Hadjiliadis\thanks{http://math.hunter.cuny.edu/~olympia/}}
 %   
 %   \date{Released \filedate}
 %   
 %   \maketitle
 %
-%   \begin{abstract}\pkg{ccool}~is a package for \LaTeX, for encoding mathematical definitions in macros that
-%     retain the meaning thereof (\cs{R} rather than |$\mathbb{R}$|), the idea behind \pkg{cool}\cite{cool}. However, here,
-%    it is entirely up to the user to define these macros, hence the prefix `c'\textins{ustom}.
-%   This is done using a minimalist interface built upon \pkg{xparse}\cite{xparse}. 
-%     Specifically, \cs{Ccool}\docoptd{\meta{object}} begins a series of instructions
-%     alternating between `text' and definitions, that themselves optionally expand using predefined or inline rules.
+%   \begin{abstract} \pkg{ccool} stands for Custom COntent Oriented for \LaTeX,
+%     a concept pioneered by \pkg{cool}\cite{cool}\footnote{Whereas \pkg{cool} provided predefined macros, \pkg{ccool} is tool for making custom macros.}.
+%     This is done using a minimalist interface built upon \pkg{xparse}\cite{xparse}.\nobreak
+%     ~Specifically, \nameref{usage:cs:ccool}\docoptd{\meta{name}} begins a series of instructions
+%     alternating between `text' and instructions, that themselves optionally expand using predefined or inline rules.
 %     For example,\begin{Verbatim}[breaklines=true]
-%       \Ccool<Math>[Let~]{Space=\Omega}*[~denote the sample space]{}
+%       \Ccool<Math>[Let~]i{\mathbb{#1}}{ Nat = N, Real = R }*s{{~and~}}
+%       [~denote the natural and real numbers.]{}
 %     \end{Verbatim}
-%          expands to: ``\Ccool<Math>[Let~]{Space=\Omega}*[~denote the sample space]{}''.
-%          As a side effect, |$\Space<Math>$| encodes``$\Space<Math>$''. \pkgparnad~being the default for \meta{object}, it can be dropped. 
-%     Optionally, the definitions can be written to a file, and restored, which
+%     expands to: ``\Ccool<Math>[Let~]i{\mathbb{#1}}{Nat = N, Real = R}*s{{~\rm{and}~}}[~denote the natural and real numbers.]{}''
+%     As a side effect, |$\Nat<Math>$|~encodes~``$\Nat<Math>$'' (and likewise for |\Real|). \pkgoptnad~being the default for \meta{name}, |<Math>| can be dropped. 
+%     Optionally, the macros can be written to a file, and restored, which
 %     can be useful for typesetting documents sharing the same notational conventions.
 %   \end{abstract}
 %   
@@ -198,8 +200,7 @@ ccool.sty, ccool.pdf, ...
 %   \section*{Convention}
 %   \begin{enumerate}
 %   \item Loosely, those of \cite{interface3} and \cite{xparse}, for example as to the meaning of \meta{\docccepttl}. 
-%   \item If unspecified, the environment in which a function must be declared is \docenvdoc.
-%   \item Where \meta{\pkgparna} is an optional argument, its default is \pkgparnad.
+%   \item If unspecified, the environment in which a macro must be declared is \docenvdoc.
 %   \end{enumerate}
 %
 %   \refstepcounter{section}
@@ -215,8 +216,10 @@ ccool.sty, ccool.pdf, ...
 %     \item[Requirement] \file{ccool.sty} is in the path of the \LaTeX~engine. See \autoref{part:other}, \autoref{other:support}.
 %     \end{description}  
 %   \end{function}
-%   
+%
+%   \leavevmode
 %   \refstepcounter{section}
+%   \docsetnameref{\cs{Ccool}}
 %   \label{usage:cs:ccool}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{Ccool}}
 %   \setcounter{subsection}{0}
@@ -237,17 +240,21 @@ ccool.sty, ccool.pdf, ...
 %     \end{description}
 %   \end{function}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\meta{\pkgparna}}
 %   \label{usage:par:na}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docoptd{\meta{\pkgparna}}}
 %   \DescribeOption{\meta{\pkgparna}}
 %   
 %   \begin{description}
-%   \item[Example] \pkgparnad, |ModelA|, |ModelB|
-%   \item[Semantics] Registers a new object, if applicable
+%   \item[Example] \pkgoptnad, |ModelA|, |ModelB|
+%   \item[Semantics] Identifies a group of macros
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\meta{\pkgparhe}}
 %   \label{usage:par:he}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopto{\meta{\pkgparhe}}}
 %   \DescribeOption{\meta{\pkgparhe}}
@@ -257,64 +264,75 @@ ccool.sty, ccool.pdf, ...
 %   \item[Semantics] Expands~\meta{\pkgparhe}
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\meta{\pkgparin}}
 %   \label{usage:par:in}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopte{i}{\meta{\pkgparin}}}
 %   \DescribeOption{\meta{\pkgparin}}
 %   
 %   \begin{description}
 %   \item[Example] |\mathbb{#1}|
-%   \item[Semantics]
+%   \item[Semantics] \docfillblank
 %     \begin{enumerate}
 %     \item \docassign{\meta{\pkgval} }
 %       { \meta{\pkgparin} applied to \meta{\pkgval} }\label{step:val}
 %     \end{enumerate}
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\meta{\pkgparde}}
 %   \label{usage:par:de}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\Arg{\pkgparde}}
 %   \DescribeOption{\meta{\pkgparde}}
 %   \begin{description}
 %   \item[Example] |Elems={\omega_1, \dots, \omega_n}, Sample=\Omega|
-%   \item[Semantics]
+%   \item[Semantics]\docfillblank
 %     \begin{enumerate}
 %       \setcounter{enumi}{1}
 %     \item \docassign{ \cs{\meta{\pkgkey}}\docoptd{\meta{\pkgparna}}}{\meta{val_i}} defined in \docstep{val},
-%    using \autoref{usage:opt:ex} for expansion. \label{step:key}
-%     \item If \pkgoptwr$=$\cs{BooleanTrue}, writes the definitions made in \docstep{key} to file \file{ccool}\meta{digits}\file{.tex},
-%       where \meta{digits}=|\pdfcreationdate|\label{step:write}
+%    using \nameref{usage:opt:ex} for expansion. \label{step:key}
+%     \item If \nameref{usage:opt:wr}, writes the input used by \docstep{key} to \nameref{usage:opt:fi}\label{step:write}
 %     \end{enumerate}
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{parameter \docarg{+}}
 %   \label{usage:par:appto}
-%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}+}
+%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docarg{+}}
 %   \DescribeOption{+}
 %   \begin{description}
-%   \item[Other] Needed to make \cs{Ccool}'side effect within a \docccept{\doccceptgroup}~persist thereafter
-%   \item[Semantics] Appends \docstep{key} and \docstep{write} to \cs{CcoolHook}
+%   \item[Other] Needed to make \nameref{usage:cs:ccool}'s side effect within a \docccept{\doccceptgroup}~persist thereafter
+%   \item[Semantics] Appends \docstep{key} and \docstep{write} to \nameref{usage:cs:hook}
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{parameter \docarg{*}}
 %   \label{usage:par:expand}
-%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}*}
+%   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docarg{*}}
 %   \DescribeOption{*}
 %   
 %   \begin{description}
-%   \item[Semantics]
+%   \item[Semantics]\docfillblank
 %     \begin{enumerate}
-%       \setcounter{enumi}{4}
-%     \item Expands~\meta{\pkgparou} applied to the list created in \docstep{val},
-%       using the separator specified by \autoref{usage:par:si}, \autoref{usage:par:sii}, \autoref{usage:par:siii}.
+%       \setcounter{enumi}{3}
+%     \item Expands~\nameref{usage:par:ou} applied to the list created in \docstep{val},
+%       using the separator specified by \nameref{usage:par:si}, \nameref{usage:par:sii}, \nameref{usage:par:siii}.
 %     \end{enumerate}
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{separators' parameter}
 %   \label{usage:par:s}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopte{s}{\pkgpars}}
-%   
+%
+%   \leavevmode
 %   \refstepcounter{subsubsection}
+%   \docsetnameref{\meta{\pkgparsi}}
 %   \label{usage:par:si}
 %   \DescribeOption{\meta{\pkgparsi}}
 %   
@@ -322,7 +340,9 @@ ccool.sty, ccool.pdf, ...
 %   \item[Example] |{~\in~}|
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsubsection}
+%   \docsetnameref{\meta{\pkgparsii}}
 %   \label{usage:par:sii}
 %   \DescribeOption{\meta{\pkgparsii}}
 %   
@@ -330,7 +350,9 @@ ccool.sty, ccool.pdf, ...
 %   \item[Example] |{,~}|
 %   \end{description}
 %
+%   \leavevmode
 %   \refstepcounter{subsubsection}
+%   \docsetnameref{\meta{\pkgparsiii}}
 %   \label{usage:par:siii}
 %   \DescribeOption{\meta{\pkgparsiii}}
 %   
@@ -338,7 +360,9 @@ ccool.sty, ccool.pdf, ...
 %   \item[Example] |{~\&~}|
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\meta{\pkgparou}}
 %   \label{usage:par:ou}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopte{o}{\meta{\pkgparou}}}
 %   \DescribeOption{\meta{\pkgparou}}
@@ -347,37 +371,34 @@ ccool.sty, ccool.pdf, ...
 %   \item[Example] |$\left\{#1\right\}$| 
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\meta{\pkgparta}}
 %   \label{usage:par:ta}
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docopto{\meta{\pkgparta}}}
 %   \DescribeOption{\meta{\pkgparta}}
 %   \begin{description}
 %   \item[Semantics]
-%     \cs{Ccool}\docoptd{\meta{\pkgparna}}\docopto{\meta{\pkgparta}}
+%     \nameref{usage:cs:ccool}\docoptd{\meta{\pkgparna}}\docopto{\meta{\pkgparta}}
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{section}
 %   \label{usage:cs:clear}
+%   \docsetnameref{\cs{CcoolClear}}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{CcoolClear}}
 %   \begin{function}{\CcoolClear}
 %     \begin{syntax}
 %       \cs{CcoolClear}\docoptd{\meta{\doccceptkvl}}
 %     \end{syntax}
 %     \begin{description}
-%     \item[Semantics] Clears any data created by \cs{Ccool}\Arg{\pkgparna}, for all \meta{\pkgparna} in \meta{\doccceptkvl}
+%     \item[Semantics] Clears any data created by \nameref{usage:cs:ccool}\Arg{\pkgparna}, for all \nameref{usage:par:na} in \meta{\doccceptkvl}
 %     \end{description}
 %   \end{function}
 %   
+%   \leavevmode
 %   \refstepcounter{section}
-%   \label{usage:cs:debug}
-%   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{CcoolDebug}}
-%   \begin{function}{\CcoolDebug}
-%     \begin{description}
-%     \item[Semantics] See \autoref{part:impl}
-%     \end{description}
-%   \end{function}
-%
-%   \refstepcounter{section}
+%   \docsetnameref{\cs{CcoolHook}}
 %   \label{usage:cs:hook}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{CcoolHook}}
 %   \begin{function}{\CcoolHook}
@@ -386,11 +407,12 @@ ccool.sty, ccool.pdf, ...
 %     \end{syntax}
 %     \begin{description}
 %     \item[Example] |\AfterEndEnvironment{theorem}{\CcoolHook}|
-%     \item[Tip] Add as many hooks after the \doccceptgroup~as there are calls to \Arg{\pkgparde}|+| within
 %     \end{description}
 %   \end{function}
-%   
+%
+%   \leavevmode
 %   \refstepcounter{section}
+%   \docsetnameref{\cs{CcoolOption}}
 %   \label{usage:cs:option}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{CcoolOption}}
 %   \begin{function}{\CcoolOption}
@@ -398,11 +420,13 @@ ccool.sty, ccool.pdf, ...
 %       \cs{CcoolOption}\Arg{\pkgoptions}
 %     \end{syntax} 
 %     \begin{description}
-%     \item[Semantics] Set default options for \autoref{usage:cs:ccool}
+%     \item[Semantics] Set default options for \nameref{usage:cs:ccool}
 %     \end{description}  
 %   \end{function}
-%   
+%
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\pkgoptex}
 %   \label{usage:opt:ex}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptex}
 %   \DescribeOption{\pkgoptex}
@@ -411,58 +435,78 @@ ccool.sty, ccool.pdf, ...
 %   \item[Syntax] Either of |eo, ee, ex, xe, xo, xe, xx|
 %   \end{description} 
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
-%   \label{usage:opt:ex}
+%   \docsetnameref{\pkgoptfi}
+%   \label{usage:opt:fi}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptfi}
 %   \DescribeOption{\pkgoptfi}
 %   \begin{description}
+%   \item[Default] |ccool\pdfcreationdate|
 %   \item[Syntax] \docccept{\docU{\docccepttok}}
 %   \end{description} 
 %
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\pkgoptin}
 %   \label{usage:opt:in}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptin}
 %   \DescribeOption{\pkgoptin}
 %   \begin{description}
-%   \item[Semantics] \docU{\docdefaultfor}\autoref{usage:par:in}
+%   \item[Default] |####1|
+%   \item[Semantics] \docU{\docdefaultfor}\nameref{usage:par:in}
 %   \item[Syntax] Use |####1| as the argument to be replaced
 %   \end{description} 
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\pkgoptna}
 %   \label{usage:opt:na}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptna}
 %   \DescribeOption{\pkgoptna}
 %   \begin{description}
-%   \item[Semantics] \docU{\docdefaultfor}\autoref{usage:par:na}
+%   \item[Default] \pkgoptnad
+%   \item[Semantics] \docU{\docdefaultfor}\nameref{usage:par:na}
 %   \end{description} 
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\pkgoptou}
 %   \label{usage:opt:ou}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptou}
-%   \DescribeOption{Outer}
+%   \DescribeOption{\pkgoptou}
 %   \begin{description}
-%   \item[Semantics] \docU{\docdefaultfor}\autoref{usage:par:ou}
+%   \item[Default] |\ensuremath{####1}|
+%   \item[Semantics] \docU{\docdefaultfor}\nameref{usage:par:ou}
 %   \item[Syntax] Use |####1| as the argument to be replaced
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{subsection}
+%   \docsetnameref{\pkgoptse}
 %   \label{usage:opt:se}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptse}
 %   \DescribeOption{\pkgoptse}
 %   \begin{description}
-%   \item[Semantics] \docU{\docdefaultfor}\autoref{usage:par:s}
+%   \item[Default] |{ {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } }|
+%   \item[Semantics] \docU{\docdefaultfor}\nameref{usage:par:s}
 %   \item[Syntax] That of `separators' in \cite[Section 8 of \pkg{l3seq}]{interface3}
 %   \end{description}
 %   
+%   \leavevmode
 %   \addtocounter{subsection}{1}
+%   \docsetnameref{\pkgoptwr}
 %   \label{usage:opt:wr}
 %   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\pkgoptwr}
 %   \DescribeOption{\pkgoptwr}
 %   \begin{description}
+%   \item[Default] |\BooleanFalse|
 %   \item[Syntax] \docccept{\docU{\doccceptbool}}
 %   \end{description}
 %   
+%   \leavevmode
 %   \refstepcounter{section}
+%   \docsetnameref{\cs{CcoolRead}}
 %   \label{usage:cs:read}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{CcoolRead}}
 %   \begin{function}{\CcoolRead}
@@ -470,15 +514,18 @@ ccool.sty, ccool.pdf, ...
 %       \cs{CcoolRead}\docopto{\meta{\doccceptpath}}
 %     \end{syntax} 
 %     \begin{description}
-%     \item[Other] The default for \meta{\doccceptpath} is the last write-file (see \meta{\pkgparde})
-%     \item[Semantics] \begin{enumerate}
+%     \item[Other] The default for \meta{\doccceptpath} is the last write-file (see \nameref{usage:par:de})
+%     \item[Semantics]\docfillblank
+%      \begin{enumerate}
 %       \item Reads the definitions in \meta{\doccceptpath}.
 %       \item Writes to \file{ccool.log}: `read from \meta{\doccceptpath}'
 %       \end{enumerate}
 %     \end{description}  
 %   \end{function}
 %   
+%   \leavevmode
 %   \refstepcounter{section}
+%   \docsetnameref{Section~Do's and dont's}
 %   \label{usage:dosdont}
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Do's and dont's}
 %   \section*{Do's and dont's}
@@ -517,7 +564,7 @@ ccool.sty, ccool.pdf, ...
 %   colframe=black,
 %   opacitybacktitle=.8,%
 %   fonttitle=\bfseries,
-%   title=Listing~\thetcbcounter. #1,
+%   title={Listing~\thetcbcounter. #1},
 %   arc=0pt,
 %   outer arc=0pt,
 %   boxrule=1pt,
@@ -525,31 +572,17 @@ ccool.sty, ccool.pdf, ...
 %   ^^Atext only, ^^A% only for bech.tex
 %   #2
 % }
-% ^^A  \pagestyle{empty} ^^A% only for bench.tex
+%   ^^A\pagestyle{empty} ^^A% only for bench.tex
 %   
-%   \doclist{pre} is what might be needed to replicate the code within subsequent listings.
-%   Check the documentation portion of the source file, |ccool.dtx|, for exhaustive settings.
-%   ^^A   \begin{listing}[]
-%     ^^A     {label=listing:debug}
-%     ^^A     \newtheorem{definition}{Definition}
-%     ^^A     \AfterEndEnvironment{definition}{\CcoolHook}
-%     ^^A     \begin{definition}
-%       ^^A       \Ccool<Test>
-%       ^^A       i{#1{.}}
-%       ^^A       { KeyA = {a}, KeyB = {b}, KeyC = {c} }* $\diamond$
-%       ^^A     \end{definition}
-%     ^^A     \KeyA<Test>\KeyB<Test>\KeyC<Test>
-%     ^^A   \end{listing}
-
-%   \phantomsection\addcontentsline{toc}{section}{\doclist{pre}.}
-%   \begin{listing}[]
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{pre}. Preamble.}
+%   \begin{listing}[Preamble\footnote{Check the documentation portion of the source file, |ccool.dtx|, for exhaustive settings}]
 %     {label=listing:pre, listing only}
 %     \usepackage{amsmath, amsthm, commath}
 %     \usepackage[T1]{fontenc}% \char`[
 %   \end{listing}
 %
-%   \phantomsection\addcontentsline{toc}{section}{\doclist{test:i}.}
-%   \begin{listing}[]
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{test:i}. Separators.}
+%   \begin{listing}[Separators]
 %     {label=listing:test:i}
 %     \CcoolOption{
 %     ^^A% spaces betw. inner and outer brackets matter!->
@@ -563,8 +596,8 @@ ccool.sty, ccool.pdf, ...
 %     { X = x, Y = y, Z = z }*s{{\ \&\ }{,\ }{\ \&\ }}\\
 %   \end{listing}
 %
-%   \phantomsection\addcontentsline{toc}{section}{\doclist{test:ii}.}
-%   \begin{listing}[]
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{test:ii}. Hello, world!}
+%   \begin{listing}[Hello, world!\footnote{If this looks arcane, it's for the purpose of testing.}]
 %     {label=listing:test:ii}
 %     \CcoolOption{ Separ = {{}{.}{.}}, Outer = {####1} }
 %     \CcoolOption{ Write = \BooleanTrue }
@@ -582,8 +615,8 @@ ccool.sty, ccool.pdf, ...
 %     \CcoolOption{ Write = \BooleanFalse }
 %   \end{listing}
 %   
-%   \phantomsection\addcontentsline{toc}{section}{\doclist{test:iii}.}
-%   \begin{listing}[]
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{test:iii}. \doclist{test:ii} read from file.}
+%   \begin{listing}[\doclist{test:ii} read from file.]
 %     {label=listing:test:iii}
 %     \CcoolRead
 %     \KeyF<Test>\KeyA<Test>\nobreak
@@ -600,37 +633,31 @@ ccool.sty, ccool.pdf, ...
 %     \KeyN<Test>\nobreak
 %   \end{listing}
 %   
-%   \phantomsection\addcontentsline{toc}{section}{\doclist{proba:i}.}
-%   \begin{listing}[]
+%   \phantomsection\addcontentsline{toc}{section}{\doclist{proba:i}. Probability space.}
+%   \begin{listing}[Probability space]
 %     {label=listing:proba:i}
-%     \Ccool[We call~]{Elems={{\omega_{1}}, {\dots}, {\omega_{n}}}}*
-%     [~the elementary events, and ]{Space=\Omega}
-%     [\begin{equation*}\Space=(\Elems)\end{equation*}~the sample space.]
-%     {}
-%   \end{listing}
-%   
-%   \begin{listing}[]
-%     {label=listing:proba:ii}
 %     \CcoolOption{ Write = \BooleanTrue }
 %     \Ccool[Let~]
-%     {Space=\Omega, Field=\mathcal{F}, Meas=\mathcal{P}}
+%     { Space = \Omega, Field = \mathcal{F}, Meas = \mathcal{P} }
 %     *s{{,}}o{$\{#1\}$}
-%     [~denote the probability space, where $\Field\subset 2^{\Space}$.]
+%     [~denote the probability space, where~]{ PowerSet = { 2^{\Space} } }
+%     [$\Field\subset \PowerSet$.]
 %     {}
 %     \CcoolOption{ Write = \BooleanFalse }
 %   \end{listing}
 % 
-%    \phantomsection\addcontentsline{toc}{section}{\doclist{proba:iii}.}
-%    \begin{listing}[]
-%        {label=listing:proba:iii}
+%    \phantomsection\addcontentsline{toc}{section}{\doclist{proba:ii}. \doclist{proba:i} read from file.}
+%    \begin{listing}[\doclist{proba:i} read from file.]
+%        {label=listing:proba:ii}
 %           \CcoolRead \tab $\Omega$ $\Field$ $\Meas$
 %      \end{listing}
-%^^A^^A      
-%^^A^^A     ^^A%{OffeneMenge={D}, Ci={C^{1}}, Strecke={[x_0,x]}} ^^A% Hook 2.a
-%^^A^^A     ^^A%Strecke={\char`[x_0,x\char`]}  % PASS % Hook 2.b
-%^^A^^A     ^^A%Strecke={\[x_0,x\]}            % FAIL % Hook 2.c
-%     \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:i}.}
-%     \begin{listing}[]{label=listing:mvt:i}
+%      
+%     ^^A%{OffeneMenge={D}, Ci={C^{1}}, Strecke={[x_0,x]}} ^^A% Hook 2.a
+%     ^^A%Strecke={\char`[x_0,x\char`]}  % PASS % Hook 2.b
+%     ^^A%Strecke={\[x_0,x\]}            % FAIL % Hook 2.c
+%     \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:i}. Mittelwertsatz f\"ur $n$ Variable.}
+%     \begin{listing}[Mittelwertsatz f\"ur $n$ Variable]
+%      {label=listing:mvt:i}
 %       \CcoolOption{ Write = \BooleanTrue }
 %       \newtheorem{theorem}{Theorem}
 %       \AfterEndEnvironment{theorem}{\CcoolHook}
@@ -649,15 +676,39 @@ ccool.sty, ccool.pdf, ...
 %         \end{equation*}
 %       \end{theorem}]
 %       {}
-%       (Check: $\Punkt$)
+%       (Check: $\N$, $\Punkt$)
 %       \CcoolOption{ Write = \BooleanFalse }
 %     \end{listing}
 %   
-%     \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:ii}.}
-%     \begin{listing}[]
+%     \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:ii}. \doclist{mvt:i} read from file.}
+%     \begin{listing}[\doclist{mvt:i} read from file.]
 %       {label=listing:mvt:ii}
 %       \CcoolRead \tab $\N$ $\R$ $\OffMenge$ $\Ci$ $\Strecke$ 
 %     \end{listing}
+%
+%     \phantomsection\addcontentsline{toc}{section}{\doclist{cusum}. CUSUM statistic}
+%     \begin{listing}[CUSUM statistic\cite{ccool-thesis}]
+%       {label=listing:cusum}
+%       \newtheorem{definition}{Definition}
+%       \AfterEndEnvironment{definition}{\CcoolHook}
+%       \NewDocumentCommand\EvalAt{m}{(#1)}
+%       
+%       \Ccool{ SuchThat = { ;~ }, Time = { t }, Process = { \xi }, StopT = T }
+%       [The CUSUM statistic process and the corresponding one-sided CUSUM stopping time are defined as follows:
+%       \begin{definition}\label{the CUSUM statistic} Let~]
+%         { Scale = { \lambda }, Real = {\mathcal{R}} }+*s{{~\in~}}[~and~]
+%         { CUSUMthresh = { \nu } }+*o{$#1\in\Real^{+}$.}
+%         [~Define the following processes:]
+%         { LogWald = { u },  CUSUMst = { \StopT_{c} }, CUSUM = { y }, LogWaldInf = { m } }+
+%         [\begin{enumerate}
+%         \item{$\LogWald_{\Time}\EvalAt{ \Scale } = \Scale\Process_{\Time} - \frac{1}{2}\Scale^2\Time$;
+%           $\LogWaldInf_{\Time}\EvalAt{ \Scale } = \inf_{ 0\le s \le \Time }\CUSUM_{s} \EvalAt{ \Scale }$.}
+%         \item{$\CUSUM_{\Time}\EvalAt{ \Scale } = \LogWaldInf_{\Time}\EvalAt{ \Scale } - \LogWald_{\Time}\EvalAt{ \Scale }\ge0$, which is the CUSUM statistic process.}
+%         \item{$\CUSUMst \EvalAt{ \Scale, \LogWaldInf } = \inf\left[ \Time \ge 0 \SuchThat \CUSUM_{\Time}\EvalAt{\Scale} \ge \LogWaldInf \right]$, which is the CUSUM stopping time.} \end{enumerate}\end{definition}\par]{}
+%
+%     (Check: $\Scale$, $\CUSUM$)
+%     \end{listing}
+
 %^^A   
 %^^A   ^^A   \StopEventually{^^A
 %^^A   ^^A   \PrintChanges
@@ -675,7 +726,7 @@ ccool.sty, ccool.pdf, ...
 %   
 %   \section{Install}\label{other:install}
 %   
-%   Compiling \file{ccool.dtx} (under Unix, |$tex ccool.dtx|) will generate \file{ccool.sty} and \file{ccool.pdf}
+%   Compiling \file{ccool.dtx}\footnote{Under Unix, |$tex ccool.dtx|} will generate \file{ccool.sty} and \file{ccool.pdf}
 %   
 %   \section{Issue}\label{other:issue}
 %   
@@ -698,55 +749,69 @@ ccool.sty, ccool.pdf, ...
 %       Instead, one can check that \autoref{part:listing},
 %       as generated in \autoref{other:install} on one's own machine,
 %       agrees with \file{bench.pdf} available at \url{https://github.com/rogard/ccool},
-%       
+%
 %       \begin{thebibliography}{1}
 %       \bibitem{shir95} A.N. Shiryaev  {\em Probability} Springer, 1995
-%       \bibitem{cool} Nick Setzer {\em The \pkg{cool} package}, 2005 \url{https://www.ctan.org/pkg/cool}
-%       \bibitem{interface3} The \LaTeX3 Project Team {\em The \LaTeX3 interfaces} 
+%       \bibitem{cool} Nick Setzer {\em The \pkg{cool} package}, 2005, \url{https://www.ctan.org/pkg/cool}
+%       \bibitem{oh-2005} Olympia Hadjiliadis
+%         {\em Change--point detection of two--sided alternatives in the Brownian motion model and its connection
+%         to the gambler's ruin problem with relative wealth perception}. PhD thesis. Columbia University, 2005
+%       \bibitem{interface3} The \LaTeX3 Project Team {\em The \LaTeX3 interfaces}, 2019,
 %         \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3kernel/interface3.pdf}
-%       \bibitem{xparse} The \LaTeX3 Project Team {\em The \pkg{xparse} package} 
-%         \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3packages/xparse.pdf}
-%         ^^A\bibitem{l3buil} The \LaTeX3 Project Team {\em The \pkg{l3build} package} 
-%         ^^A  \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3build/l3build.pdf}
-%       \bibitem{tcolbox} Thomas F. Sturm {\em The \pkg{tcolorbox} package} 
+%       \bibitem{tcolbox} Thomas F. Sturm {\em The \pkg{tcolorbox} package}, 2019,
 %         \url{http://www.texdoc.net/texmf-dist/doc/latex/tcolorbox/tcolorbox.pdf}
+%       \bibitem{xparse} The \LaTeX3 Project Team {\em The \pkg{xparse} package}, 2020,
+%         \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3packages/xparse.pdf}
+%       \bibitem{ccool-thesis} Erwann Rogard and Olympia Hadjiliadis {\em Typesetting a math thesis with \pkg{ccool}}, 2020,
+%       \url{https://github.com/rogard/ccool/blob/master/thesis.pdf}
 %       \bibitem{534100} \url{https://tex.stackexchange.com/a/534100/112708}
 %       \end{thebibliography}
 %       
 %       \changes{\docvers{1}{0}}{2020/03/08}{Initial version}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Revamped: much of the implementation}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \Arg{kvl_{2}}~by~\docoptd{kvl_{2}}~given that option type \texttt{G} not recommended\cite{xparse}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \cs{CcoolOptions}~by~\cs{CcoolOption}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \docarg{GenericObject} by~\docarg{Name}}
+%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \cs{OopsOptions}~by~\cs{OopsOption}}
+%       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \docarg{GenericObject}~by~\docarg{Name}}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Replaced: \docarg{Separators}~by~\docarg{Separ}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Added:\cs{CcoolTest}}
-%       \changes{\docvers{1}{1}}{2020/04/04}{Added:\cs{CcoolRestore}}
+%       \changes{\docvers{1}{1}}{2020/04/04}{Added:\cs{OopsTest}}
+%       \changes{\docvers{1}{1}}{2020/04/04}{Added:\cs{OopsRestore}}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Added: \docarg{Save}}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Deleted: Listing 1-5 from \docvers{1}{0}}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Added: Listing~1., 2., 3., 4., 6., and 9.}
 %       \changes{\docvers{1}{1}}{2020/04/04}{Fixed: apparent anomaly in \docvers{1}{0}'s Listing~4, see \doclist{test:i}}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Added: optional |*| to \cs{CcoolNew} as instruction to expand \pkgparde}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{CcoolClear}\Arg{\pkgparna} by \cs{CcoolClear}\docopto{\meta{\doccceptkvl}}}
+%       \changes{\docvers{1}{2}}{2020/04/06}{Added: optional |*| to \cs{OopsNew} as instruction to expand \pkgparde}
+%       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{OopsClear}\Arg{\pkgparna} by \cs{OopsClear}\docopto{\meta{\doccceptkvl}}}
 %       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \meta{kvl_{2}}~and~\meta{code_{2}}}
-%       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \cs{CcoolTest}}
+%       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: \cs{OopsTest}}
 %       \changes{\docvers{1}{2}}{2020/04/06}{Deleted: Listing~2-3 from \docvers{1}{1}.}
 %       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Save} by \cs{Write}}
 %       \changes{\docvers{1}{2}}{2020/04/06}{Replaced: \cs{Restore} by \cs{Read}}
-%       \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \cs{CcoolNew} by \cs{Ccool}}
+%       \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \cs{OopsNew} by \cs{Oops}}
 %       \changes{\docvers{1}{3}}{2020/04/06}{Replaced: \Arg{\pkgparna} and \docopto{\meta{\pkgparna}} by \docoptd{\meta{\pkgparna}} }
 %       \changes{\docvers{1}{4}}{2020/04/10}{Replaced: \docopte{s}{\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
 %       by \docopte{s}{\Arg{\pkgparsi}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\doccceptpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}}
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added:optional |+| to \cs{CcoolNew} to make side effects presist beyond local group}
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{CcoolHook}}
+%       \changes{\docvers{1}{4}}{2020/04/10}{Added:optional |+| to \cs{OopsNew} to make side effects presist beyond local group}
+%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{OopsHook}}
 %       \changes{\docvers{1}{4}}{2020/04/10}{Deleted: Listing~1., and 2. }
 %       \changes{\docvers{1}{4}}{2020/04/10}{Added: Listing~1., 2., and 3. }
 %       \changes{\docvers{1}{4}}{2020/04/10}{Added: \docarg{Expans} (for debugging' sake, but...) }
 %       \changes{\docvers{1}{4}}{2020/04/10}{Added: \autoref{usage:dosdont} }
-%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{CcoolDebug} }
+%       \changes{\docvers{1}{4}}{2020/04/10}{Added: \cs{OopsDebug} }
 %       \changes{\docvers{1}{5}}{2020/04/10}{Deleted: dependence on \pkg{datetime} }
 %       \changes{\docvers{1}{5}}{2020/04/10}{Added: \pkgoptfi }
-%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed \pkg{oops} (reflects implementation) to \pkg{ccool} (reflects purpose)}
-%       \changes{\docvers{1}{6}}{2020/04/10}{Added: Listing~1.}
+%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \pkg{oops} to \pkg{ccool} (better describes the purpose) }
+%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{Oops} to \cs{Ccool}}
+%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsClear} to \cs{CcoolClear}}
+%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsDebug} to \cs{CcoolDebug}}
+%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsHook} to \cs{CcoolHook}}
+%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsOption} to \cs{CcoolOption}}
+%       \changes{\docvers{1}{6}}{2020/04/10}{Renamed: \cs{OopsRead} to \cs{CcoolRead}}
+%       \changes{\docvers{1}{6}}{2020/04/10}{Added: \doclist{pre} (preamble) }
+%       \changes{\docvers{1}{7}}{2020/04/11}{Added: \doclist{cusum} (CUSUM) }
+%       \changes{\docvers{1}{7}}{2020/04/11}{Added: Legends to listings }
+%       \changes{\docvers{1}{7}}{2020/04/11}{Added: Co-author}
+%       \changes{\docvers{1}{7}}{2020/04/11}{Removed: \cs{CcoolDebug} }
+%       \changes{\docvers{1}{7}}{2020/04/11}{Removed: Listing~5 from \docvers{1}{6} }
 %
 %       \clearpage
 %       \PrintChanges
@@ -845,7 +910,6 @@ ccool.sty, ccool.pdf, ...
   \use:c{@@_aux_prop:\g@@_option_expans_tl}
   { \tl_trim_spaces:n{#1} }
   { \@@_aux_inner:n{ \tl_trim_spaces:n{#2} } }
-%^^A  { \@@_aux_inner:e{ \tl_trim_spaces:n{#2} } }% DEBUG
 }
 %    \end{macrocode}
 % \end{macro}
@@ -1409,24 +1473,6 @@ ccool.sty, ccool.pdf, ...
 { D<>{\g@@_option_name_tl} }
 { 
   \@@_prop_clear_new_map:n{#1} 
-}
-%    \end{macrocode}
-% \end{macro}
-% \begin{macro}{\CcoolDebug}
-%    \begin{macrocode}
-\NewDocumentCommand\CcoolDebug{m}
-{
-  \@@_prop_if_exist:nTF{#1}
-  { \c_empty_tl }
-  { \@@_prop_new:n{#1} }
-  \@@_make_key:Nn \KeyA{KeyA}
-  \gappto{\CcoolHook}
-  {
-    \@@_prop_if_exist:nTF{#1}
-    { \c_empty_tl }
-    { \@@_prop_new:n{#1} }
-    \@@_make_key:Nn \KeyA{KeyA}
-  }
 }
 %    \end{macrocode}
 % \end{macro}

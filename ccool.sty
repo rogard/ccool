@@ -6,7 +6,7 @@
 %%
 %% ccool.dtx  (with options: `package')
 %% ----------------------------------------------------------------------------
-%% ccool --- A tool for encoding mathematical notation
+%% ccool --- Custom COntext Oriented for LaTeX
 %% Released under the LaTeX Project Public License v1.3c or later
 %% See http://www.latex-project.org/lppl.txt
 %% ----------------------------------------------------------------------------
@@ -16,9 +16,9 @@
  \RequirePackage{xparse}[2019/05/28]
  \ProvidesExplPackage
  {ccool}                                                                                      % Package name
- {2020/04/10}                                                                                 % Release date
- {1.6}                                                                                        % Release version
- {A tool for encoding mathematical notation}                                                  % Description
+ {2020/04/12}                                                                                 % Release date
+ {1.7}                                                                                        % Release version
+ {cool --- Custom COntext Oriented for LaTeX}                                                 % Description
 
 \NeedsTeXFormat{LaTeX2e}[2019/10/01]
 \ExplSyntaxOn
@@ -392,20 +392,6 @@
 {
   \@@_prop_clear_new_map:n{#1}
 }
-\NewDocumentCommand\CcoolDebug{m}
-{
-  \@@_prop_if_exist:nTF{#1}
-  { \c_empty_tl }
-  { \@@_prop_new:n{#1} }
-  \@@_make_key:Nn \KeyA{KeyA}
-  \gappto{\CcoolHook}
-  {
-    \@@_prop_if_exist:nTF{#1}
-    { \c_empty_tl }
-    { \@@_prop_new:n{#1} }
-    \@@_make_key:Nn \KeyA{KeyA}
-  }
-}
 \NewDocumentCommand{ \CcoolOption }
 { m }
 {
@@ -433,7 +419,7 @@
 %% Erwann Rogard.
 %% 
 %% This work consists of the file ccool.dtx and the derived files:
-%% ccool.sty, ccool.pdf, ...
+%% ccool.sty, and ccool.pdf.
 %% 
 %%
 %% End of file `ccool.sty'.
