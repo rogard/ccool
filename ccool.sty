@@ -16,8 +16,8 @@
  \RequirePackage{xparse}[2019/05/28]
  \ProvidesExplPackage
  {ccool}                                                                                      % Package name
- {2020/04/12}                                                                                 % Release date
- {1.8}                                                                                        % Release version
+ {2020/04/14}                                                                                 % Release date
+ {1.9}                                                                                        % Release version
  {cool --- A tool for encoding mathematical notation}                                         % Description
 \NeedsTeXFormat{LaTeX2e}[2019/10/01]
 \ExplSyntaxOn
@@ -86,7 +86,7 @@
   }
   { \c_empty_tl }
   {
-    \msg_error:nnnn { __erw }
+    \msg_error:nnnn { @@ }
     { separ }
     { \exp_not:N \_@@_aux_separ:nn }
     {#2}
@@ -96,6 +96,13 @@
 \cs_new:Nn \@@_aux_separ:n
 {
   \@@_aux_separ:en{ \tl_count:n{#1} }{#1}
+}
+\ifcsdef{pdfcreationdate}
+{\csedef{@@_aux_timestamp}{\pdfcreationdate}}
+{
+  \usepackage{texosquery}
+  \TeXOSQueryNow{\pdfcreationdate}
+  \csedef{@@_aux_timestamp}{\detokenize\expandafter{\pdfcreationdate}}
 }
 \cs_new_protected:Nn \@@_aux_val:Nn
 {
@@ -193,7 +200,7 @@
 {
   \@@_make_ccool_key:nnn{#1}{#2}{#3}
   \bool_if:nTF{ \g@@_log_open_bool }
-  {%^^A https://tex.stackexchange.com/questions/536597
+  {
     \@@_log_write:n
     {
       \begingroup
@@ -202,7 +209,6 @@
     }
   }{\c_empty_tl}
 }
-\def\CcoolHook{\c_empty_tl}
 \cs_new_protected:Npn \@@_make_ccool:nnnn #1 #2 #3 #4
 {
   \exp_args:NNx \DeclareDocumentCommand \Ccool
@@ -319,86 +325,12 @@
   \seq_use:Nnnn #1
   \@@_aux_separ:n{#2}
 }
-\keys_define:nn { @@ }
-{
-  Expans .multichoices:nn =
-  { eo, ee, ex, xo, xe, xx }
-  { \tl_gset_eq:NN \g@@_option_expans_tl \l_keys_choice_tl },
-  Expans .default:n = { xo },
-  Expans .initial:n = { xo },
-  File .code:n = { \tl_gset:Nn  \g@@_log_file_tl{ \exp_not:n{ #1 } } },
-  File .default:n = { ccool\pdfcreationdate },
-  File .initial:n = { ccool\pdfcreationdate },
-  Name .code:n={
-    \@@_option_name:n{#1}
-    \exp_last_unbraced:Nf
-    \@@_make_ccool:nnnn
-    {
-      { \g@@_option_name_tl }
-      { \g@@_option_inner_tl }
-      { \g@@_option_separ_tl }
-      { \g@@_option_outer_tl }
-    }
-  },
-  Name .value_required:n = false,
-  Name .default:n = { Math },
-  Name .initial:n = { Math },
-  Inner .code:n={
-    \@@_option_inner:n{#1}
-    \exp_last_unbraced:Nf
-    \@@_make_ccool:nnnn
-    {
-      { \g@@_option_name_tl }
-      { \g@@_option_inner_tl }
-      { \g@@_option_separ_tl }
-      { \g@@_option_outer_tl }
-    }
-  },
-  Inner .value_required:n = false,
-  Inner .default:n = {####1},
-  Inner .initial:n = {####1},
-  Outer .code:n={
-    \@@_option_outer:n{#1}
-    \exp_last_unbraced:Nf
-    \@@_make_ccool:nnnn
-    {
-      { \g@@_option_name_tl }
-      { \g@@_option_inner_tl }
-      { \g@@_option_separ_tl }
-      { \g@@_option_outer_tl }
-    }
-  },
-  Outer .value_required:n = false,
-  Outer .default:n = { \ensuremath{####1} },
-  Outer .initial:n = { \ensuremath{####1} },
-  Write .code:n = {
-    \bool_if:nTF{#1}
-    {\@@_log_open:}
-    {\@@_log_close:}
-  },
-  Write .value_required:n = false,
-  Write .default:n = \BooleanFalse,
-  Write .initial:n = \BooleanFalse,
-  Separ .code:n={
-    \@@_option_separ:n{#1}
-    \exp_last_unbraced:Nf
-    \@@_make_ccool:nnnn
-    {
-      { \g@@_option_name_tl }
-      { \g@@_option_inner_tl }
-      { \g@@_option_separ_tl }
-      { \g@@_option_outer_tl }
-    }
-  },
-  Separ .value_required:n = false,
-  Separ .default:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } },
-  Separ .initial:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } }
-}
 \NewDocumentCommand{ \CcoolClear }
 { D<>{\g@@_option_name_tl} }
 {
   \@@_prop_clear_new_map:n{#1}
 }
+\NewDocumentCommand{\CcoolHook}{}{\c_empty_tl}
 \ProvideDocumentCommand \CcoolLambda { O{1} m }
 {
   \@@_lambda:nn { #1 } { #2 }
@@ -407,6 +339,80 @@
 { m }
 {
   \keys_set:nn{ @@ }{#1}
+}
+\keys_define:nn { @@ }
+{
+Expans .multichoices:nn = { eo, ee, ex, xo, xe, xx }
+{ \tl_gset_eq:NN \g@@_option_expans_tl \l_keys_choice_tl },
+Expans .default:n = { xo },
+Expans .initial:n = { xo },
+File .code:n = { \tl_gset:Nn  \g@@_log_file_tl{ \exp_not:n{ #1 } } },
+File .default:n = { \c_sys_jobname_str\@@_aux_timestamp },
+File .initial:n = { \c_sys_jobname_str\@@_aux_timestamp },
+Inner .code:n={
+  \@@_option_inner:n{#1}
+  \exp_last_unbraced:Nf
+  \@@_make_ccool:nnnn
+  {
+    { \g@@_option_name_tl }
+    { \g@@_option_inner_tl }
+    { \g@@_option_separ_tl }
+    { \g@@_option_outer_tl }
+  }
+},
+Inner .value_required:n = false,
+Inner .default:n = {####1},
+Inner .initial:n = {####1},
+Name .code:n={
+  \@@_option_name:n{#1}
+  \exp_last_unbraced:Nf
+  \@@_make_ccool:nnnn
+  {
+    { \g@@_option_name_tl }
+    { \g@@_option_inner_tl }
+    { \g@@_option_separ_tl }
+    { \g@@_option_outer_tl }
+  }
+},
+Name .value_required:n = false,
+Name .default:n = { Math },
+Name .initial:n = { Math },
+Outer .code:n={
+  \@@_option_outer:n{#1}
+  \exp_last_unbraced:Nf
+  \@@_make_ccool:nnnn
+  {
+    { \g@@_option_name_tl }
+    { \g@@_option_inner_tl }
+    { \g@@_option_separ_tl }
+    { \g@@_option_outer_tl }
+  }
+},
+Outer .value_required:n = false,
+Outer .default:n = { \ensuremath{####1} },
+Outer .initial:n = { \ensuremath{####1} },
+Separ .code:n={
+  \@@_option_separ:n{#1}
+  \exp_last_unbraced:Nf
+  \@@_make_ccool:nnnn
+  {
+    { \g@@_option_name_tl }
+    { \g@@_option_inner_tl }
+    { \g@@_option_separ_tl }
+    { \g@@_option_outer_tl }
+  }
+},
+Separ .value_required:n = false,
+Separ .default:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } },
+Separ .initial:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } },
+Write .code:n = {
+  \bool_if:nTF{#1}
+  {\@@_log_open:}
+  {\@@_log_close:}
+},
+Write .value_required:n = false,
+Write .default:n = \BooleanFalse,
+Write .initial:n = \BooleanFalse
 }
 \NewDocumentCommand{\CcoolRead}
 {o}
