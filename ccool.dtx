@@ -166,8 +166,8 @@ ccool.sty, and ccool.pdf.
 % 
 % \GetFileInfo{\jobname.sty}
 % \begin{documentation}
-% \title{The \pkg{ccool} package\thanks{^^A
-% This file describes version \fileversion, last revised \filedate.^^A
+%   \title{The \pkg{ccool} package\thanks{^^A
+%   This file describes version \fileversion, last revised \filedate.^^A
 % }^^A
 % }
 %   \author{Erwann Rogard\thanks{firstname dot lastname AusTria gmail dot com}}
@@ -551,14 +551,14 @@ ccool.sty, and ccool.pdf.
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}\cs{CcoolVers}}
 %   \begin{function}{\CcoolVers}
 %     \begin{syntax}
-%     \cs{CcoolVers}
+%       \cs{CcoolVers}
 %     \end{syntax} 
 %     \begin{description}
 %     \item[Semantics] Expands to the package's version
 %     \end{description}  
 %   \end{function}
-%
-%       \leavevmode
+%   
+%   \leavevmode
 %   \refstepcounter{section}
 %   \docsetnameref{Section~Do's and dont's}
 %   \label{usage:dosdont}
@@ -607,13 +607,13 @@ ccool.sty, and ccool.pdf.
 %   listing and text,
 %   #2
 % }
-%
+%   
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{vers}. Version.}
 %   \begin{listing}[]
 %     {label=listing:vers}
 %     \CcoolVers
 %   \end{listing}
-%
+%   
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{pre}. Preamble.}
 %   \begin{listing}[Preamble\footnote{These are the settings to replicate the listings.
 %     For exhaustivity, check the \env{documentation} section of \pkg{ccool}\texttt{.dtx}.}]
@@ -697,7 +697,7 @@ ccool.sty, and ccool.pdf.
 %   ^^A%Strecke={\char`[x_0,x\char`]}  % PASS % Hook 2.b
 %   ^^A%Strecke={\[x_0,x\]}            % FAIL % Hook 2.c
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:i}. Mittelwertsatz f\"ur $n$ Variable.}
-%   \begin{listing}[Mittelwertsatz f\"ur $n$ Variable]
+%   \begin{listing}[{Mittelwertsatz f\"ur $n$ Variable\cite[17.3]{tcolbox}}]
 %     {label=listing:mvt:i}
 %     \CcoolOption{ Write = \BooleanTrue }
 %     \newtheorem{theorem}{Theorem}
@@ -778,10 +778,7 @@ ccool.sty, and ccool.pdf.
 %   \section{Acknowledgment}\label{other:acknowl} 
 %   
 %   This work has benefited from Q\&A's from the \LaTeX community\cite{stackex-erw}.
-%   The implementations of \nameref{usage:cs:lambda} and \nameref{usage:opt:wr} are based on answers by
-%   \href{https://tex.stackexchange.com/users/17423/sean-allred}{\@{}sean-allred}\cite{stackex-188053} and
-%   \href{https://tex.stackexchange.com/users/73317/frougon}{\@{}frougon}\cite{stackex-536597}, respectively.
-%   \doclist{mvt:i} is from \pkg{tcolbox}\cite[17.3]{tcolbox}.
+%   Specific attributions are made in the implementation and \nameref{other:bib}.
 %   
 %   \section{Install}\label{other:install}
 %   
@@ -803,22 +800,28 @@ ccool.sty, and ccool.pdf.
 %   This package is available from \url{https://www.ctan.org/pkg/ccool} and \url{https://github.com/rogard/ccool}.
 %   
 %   \section{Testing}\label{other:testing}
-%
-%   \begin{description}
-%   \item[General] Not possible to compile-check the expansion of a certain class of macros against predefined values\cite{stackex-534100}. 
-%     Instead, one can visually check \autoref{part:listing}, as generated in \autoref{other:install} on one's own machine,
-%     against that \href{https://github.com/rogard/ccool}{of the repository} for the same version.
-%   \item[Platform]\docfillblank
-%     \begin{enumerate}
-%     \item \pkg{ccool} v1.8 satisfactory on/with^^A\footnote{\texttt{\${}cat /proc/version}}\\
-%       \begin{Verbatim}[breaklines=true]
-%         Linux version 4.15.0-20-generic (buildd@lgw01-amd64-039) pdfTeX 3.14159265-2.6-1.40.20 (TeX Live 2019)
-%       \end{Verbatim}
-% \label{unix}
-%     \end{enumerate}
-%   \item[Class]Check \cite{ccool-thesis} for support for \cls{llncs}
-%   \end{description}
 %   
+%   \section*{Technicality}
+%   Not possible to compile-check the expansion of a certain class of macros against predefined values\cite{stackex-534100}. 
+%   Instead, one can visually check \autoref{part:listing}, as generated in \autoref{other:install} on one's own machine,
+%   against that \href{https://github.com/rogard/ccool}{of the repository} for the same version.
+%   
+%   \section*{Platform and \LaTeX~engine}
+%   
+%   \begin{enumerate}
+%   \item \pkg{ccool} v1.8 satisfactory on/with^^A\footnote{\texttt{\${}cat /proc/version}}\\
+%     \begin{Verbatim}[breaklines=true]
+%       Linux version 4.15.0-20-generic (buildd@lgw01-amd64-039) pdfTeX 3.14159265-2.6-1.40.20 (TeX Live 2019)
+%     \end{Verbatim}
+%     \label{unix}
+%   \end{enumerate}
+%   
+%   \section*{Other}
+%   Check \cite{ccool-thesis} for using \pkg{ccool} with \cls{llncs}
+%   
+%   \refstepcounter{section}
+%   \docsetnameref{References}
+%   \label{other:bib}
 %   \begin{thebibliography}{1}
 %   \bibitem{cool} Nick Setzer {\em The \pkg{cool} package}, 2005, \url{https://www.ctan.org/pkg/cool}
 %   \bibitem{interface3} The \LaTeX3 Project Team {\em The \LaTeX3 interfaces}, 2019,
@@ -830,9 +833,10 @@ ccool.sty, and ccool.pdf.
 %   \bibitem{ccool-thesis} Erwann Rogard and Olympia Hadjiliadis {\em Typesetting a math thesis with \pkg{ccool}}, 2020,
 %     \url{https://github.com/rogard/ccool/blob/master/thesis.pdf}
 %   \bibitem{stackex-erw} User \texttt{erwann} at \href{https://tex.stackexchange.com}{tex.stackexchange.com}, \url{https://tex.stackexchange.com/users/112708/erwann?tab=questions}
-%   \bibitem{stackex-188053} ``How to create lambda expressions?'', \url{https://tex.stackexchange.com/a/188053/112708}
-%   \bibitem{stackex-534100} ``You can only carry out a string comparison for expandable material.'', \url{https://tex.stackexchange.com/a/534100/112708}
-%   \bibitem{stackex-536597} ``Checking a function's expansion against a string'', \url{https://tex.stackexchange.com/questions/536597}
+%   \bibitem{stackex-188053} \href{https://tex.stackexchange.com/users/17423/sean-allred}{@{}sean-allred}'s answer to
+%     ``How to create lambda expressions?'', \url{https://tex.stackexchange.com/a/188053/112708}
+%   \bibitem{stackex-534100} ``Checking a function's expansion against a string'', \url{https://tex.stackexchange.com/a/534100}
+%   \bibitem{stackex-536597} \href{https://tex.stackexchange.com/users/73317/frougon}{@{}frougon}'s answer to ``Journaling calls to a function \textdel{taking inline code as argument}'', \url{https://tex.stackexchange.com/a/536620}
 %   \end{thebibliography}
 %   
 %   \changes{\docvers{1}{0}}{2020/03/08}{Initial version}
@@ -891,11 +895,11 @@ ccool.sty, and ccool.pdf.
 % }
 % \end{documentation}
 % \begin{implementation}
-%     \part{Implementation}\label{part:impl}
-%     
-%     \iffalse
-%<*package>     
-%     \fi
+%   \part{Implementation}\label{part:impl}
+%   
+%   \iffalse
+%<*package>   
+%   \fi
 %    \begin{macrocode}
 %<@@=ccool>      
 \NeedsTeXFormat{LaTeX2e}[2019/10/01]
@@ -1069,10 +1073,10 @@ ccool.sty, and ccool.pdf.
 %    \end{macrocode}
 % \end{macro}
 % \section{\texttt{lambda}}
-% \begin{macro}{\@@_lambda:nn}
+% \begin{macro}{\@@_lambda:nn}\cite{stackex-188053}
 %    \begin{macrocode}
 \cs_new_protected:Npn \@@_lambda:nn #1 #2 
-{%^^A https://tex.stackexchange.com/a/188053/112708
+{
   \exp_args:NNx 
   \DeclareDocumentCommand \@@_lambda_expression 
   { \prg_replicate:nn { #1 } { m } }
@@ -1216,7 +1220,7 @@ ccool.sty, and ccool.pdf.
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\@@_make_ccool_sideeffect:nnn}
+% \begin{macro}{\@@_make_ccool_sideeffect:nnn}\cite{stackex-536597}
 %    \begin{macrocode}
 \cs_new_protected:Nn \@@_make_ccool_sideeffect:nnn
 {
