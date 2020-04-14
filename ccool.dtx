@@ -170,7 +170,7 @@ ccool.sty, and ccool.pdf.
 % This file describes version \fileversion, last revised \filedate.^^A
 % }^^A
 % }
-%   \author{Erwann Rogard\thanks{firstname dot lastname AusTria gmail dot com}~and~Olympia Hadjiliadis\thanks{http://math.hunter.cuny.edu/~olympia/}}
+%   \author{Erwann Rogard\thanks{firstname dot lastname AusTria gmail dot com}}
 %   
 %   \date{Released \filedate}
 %   
@@ -215,8 +215,11 @@ ccool.sty, and ccool.pdf.
 %       \cs{usepackage}\doceval{\pkg{ccool}}
 %     \end{syntax}
 %     \begin{description}
-%     \item[Environment] \docccept{\doccceptpre}
-%     \item[Requirement] \file{ccool.sty} is in the path of the \LaTeX~engine. See \autoref{part:other}, \autoref{other:support}.
+%     \item[Requirement]\docfillblank
+%       \begin{enumerate}
+%       \item \file{ccool.sty} is in the path of the \LaTeX~engine. See \autoref{part:other}, \autoref{other:support}.
+%       \item Declare it in the~\docccept{\doccceptpre}
+%       \end{enumerate}
 %     \end{description}  
 %   \end{function}
 %   
@@ -801,16 +804,20 @@ ccool.sty, and ccool.pdf.
 %   
 %   \section{Testing}\label{other:testing}
 %
-%   \begin{itemize}
+%   \begin{description}
 %   \item[General] Not possible to compile-check the expansion of a certain class of macros against predefined values\cite{stackex-534100}. 
 %     Instead, one can visually check \autoref{part:listing}, as generated in \autoref{other:install} on one's own machine,
 %     against that \href{https://github.com/rogard/ccool}{of the repository} for the same version.
-%   \item[Unix] \pkg{ccool} v1.8 satisfactory on
+%   \item[Platform]\docfillblank
 %     \begin{enumerate}
-%     \item |Linux version 4.15.0-20-generic (buildd@lgw01-amd64-039)|\footnote{\texttt{\${}cat /proc/version}}, with
-%     \item |pdfTeX 3.14159265-2.6-1.40.20 (TeX Live 2019)|
+%     \item \pkg{ccool} v1.8 satisfactory on/with^^A\footnote{\texttt{\${}cat /proc/version}}\\
+%       \begin{Verbatim}[breaklines=true]
+%         Linux version 4.15.0-20-generic (buildd@lgw01-amd64-039) pdfTeX 3.14159265-2.6-1.40.20 (TeX Live 2019)
+%       \end{Verbatim}
+% \label{unix}
 %     \end{enumerate}
-%   \end{itemize}
+%   \item[Class]Check \cite{ccool-thesis} for support for \cls{llncs}
+%   \end{description}
 %   
 %   \begin{thebibliography}{1}
 %   \bibitem{cool} Nick Setzer {\em The \pkg{cool} package}, 2005, \url{https://www.ctan.org/pkg/cool}
@@ -822,7 +829,7 @@ ccool.sty, and ccool.pdf.
 %     \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3packages/xparse.pdf}
 %   \bibitem{ccool-thesis} Erwann Rogard and Olympia Hadjiliadis {\em Typesetting a math thesis with \pkg{ccool}}, 2020,
 %     \url{https://github.com/rogard/ccool/blob/master/thesis.pdf}
-%   \bibitem{stackex-erw} Erwann Rogard's questions at \href{https://tex.stackexchange.com}{tex.stackexchange.com}, \url{https://tex.stackexchange.com/users/112708/erwann?tab=questions}
+%   \bibitem{stackex-erw} User \texttt{erwann} at \href{https://tex.stackexchange.com}{tex.stackexchange.com}, \url{https://tex.stackexchange.com/users/112708/erwann?tab=questions}
 %   \bibitem{stackex-188053} ``How to create lambda expressions?'', \url{https://tex.stackexchange.com/a/188053/112708}
 %   \bibitem{stackex-534100} ``You can only carry out a string comparison for expandable material.'', \url{https://tex.stackexchange.com/a/534100/112708}
 %   \bibitem{stackex-536597} ``Checking a function's expansion against a string'', \url{https://tex.stackexchange.com/questions/536597}
@@ -870,7 +877,6 @@ ccool.sty, and ccool.pdf.
 %   \changes{\docvers{1}{6}}{2020/04/10}{Added: \doclist{pre} (preamble) }
 %   \changes{\docvers{1}{7}}{2020/04/11}{Added: \doclist{cusum:i} (CUSUM) }
 %   \changes{\docvers{1}{7}}{2020/04/11}{Added: Legends to listings }
-%   \changes{\docvers{1}{7}}{2020/04/11}{Added: Co-author}
 %   \changes{\docvers{1}{7}}{2020/04/11}{Deleted: \cs{CcoolDebug} }
 %   \changes{\docvers{1}{7}}{2020/04/11}{Deleted: Listing~5 from \docvers{1}{6} }
 %   \changes{\docvers{1}{8}}{2020/04/12}{Added: \cs{CcoolLambda} }
