@@ -82,6 +82,8 @@ ccool.sty, and ccool.pdf.
 \usepackage{amsmath, amssymb}
 \usepackage[english]{babel}
 \usepackage{bookmark}
+%^^A%\usepackage{enumerate} ERROR: Undefined ctrl seq
+%^^A%\usepackage{enumitem} ERROR: see within
 \usepackage{fancyvrb}
 \usepackage[T1]{fontenc}% \char`[
 \usepackage{fvextra}
@@ -801,22 +803,37 @@ ccool.sty, and ccool.pdf.
 %   
 %   \section{Testing}\label{other:testing}
 %   
-%   \section*{Technicality}
+%   \subsection{Technicality}
 %   Not possible to compile-check the expansion of a certain class of macros against predefined values\cite{stackex-534100}. 
 %   Instead, one can visually check \autoref{part:listing}, as generated in \autoref{other:install} on one's own machine,
 %   against that \href{https://github.com/rogard/ccool}{of the repository} for the same version.
 %   
-%   \section*{Platform and \LaTeX~engine}
-%   
-%   \begin{enumerate}
-%   \item \pkg{ccool} v1.8 satisfactory on/with^^A\footnote{\texttt{\${}cat /proc/version}}\\
-%     \begin{Verbatim}[breaklines=true]
-%       Linux version 4.15.0-20-generic (buildd@lgw01-amd64-039) pdfTeX 3.14159265-2.6-1.40.20 (TeX Live 2019)
-%     \end{Verbatim}
-%     \label{unix}
-%   \end{enumerate}
-%   
-%   \section*{Other}
+%
+% \subsection{Platform}
+% \begin{enumerate}^^A%[label=\roman*{)}]
+% \item 
+%   ^^A uname -a
+%   \begin{Verbatim}[breaklines=true]
+%     Linux laptop 4.15.0-20-generic #21-Ubuntu SMP Tue Apr 24 06:16:15 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+%   \end{Verbatim}
+%   \label{plat:lin}
+% \end{enumerate}
+% 
+% \subsection{Engine}
+% \begin{enumerate}^^A%[\label=\arabic*{)}] ERROR
+% \item 
+%   \begin{Verbatim}[breaklines=true]
+%     pdfTeX 3.14159265-2.6-1.40.20 (TeX Live 2019)
+%   \end{Verbatim}
+%   \label{eng:tlxviiii}
+% \end{enumerate}
+%
+% \subsection{Results}
+% \begin{enumerate}
+% \item \pkg{ccool} v1.8 satisfactory on platform \ref{plat:lin} and engine \ref{eng:tlxviiii}
+% \end{enumerate}
+%
+%   \subsection{Other}
 %   Check \cite{ccool-thesis} for using \pkg{ccool} with \cls{llncs}
 %   
 %   \refstepcounter{section}
