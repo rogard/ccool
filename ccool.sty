@@ -11,15 +11,15 @@
 %% See http://www.latex-project.org/lppl.txt
 %% ----------------------------------------------------------------------------
 %% 
- \RequirePackage{etoolbox}
- \RequirePackage{l3keys2e}
- \RequirePackage{xparse}[2019/05/28]
+ \NeedsTeXFormat{LaTeX2e}[2020/02/02]
+ \RequirePackage{etoolbox}[2019/09/21]
+ \RequirePackage{l3keys2e}[2020/03/06]
+ \RequirePackage{xparse}[2020/03/06]
  \ProvidesExplPackage
  {ccool}                                                                                      % Package name
- {2020/04/14}                                                                                 % Release date
- {1.9}                                                                                        % Release version
+ {2020/04/15}                                                                                 % Release date
+ {2.0}                                                                                        % Release version
  {cool --- A tool for encoding mathematical notation}                                         % Description
-\NeedsTeXFormat{LaTeX2e}[2019/10/01]
 \ExplSyntaxOn
 \cs_new_protected:Nn \@@_aux_inner_set:n
 {
@@ -96,13 +96,6 @@
 \cs_new:Nn \@@_aux_separ:n
 {
   \@@_aux_separ:en{ \tl_count:n{#1} }{#1}
-}
-\ifcsdef{pdfcreationdate}
-{\csedef{@@_aux_timestamp}{\pdfcreationdate}}
-{
-  \usepackage{texosquery}
-  \TeXOSQueryNow{\pdfcreationdate}
-  \csedef{@@_aux_timestamp}{\detokenize\expandafter{\pdfcreationdate}}
 }
 \cs_new_protected:Nn \@@_aux_val:Nn
 {
@@ -325,6 +318,33 @@
   \seq_use:Nnnn #1
   \@@_aux_separ:n{#2}
 }
+\cs_new:Nn \@@_sys_date:
+{
+  \int_eval:n
+  {
+    \c_sys_year_int * 10000
+    +\c_sys_month_int * 100
+    +\c_sys_day_int *  1
+  }
+}
+\cs_new:Nn \@@_sys_date_hex:
+{\int_to_hex:n{\@@_sys_date:}}
+\cs_new:Nn \@@_sys_time:
+{
+  \int_eval:n
+  {
+    \c_sys_hour_int * 100
+    +\c_sys_minute_int * 1
+  }
+}
+\cs_new:Nn\@@_sys_time_hex:
+{\int_to_hex:n{\@@_sys_time:}}
+\cs_new:Nn\@@_sys_filename:
+{
+  \c_sys_jobname_str--
+  \@@_sys_date_hex:--
+  \@@_sys_time_hex:
+}
 \NewDocumentCommand{ \CcoolClear }
 { D<>{\g@@_option_name_tl} }
 {
@@ -346,9 +366,11 @@ Expans .multichoices:nn = { eo, ee, ex, xo, xe, xx }
 { \tl_gset_eq:NN \g@@_option_expans_tl \l_keys_choice_tl },
 Expans .default:n = { xo },
 Expans .initial:n = { xo },
-File .code:n = { \tl_gset:Nn  \g@@_log_file_tl{ \exp_not:n{ #1 } } },
-File .default:n = { \c_sys_jobname_str\@@_aux_timestamp },
-File .initial:n = { \c_sys_jobname_str\@@_aux_timestamp },
+File .code:n = {
+  \tl_gset:Nx \g@@_log_file_tl{#1}
+},
+File .default:n = { \@@_sys_filename: },
+File .initial:n = { \@@_sys_filename: },
 Inner .code:n={
   \@@_option_inner:n{#1}
   \exp_last_unbraced:Nf

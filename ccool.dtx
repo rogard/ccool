@@ -67,18 +67,20 @@ ccool.sty, and ccool.pdf.
 \else
 \expandafter\endgroup
 \fi
-%</internal> 
-%<package> \RequirePackage{etoolbox}
-%<package> \RequirePackage{l3keys2e}
-%<package> \RequirePackage{xparse}[2019/05/28]
+%</internal>
+%<package> \NeedsTeXFormat{LaTeX2e}[2020/02/02]
+%<package> \RequirePackage{etoolbox}[2019/09/21]
+%<package> \RequirePackage{l3keys2e}[2020/03/06]
+%<package> \RequirePackage{xparse}[2020/03/06]
 %<package> \ProvidesExplPackage
 %<package> {ccool}                                                                                      % Package name
-%<package> {2020/04/14}                                                                                 % Release date
-%<package> {1.9}                                                                                        % Release version
+%<package> {2020/04/15}                                                                                 % Release date
+%<package> {2.0}                                                                                        % Release version
 %<package> {cool --- A tool for encoding mathematical notation}                                         % Description
 % 
 %<*driver> 
-\documentclass[full]{l3doc}%TODO
+\documentclass[full]{l3doc}
+\listfiles
 \usepackage{amsmath, amssymb}
 \usepackage[english]{babel}
 \usepackage{bookmark}
@@ -86,7 +88,6 @@ ccool.sty, and ccool.pdf.
 \usepackage{fancyvrb}
 \usepackage{fvextra}% csquotes should be loaded after fvextra
 \usepackage[T1]{fontenc}% \char`[
-\usepackage{luatex85}
 \usepackage{pdfpages}
 \usepackage{tabto}
 \usepackage{tcolorbox}
@@ -427,6 +428,11 @@ ccool.sty, and ccool.pdf.
 %     \item[\docissuedont] |\Ccool{ F = \cal F }|.
 %     \item[\docissuedo] | \Ccool{ F = \cal{F} } | or | \Ccool{ F = \mathcal{F} } |
 %     \end{itemize}
+%   \item \docfillblank
+%     \begin{itemize}
+%     \item[\docissuedont] |[x_0,x]|
+%     \item[\docissuedo] |\left[x_0,x\right]|
+%     \end{itemize}
 %   \item Also see \autoref{part:other}, \autoref{other:issue}
 %   \end{enumerate}
 %   
@@ -481,7 +487,7 @@ ccool.sty, and ccool.pdf.
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{test:ii}. Hello, world!}
 %   \begin{listing}[Hello, world!\footnote{If this looks arcane, it's for the purpose of testing.}]
 %     {label=listing:test:ii}
-%     \CcoolOption{ Separ = {{}{.}{.}}, Outer = {####1} }
+%     \CcoolOption{ Separ = {{}{.}{.}}, Outer = { ####1 } }
 %     \CcoolOption{ Write = \BooleanTrue }
 %     \Ccool<Test>
 %     { KeyA = {.}, KeyB = {!}, KeyC = {\%} }[]
@@ -534,9 +540,6 @@ ccool.sty, and ccool.pdf.
 %     \CcoolRead \tab $\Omega$ $\Field$ $\Meas$
 %   \end{listing}
 %   
-%   ^^A%{OffeneMenge={D}, Ci={C^{1}}, Strecke={[x_0,x]}} ^^A% Hook 2.a
-%   ^^A%Strecke={\char`[x_0,x\char`]}  % PASS % Hook 2.b
-%   ^^A%Strecke={\[x_0,x\]}            % FAIL % Hook 2.c
 %   \phantomsection\addcontentsline{toc}{section}{\doclist{mvt:i}. Mittelwertsatz f\"ur $n$ Variable.}
 %   \begin{listing}[{Mittelwertsatz f\"ur $n$ Variable\cite[17.3]{tcolbox}}]
 %     {label=listing:mvt:i}
@@ -548,7 +551,7 @@ ccool.sty, and ccool.pdf.
 %     { Grad = { \operatorname{grad} } }+
 %     [\begin{theorem}
 %       [Mittelwertsatz f\"ur $n$ Variable]Es~sei~]
-%       { OffMenge = {D}, Ci = {C^{1}}, Strecke = { [x_0,x] } }+
+%       { OffMenge = {D}, Ci = {C^{1}}, Strecke = { \left[x_0,x\right] } }+
 %       [$n\in\N$,~$\OffMenge\subseteq\N^n$ eine offene Menge und $f\in\Ci(\OffMenge,\R)$.
 %       Dann gibt es auf jeder Strecke $\Strecke\subset\OffMenge$ einen Punkt $\xi\in\Strecke$,~]
 %       { Steig = { \frac{ f(x)-f(x_0) }{ x-x_0 } }, Punkt = { \xi } }+
@@ -630,7 +633,7 @@ ccool.sty, and ccool.pdf.
 %   \begin{enumerate}
 %   \item
 %     \begin{description}
-%     \item[\docissuedont] |Inner={\{####1\}|
+%     \item[\docissuedont] |Inner={\{####1\}}|
 %     \item[\docissuesymp] \cs{CcoolRead} fails
 %     \item[\docissuedo] |Inner={\char`{####1\char`}}|
 %     \end{description}
@@ -675,6 +678,11 @@ ccool.sty, and ccool.pdf.
 %       LuaHBTeX, Version 1.12.0 (TeX Live 2020)
 %     \end{Verbatim}
 %     \label{eng:tlxx:lua}
+%   \item
+%     \begin{Verbatim}[breaklines=true]
+%       XeTeX 3.14159265-2.6-0.999992 (TeX Live 2020)
+%     \end{Verbatim}
+%     \label{eng:tlxx:xe}
 %   \end{enumerate}
 %   
 %   \subsection{Results}
@@ -683,6 +691,7 @@ ccool.sty, and ccool.pdf.
 %   \item \pkg{ccool} \docvers{1}{8} satisfactory on platform \ref{plat:lin} and engine \ref{eng:tlxviiii:pdf}
 %   \item \pkg{ccool} \docvers{1}{8} satisfactory on platform \ref{plat:lin} and engine \ref{eng:tlxx:pdf}
 %   \item \pkg{ccool} \docvers{1}{9} satisfactory on platform \ref{plat:lin} and engines \ref{eng:tlxx:pdf} and \ref{eng:tlxx:lua}
+%   \item \pkg{ccool} \docvers{1}{9} satisfactory on platform \ref{plat:lin} and engines \ref{eng:tlxx:pdf},  \ref{eng:tlxx:lua}, and \ref{eng:tlxx:xe}
 %   \end{enumerate}
 %   
 %   \subsection{Other}
@@ -704,8 +713,6 @@ ccool.sty, and ccool.pdf.
 %   \bibitem{ccool-thesis} Erwann Rogard and Olympia Hadjiliadis {\em Typesetting a math thesis with \pkg{ccool}}, 2020,
 %     \url{https://github.com/rogard/ccool/blob/master/thesis.pdf}
 %   \bibitem{user-erw} \url{https://tex.stackexchange.com/users/112708/erwann?tab=questions}
-%   \bibitem{a-41893} \href{https://tex.stackexchange.com/users/4427/egreg}{@{}egreg}'s answer to
-%     ``What is the XeTeX equivalent of \textbackslash\texttt{pdfcreationdate}?'', \url{https://tex.stackexchange.com/a/41893}
 %   \bibitem{a-188053} \href{https://tex.stackexchange.com/users/17423/sean-allred}{@{}sean-allred}'s answer to
 %     ``How to create lambda expressions?'', \url{https://tex.stackexchange.com/a/188053/112708}
 %   \bibitem{a-534100} \href{https://tex.stackexchange.com/users/73/joseph-wright}{@{}joseph-wright}'s answer to
@@ -763,6 +770,9 @@ ccool.sty, and ccool.pdf.
 %   \changes{\docvers{1}{8}}{2020/04/12}{Added: \doclist{vers} }
 %   \changes{\docvers{1}{9}}{2020/04/14}{Added: support for \LuaTeX }
 %   \changes{\docvers{1}{9}}{2020/04/14}{Moved: from \autoref{part:usage} to \autoref{part:impl}, what is now that part's \autoref{impl:frontend}}
+%   \changes{\docvers{2}{0}}{2020/04/15}{Deleted: \pkgoptfi's dependency on \pkg{texosquery} and \cs{pdfcreationdate}}
+%   \changes{\docvers{2}{0}}{2020/04/15}{Added: support for \XeTeX}
+%   \changes{\docvers{2}{0}}{2020/04/15}{Updated: \cs{RequirePackage}, \cs{NeedsTeXFormat}'s second argument / TeX Live 2020}
 %   
 %   \PrintChanges
 %   \PrintIndex
@@ -781,7 +791,6 @@ ccool.sty, and ccool.pdf.
 %   \fi
 %    \begin{macrocode}
 %<@@=ccool>      
-\NeedsTeXFormat{LaTeX2e}[2019/10/01]
 \ExplSyntaxOn
 %    \end{macrocode}
 % \section{\texttt{aux}}
@@ -935,17 +944,6 @@ ccool.sty, and ccool.pdf.
 \cs_new:Nn \@@_aux_separ:n
 {
   \@@_aux_separ:en{ \tl_count:n{#1} }{#1}
-}
-%    \end{macrocode}
-% \end{macro}
-% \begin{macro}{\@@_aux_timestamp}\cite{a-41893}
-%    \begin{macrocode}
-\ifcsdef{pdfcreationdate}
-{\csedef{@@_aux_timestamp}{\pdfcreationdate}}
-{
-  \usepackage{texosquery}
-  \TeXOSQueryNow{\pdfcreationdate}
-  \csedef{@@_aux_timestamp}{\detokenize\expandafter{\pdfcreationdate}}
 }
 %    \end{macrocode}
 % \end{macro}
@@ -1365,6 +1363,54 @@ ccool.sty, and ccool.pdf.
 }
 %    \end{macrocode}
 % \end{macro}
+% \section{sys}\label{impl:sys}
+% \begin{macro}{\@@_sys_date:}
+%    \begin{macrocode}
+\cs_new:Nn \@@_sys_date:
+{
+  \int_eval:n
+  {
+    \c_sys_year_int * 10000
+    +\c_sys_month_int * 100
+    +\c_sys_day_int *  1
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@@_sys_date_hex:}
+%    \begin{macrocode}
+\cs_new:Nn \@@_sys_date_hex:
+{\int_to_hex:n{\@@_sys_date:}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@@_sys_time:}
+%    \begin{macrocode}
+\cs_new:Nn \@@_sys_time:
+{
+  \int_eval:n
+  {
+    \c_sys_hour_int * 100 
+    +\c_sys_minute_int * 1 
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@@_sys_time_hex:}
+%    \begin{macrocode}
+\cs_new:Nn\@@_sys_time_hex:
+{\int_to_hex:n{\@@_sys_time:}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@@_sys_filename:}
+%    \begin{macrocode}
+\cs_new:Nn\@@_sys_filename:
+{
+  \c_sys_jobname_str--
+  \@@_sys_date_hex:--
+  \@@_sys_time_hex:
+}
+%    \end{macrocode}
+% \end{macro}
 % \section{Front-end}\label{impl:frontend}
 % \leavevmode
 % \refstepcounter{section}
@@ -1464,9 +1510,11 @@ Expans .initial:n = { xo },
 % \item[Value] \meta{\doccceptpath}
 % \end{description}
 %    \begin{macrocode}
-File .code:n = { \tl_gset:Nn  \g@@_log_file_tl{ \exp_not:n{ #1 } } },
-File .default:n = { \c_sys_jobname_str\@@_aux_timestamp },
-File .initial:n = { \c_sys_jobname_str\@@_aux_timestamp },
+File .code:n = {
+  \tl_gset:Nx \g@@_log_file_tl{#1}  
+},
+File .default:n = { \@@_sys_filename: },
+File .initial:n = { \@@_sys_filename: },
 %    \end{macrocode}
 % \leavevmode
 % \refstepcounter{subsubsection}
