@@ -77,10 +77,12 @@ There are at least four ways to do it:
 
 \docWays{i} is prone to errors, should the author change \verb+\mathbb{R}+ to \verb+\mathcal{R}+ throughout the document.
 \docWays{ii} corrects that, as the change need only be made in place.
-Also, it has the advantage that it makes the meaning of \verb+\mathbb{R}+ explicit (real numbers), in the source file.
+Also, it has the advantage that it attaches a meaning (real numbers) to the macro created,
+by naming it accordinly (\verb|\Real|), which should help getting one's hand (a collaborator,
+or the same author revisiting it when he has forgotten about it) with the source file.
 The advantage of \docways{iii} over  \docways{iv}, is that it is less verbose,
 and, in this case, that it eliminates the redundancy of \verb|\mathbb|.
-By expanding the macro definitions (\verb+\Real+) as they are made, \docways{iv} allows to
+By expanding the macro definitions (\verb+\Real+) as they are made (as instructed by \verb+*+), \docways{iv} allows to
 make them blend with the text, which some authors may find desirable.
 
 NB: The features covered are not exhaustive.
