@@ -106,7 +106,7 @@
 {
   \exp_args:NNx
   \DeclareDocumentCommand \@@_lambda_expression
-  { \prg_replicate:nn { #1 } { m } }
+  {#1}
   {#2}
   \@@_lambda_expression
 }
@@ -351,7 +351,7 @@
   \@@_prop_clear_new_map:n{#1}
 }
 \NewDocumentCommand{\CcoolHook}{}{\c_empty_tl}
-\ProvideDocumentCommand \CcoolLambda { O{1} m }
+\ProvideDocumentCommand \CcoolLambda { O{m} m }
 {
   \@@_lambda:nn { #1 } { #2 }
 }

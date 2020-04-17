@@ -5,7 +5,7 @@
 %</internal> 
 %<*readme> 
 ----------------------------------------------------------------
-##### ccool --- A tool for encoding mathematical notation
+##### ccool --- A tool for encoding notational conventions (esp. Math)
 - Source repository: https://github.com/rogard/ccool
 - Released under the LaTeX Project Public License v1.3c or later
 - See http://www.latex-project.org/lppl.txt
@@ -25,7 +25,7 @@
 \askforoverwritefalse
 \preamble
 ----------------------------------------------------------------------------
-ccool --- A tool for encoding mathematical notation
+ccool --- A tool for encoding notational conventions (esp. Math)
 Released under the LaTeX Project Public License v1.3c or later
 See http://www.latex-project.org/lppl.txt
 ----------------------------------------------------------------------------
@@ -75,8 +75,8 @@ ccool.sty, and ccool.pdf.
 %<package> \ProvidesExplPackage
 %<package> {ccool}                                                                                      % Package name
 %<package> {2020/04/15}                                                                                 % Release date
-%<package> {2.0}                                                                                        % Release version
-%<package> {cool --- A tool for encoding mathematical notation}                                         % Description
+%<package> {2.1}                                                                                        % Release version
+%<package> {cool --- A tool for encoding notational conventions (esp. Math)}                            % Description
 % 
 %<*driver> 
 \documentclass[full]{l3doc}
@@ -283,11 +283,6 @@ ccool.sty, and ccool.pdf.
 %   \begin{description}
 %   \item[Default] \nameref{usage:opt:in}
 %   \item[Example] |\mathbb{#1}|
-%   \item[Semantics] \docfillblank
-%     \begin{enumerate}[label=\emph{\arabic*)}]
-%     \item \docassign{\meta{\pkgval} }
-%       { \meta{\pkgparin} applied to \meta{\pkgval} }\label{step:val}
-%     \end{enumerate}
 %   \end{description}
 %   
 %   \leavevmode
@@ -300,7 +295,9 @@ ccool.sty, and ccool.pdf.
 %   \item[Example] |Elems={\omega_1, \dots, \omega_n}, Sample=\Omega|
 %   \item[Semantics]\docfillblank
 %     \begin{enumerate}[label=\emph{\arabic*)}]
-%       \setcounter{enumi}{1}
+%       \setcounter{enumi}{0}
+%     \item \docassign{\meta{\pkgval} }
+%       { \meta{\pkgparin} applied to \meta{\pkgval} }\label{step:val}
 %     \item \docassign{ \cs{\meta{\pkgkey}}\docoptd{\meta{\pkgparna}}}{\meta{val_i}} defined in \docstep{val},
 %       using \nameref{usage:opt:ex} for expansion. \label{step:key}
 %     \item If \nameref{usage:opt:wr}, writes the input used by \docstep{key} to \nameref{usage:opt:fi}\label{step:write}
@@ -314,8 +311,7 @@ ccool.sty, and ccool.pdf.
 %   \phantomsection\addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}\docarg{+}}
 %   \DescribeOption{+}
 %   \begin{description}
-%   \item[Semantics] Appends \docstep{key} and \docstep{write} to \nameref{usage:cs:hook}
-%   \footnote{Needed inside a \docccept{\doccceptgroup}, for the side effect of \cs{Ccool} to persist thereafter.}
+%   \item[Semantics] Repeats \docstep{val}, \docstep{key}, and \docstep{write}, at \nameref{usage:cs:hook} (useful inside a \docccept{\doccceptgroup})
 %   \end{description}
 %   
 %   \leavevmode
@@ -326,12 +322,8 @@ ccool.sty, and ccool.pdf.
 %   \DescribeOption{*}
 %   
 %   \begin{description}
-%   \item[Semantics]\docfillblank
-%     \begin{enumerate}
-%       \setcounter{enumi}{3}
-%     \item Expands~\nameref{usage:par:ou} applied to the list created in \docstep{val},
-%       using the separator specified by \nameref{usage:par:si}, \nameref{usage:par:sii}, \nameref{usage:par:siii}.
-%     \end{enumerate}
+%   \item[Semantics] Expands~\nameref{usage:par:ou} applied to the list created in \docstep{val},
+%       using the separator specified by \nameref{usage:par:si}, \nameref{usage:par:sii}, and \nameref{usage:par:siii}.
 %   \end{description}
 %   
 %   \leavevmode
@@ -575,7 +567,7 @@ ccool.sty, and ccool.pdf.
 %   \begin{listing}[Lambda expression.]
 %     {label=listing:lambda:i}
 %     \CcoolOption{ Write = \BooleanTrue }
-%     \Ccool{ EvalAt = \CcoolLambda{(#1)}, ApplyOp = \CcoolLambda[2]{#1[#2]} }
+%     \Ccool{ EvalAt = \CcoolLambda{(#1)}, ApplyOp = \CcoolLambda[mm]{#1[#2]} }
 %     [Supposons une fonction $f\EvalAt{t}$, et \'etudions le probl\`eme o\`u la fonctionnelle $\ApplyOp{S}{f}$ est donn\'ee par\dots]{}
 %     \CcoolOption{ Write = \BooleanFalse }
 %   \end{listing}
@@ -773,6 +765,7 @@ ccool.sty, and ccool.pdf.
 %   \changes{\docvers{2}{0}}{2020/04/15}{Deleted: \pkgoptfi's dependency on \pkg{texosquery} and \cs{pdfcreationdate}}
 %   \changes{\docvers{2}{0}}{2020/04/15}{Added: support for \XeTeX}
 %   \changes{\docvers{2}{0}}{2020/04/15}{Updated: \cs{RequirePackage}, \cs{NeedsTeXFormat}'s second argument / TeX Live 2020}
+%   \changes{\docvers{2}{1}}{2020/04/17}{Replaced: \cs{CcoolLambda}'s optional integer argument (number of \texttt{m}'s) by a standard argument list.  }
 %   
 %   \PrintChanges
 %   \PrintIndex
@@ -967,7 +960,7 @@ ccool.sty, and ccool.pdf.
 {
   \exp_args:NNx 
   \DeclareDocumentCommand \@@_lambda_expression 
-  { \prg_replicate:nn { #1 } { m } }
+  {#1}
   {#2}
   \@@_lambda_expression
 }
@@ -1458,7 +1451,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Semantics] Creates a lambda expression with \meta{\doccceptint} arguments for \meta{\doccceptcode}
 %   \end{description}
 %    \begin{macrocode}
-\ProvideDocumentCommand \CcoolLambda { O{1} m }
+\ProvideDocumentCommand \CcoolLambda { O{m} m }
 {
   \@@_lambda:nn { #1 } { #2 }
 }
