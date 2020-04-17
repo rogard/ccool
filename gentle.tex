@@ -35,10 +35,7 @@
 
 \begin{abstract}
   Breaking down the example in the abstract of the package's doc\cite{ccool}
-\end{abstract}
-
-
-Let's say we want to typeset:
+\end{abstract}These are different ways to do it:
 \begin{center}
   ``\Ccool<Math>[Let~]i{\mathbb{#1}}{Nat = N, Real = R}*s{{~\rm{and}~}}[~denote the natural and real numbers.]{}''
 \end{center}
@@ -61,7 +58,7 @@ There are at least four ways to do it:
 
 \item  \label{ways:iii}
   \begin{Verbatim}[breaklines=true]
-    \Ccool i{\mathbb{#1}}{ Nat = N, Real = R }
+    \Ccool { Nat = {\mathbb{N}}, Real = {\mathbb{R}} }
     Let~$\Nat$ and $\Real$~denote the natural and real numbers.
   \end{Verbatim}
 %    \Ccool i{\mathbb{#1}}{ Nat = N, Real = R }
@@ -69,8 +66,16 @@ There are at least four ways to do it:
 
 \item  \label{ways:iv}
   \begin{Verbatim}[breaklines=true]
+    \Ccool i{\mathbb{#1}}{ Nat = {N}, Real = {R} }
+    Let~$\Nat$ and $\Real$~denote the natural and real numbers.
+  \end{Verbatim}
+%    \Ccool i{\mathbb{#1}}{ Nat = N, Real = R }
+%    Let~$\Nat$ and $\Real$~denote the natural and real numbers.
+
+\item  \label{ways:v}
+  \begin{Verbatim}[breaklines=true]
     \Ccool[Let~]
-    i{\mathbb{#1}}{ Nat = N, Real = R }*s{{~\rm{and}~}}
+    i{\mathbb{#1}}{ Nat = {N}, Real = {R} }*s{{~\rm{and}~}}
     [~denote the natural and real numbers.]{}
   \end{Verbatim}
 \end{enumerate}
@@ -79,10 +84,10 @@ There are at least four ways to do it:
 \docWays{ii} corrects that, as the change need only be made in one place.
 Also, it has the advantage that it attaches a meaning (real numbers) to the macro created,
 by naming it accordinly (\verb|\Real|), which should help getting one's hand (a collaborator,
-or the same author revisiting it when he has forgotten about it) with the source file.
-The advantage of \docways{iii} over  \docways{iv}, is that it is less verbose,
-and, in this case, that it eliminates the redundancy of \verb|\mathbb|.
-By expanding the macros (\verb+\Real+) as they are made (as instructed by \verb+*+), \docways{iv} allows to
+or the same author revisiting it when he has forgotten about it) on the source file.
+\docWays{iii} is more compact than  \docways{ii}, and so is 
+\docways{iv} over \docways{iii}.
+By expanding the macros (\verb+\Real+) as they are made (as instructed by \verb+*+), \docways{v} allows to
 make them blend with the text, which some authors may find desirable.
 
 NB: The features covered are not exhaustive.
