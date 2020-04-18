@@ -6,7 +6,7 @@
 %%
 %% ccool.dtx  (with options: `package')
 %% ----------------------------------------------------------------------------
-%% ccool --- A tool for encoding mathematical notation
+%% ccool --- A tool for encoding notational conventions (esp. Math)
 %% Released under the LaTeX Project Public License v1.3c or later
 %% See http://www.latex-project.org/lppl.txt
 %% ----------------------------------------------------------------------------
@@ -17,9 +17,9 @@
  \RequirePackage{xparse}[2020/03/06]
  \ProvidesExplPackage
  {ccool}                                                                                      % Package name
- {2020/04/15}                                                                                 % Release date
- {2.0}                                                                                        % Release version
- {cool --- A tool for encoding mathematical notation}                                         % Description
+ {2020/04/17}                                                                                 % Release date
+ {2.1}                                                                                        % Release version
+ {cool --- A tool for encoding notational conventions (esp. Math)}                            % Description
 \ExplSyntaxOn
 \cs_new_protected:Nn \@@_aux_inner_set:n
 {
@@ -150,7 +150,7 @@
 {
   \exp_args:NNx
   \ProvideDocumentCommand{#1}
-  { D<>{\g@@_option_name_tl} }
+  { D<>{\g@@_option_param_tl} }
   {
     \@@_prop_item:nn{##1}{#2}
   }
@@ -206,26 +206,26 @@
 {
   \exp_args:NNx \DeclareDocumentCommand \Ccool
   {%^^A      2    3         4 5  6    7 8              9
-    D<>{#1} +o E{ i }{{#2}} m t+ s E{ s o }{{#3}{#4}} +o
+    +o D<>{#1} E{ i }{{#2}} m t+ s E{ s o }{{#3}{#4}} +o
   }
   {
-    \IfValueT{##2}{##2}
-    \@@_make_ccool_sideeffect:nnn{##1}{##3}{##4}
+    \IfValueT{##1}{##1}
+    \@@_make_ccool_sideeffect:nnn{##2}{##3}{##4}
     \IfBooleanT{##6}
     {
-      \@@_make_ccool_exp:nnn{##1}{##7}{##8}
+      \@@_make_ccool_exp:nnn{##2}{##7}{##8}
     }
     \bool_if:nTF{##5}
     {
       \gappto{\CcoolHook}
       {
-        \@@_make_ccool_sideeffect:nnn{##1}{##3}{##4}
+        \@@_make_ccool_sideeffect:nnn{##2}{##3}{##4}
       }
     }
     {\c_empty_tl}
     \IfValueT{##9}
     {
-      \exp_not:n{ \Ccool<##1>[##9] }
+      \exp_not:n{ \Ccool[##9] }
     }
   }
 }
@@ -243,15 +243,15 @@
 {
   \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_inner_tl }
 }
-\cs_new:Nn \@@_option_name:n
+\cs_new:Nn \@@_option_param:n
 {
-  \tl_gset:Nn \g@@_option_name_tl{#1}
+  \tl_gset:Nn \g@@_option_param_tl{#1}
 }
-\@@_option_name:n
+\@@_option_param:n
 {
   \msg_error:nnx{ @@ }
   { generic }
-  { \exp_not:N\g@@_option_name_tl~undefined }
+  { \exp_not:N\g@@_option_param_tl~undefined }
 }
 \cs_new_protected:Nn \@@_option_outer:n
 {
@@ -346,7 +346,7 @@
   \@@_sys_time_hex:
 }
 \NewDocumentCommand{ \CcoolClear }
-{ D<>{\g@@_option_name_tl} }
+{ D<>{\g@@_option_param_tl} }
 {
   \@@_prop_clear_new_map:n{#1}
 }
@@ -376,7 +376,7 @@ Inner .code:n={
   \exp_last_unbraced:Nf
   \@@_make_ccool:nnnn
   {
-    { \g@@_option_name_tl }
+    { \g@@_option_param_tl }
     { \g@@_option_inner_tl }
     { \g@@_option_separ_tl }
     { \g@@_option_outer_tl }
@@ -385,26 +385,26 @@ Inner .code:n={
 Inner .value_required:n = false,
 Inner .default:n = {####1},
 Inner .initial:n = {####1},
-Name .code:n={
-  \@@_option_name:n{#1}
+Param .code:n={
+  \@@_option_param:n{#1}
   \exp_last_unbraced:Nf
   \@@_make_ccool:nnnn
   {
-    { \g@@_option_name_tl }
+    { \g@@_option_param_tl }
     { \g@@_option_inner_tl }
     { \g@@_option_separ_tl }
     { \g@@_option_outer_tl }
   }
 },
-Name .value_required:n = false,
-Name .default:n = { Math },
-Name .initial:n = { Math },
+Param .value_required:n = false,
+Param .default:n = { Default },
+Param .initial:n = { Default },
 Outer .code:n={
   \@@_option_outer:n{#1}
   \exp_last_unbraced:Nf
   \@@_make_ccool:nnnn
   {
-    { \g@@_option_name_tl }
+    { \g@@_option_param_tl }
     { \g@@_option_inner_tl }
     { \g@@_option_separ_tl }
     { \g@@_option_outer_tl }
@@ -418,7 +418,7 @@ Separ .code:n={
   \exp_last_unbraced:Nf
   \@@_make_ccool:nnnn
   {
-    { \g@@_option_name_tl }
+    { \g@@_option_param_tl }
     { \g@@_option_inner_tl }
     { \g@@_option_separ_tl }
     { \g@@_option_outer_tl }
