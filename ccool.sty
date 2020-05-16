@@ -18,7 +18,7 @@
  \ProvidesExplPackage
  {ccool}                                                                                      % Package name
  {2020/04/17}                                                                                 % Release date
- {2.2}                                                                                        % Release version
+ {2.3}                                                                                        % Release version
  {cool --- A key-value interface for generating commands}                                     % Description
 \ExplSyntaxOn
 \cs_new_protected:Nn \@@_aux_inner_set:n
@@ -149,7 +149,7 @@
 \cs_new_protected:Nn \@@_make_key:Nn
 {
   \exp_args:NNx
-  \ProvideDocumentCommand{#1}
+  \DeclareDocumentCommand{#1}
   { D<>{\g@@_option_param_tl} }
   {
     \@@_prop_item:nn{##1}{#2}
@@ -197,7 +197,7 @@
     \@@_log_write:n
     {
       \begingroup
-      \def \@@_log_entry { \Ccool<#1>i{#2}{#3} } \expandafter
+      \def \@@_log_entry { \Ccool<#1>c{#2}{#3} } \expandafter
       \endgroup \@@_log_entry
     }
   }{\c_empty_tl}
@@ -206,7 +206,7 @@
 {
   \exp_args:NNx \DeclareDocumentCommand \Ccool
   {%^^A      2    3         4 5  6    7 8              9
-    +o D<>{#1} E{ i }{{#2}} m t+ s E{ s o }{{#3}{#4}} +o
+    +o D<>{#1} E{ c }{{#2}} m t+ s E{ s c }{{#3}{#4}} +o
   }
   {
     \IfValueT{##1}{##1}
