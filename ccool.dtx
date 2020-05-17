@@ -103,41 +103,10 @@ ccool.sty, and ccool.pdf.
 \RecordChanges
 % ^^A\AtEndDocument { \PrintChanges \PrintIndex }
 \ExplSyntaxOn
-\providecommand\docarg[1]{\texttt{#1}} % fun[param] (macro) vs fun[arg] (eval)
-\providecommand\docargnoval{\c_novalue_tl}
-\providecommand\docassign[2]{#1~$\leftarrow$~#2}
-\providecommand\docexpand[2]{#1~$\rightarrow$~#2}
-\providecommand\docccept[1]{\textit{#1}}
-\providecommand\doccceptargspec{arg~spec}
-\providecommand\doccceptbool{boolean}
-\providecommand\doccceptclist{clist}
-\providecommand\doccceptcode{code}
-\providecommand\doccceptempty{empty}
-\providecommand\doccceptint{integer}
-\providecommand\doccceptgroup{local~group}
-\providecommand\doccceptkvl{keyval~list}
-\providecommand\doccceptopt{option}
-\providecommand\doccceptpath{path}
-\providecommand\doccceptplaceh{placeholder}
-\providecommand\docxparsee[1][~argument]{`e'-type~#1}
-\providecommand\docxparseo[1][~argument]{`o'-type~#1}
-\providecommand\docxparsem[1][~argument]{`m'-type~#1}
-\providecommand\docxparsed[1][~argument]{`d'-type~#1}
-\providecommand\doccceptpre{preamble}
-\providecommand\doccceptsep{separators}
-\providecommand\docccepttok{token}
-\providecommand\docconv[1]{convention~\autoref{conv:#1}}
-\providecommand\docenvdoc{\env{document}}
-\providecommand\docdefaultfor{default~for~}
-\providecommand\doceval[1]{\texttt{\char`\{}#1\texttt{\char`\}}}
-\providecommand\docfillblank{\begin{minipage}[t]{\linewidth}\end{minipage}}
-\providecommand\docissuedo{Do: }
-\providecommand\docissuedont{Don't: }
-\providecommand\docissuesymp{Symptom: }
-\providecommand\docreflist[1]{Listing~\ref{listing:#1}}
-\providecommand\docopto[1]{\texttt{[}#1\texttt{]}}
-\providecommand\docopte[2]{\texttt{#1}\doceval{#2}}
-\providecommand\docoptd[1]{\texttt{\textless}#1\texttt{\textgreater}}
+\newenvironment{docabstract}[1]%https://latex.org/forum/viewtopic.php?t=12156
+{\renewcommand{\abstractname}{#1}\begin{abstract}}
+  {\end{abstract}} 
+\cs_new:Nn \__erw_docu:n{\MakeUppercase #1}
 \providecommand\docphsection[3]
 {
   \leavevmode
@@ -146,46 +115,90 @@ ccool.sty, and ccool.pdf.
   \docsetnameref{#2}
   \label{#3}
 }
-\providecommand\docpipe{\textbar}
 \cs_new:Nn \__ccool_docu:n{\MakeUppercase #1}
-\providecommand\docstep[1]{step~\ref{step:#1}}
-\providecommand\docsee{See:~}
+%^^A Sort--->
+\providecommand\docU[1]{\exp_args:Nx \__erw_docu:n{#1}}
+\providecommand\docarg[1]{\texttt{#1}} % fun[param] (macro) vs fun[arg] (eval)
+\providecommand\docargnoval{\c_novalue_tl}
+\providecommand\docassign[2]{#1~$\leftarrow$~#2}
+\providecommand\docccept[1]{\textit{#1}}
+\providecommand\doccceptargspec{arg~spec}
+\providecommand\doccceptbool{boolean}
+\providecommand\doccceptclist{clist}
+\providecommand\doccceptcode{code}
+\providecommand\doccceptcsname{cs name}
+\providecommand\doccceptcsorcode{cs~or~code}
+\providecommand\doccceptcs{cs}
+\providecommand\doccceptempty{empty}
+\providecommand\doccceptgroup{local~group}
+\providecommand\doccceptint{integer}
+\providecommand\doccceptitems{items}
+\providecommand\doccceptkey{key}
+\providecommand\doccceptkvl{keyval~list}
+\providecommand\doccceptopt{option}
+\providecommand\doccceptpath{path}
+\providecommand\doccceptplaceh{placeholder}
+\providecommand\doccceptpre{preamble}
+\providecommand\doccceptprop{prop}
+\providecommand\doccceptsep{separators}
+\providecommand\doccceptseq{seq}
+\providecommand\docccepttlvar{tl~var}
 \providecommand\docccepttl{token~list}
+\providecommand\docccepttok{token}
+\providecommand\doccceptval{val}
+\providecommand\docconv[1]{convention~\autoref{conv:#1}}
+\providecommand\docdefaultfor{default~for~}
+\providecommand\docenvdoc{\env{document}}
+\providecommand\doceval[1]{\texttt{\char`\{}#1\texttt{\char`\}}}
+\providecommand\docexpand[2]{#1~$\rightarrow$~#2}
+\providecommand\docfillblank{\begin{minipage}[t]{\linewidth}\end{minipage}}
+\providecommand\docissuedont{Don't: }
+\providecommand\docissuedo{Do: }
+\providecommand\docissuesymp{Symptom: }
+\providecommand\doclist[1]{Listing~\ref{listing:#1}}
+\providecommand\docnb{\noindent\textbf{NB}:~}
+\providecommand\docoptd[1]{\texttt{\textless}#1\texttt{\textgreater}}
+\providecommand\docopte[2]{\texttt{#1}\doceval{#2}}
+\providecommand\docopto[1]{\texttt{[}#1\texttt{]}}
+\providecommand\docpipe{\textbar}
+\providecommand\docreflist[1]{Listing~\ref{listing:#1}}
+\providecommand\docsee{See:~}
+\providecommand\docstep[1]{step~\ref{step:#1}}
 \providecommand\doctip{\noindent\textbf{Tip}:~}
-\providecommand\docU[1]{\exp_args:Nx \__ccool_docu:n{#1}}
 \providecommand\docvers[2]{v#1.#2}
 \providecommand\docwarn{\noindent\textbf{Warning}:~}
-\providecommand\docnb{\noindent\textbf{NB}:~}
-\providecommand\pkgparap{\texttt{+}}%append
-\providecommand\pkgparkvl{kvl$_{1}$}
-\providecommand\pkgparkvlnxt{kvl$_{2}$}
-\providecommand\pkgparex{\texttt{*}}%expand
-\providecommand\pkgparhe{tl$_{1}$}%head
-\providecommand\pkgparin{code$_{1}$}%inner
-\providecommand\pkgparpa{tl$_{2}$}%param
-\providecommand\pkgparou{code$_{2}$}%outer
-\providecommand\pkgpars{\Arg{\pkgparsi}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}%separ
-\providecommand\pkgparsi{tl$_{3}$}
-\providecommand\pkgparsii{tl$_{4}$}
-\providecommand\pkgparsiii{tl$_{5}$}
-\providecommand\pkgparta{tl$_{6}$}%tail
+\providecommand\docxparsed[1][~argument]{`d'-type~#1}
+\providecommand\docxparsee[1][~argument]{`e'-type~#1}
+\providecommand\docxparsem[1][~argument]{`m'-type~#1}
+\providecommand\docxparseo[1][~argument]{`o'-type~#1}
 \providecommand\pkgkey{key$_{i}$}
-\providecommand\pkgval{val$_{i}$}
+\providecommand\pkgobj[1]{object identified by #1}
 \providecommand\pkgoptex{\docarg{Expans}}
 \providecommand\pkgoptfi{\docarg{File}}
 \providecommand\pkgoptin{\docarg{Inner}}
-\providecommand\pkgoptpa{\docarg{Param}}
-\providecommand\pkgoptpad{\docarg{Default}}%default
-\providecommand\pkgoptou{\docarg{Outer}}
-\providecommand\pkgoptwr{\docarg{Write}}
-\providecommand\pkgoptse{\docarg{Separ}}
-\providecommand\pkgobj[1]{object identified by #1}
 \providecommand\pkgoptions{kvl0}
+\providecommand\pkgoptou{\docarg{Outer}}
+\providecommand\pkgoptpad{\docarg{Default}}%default
+\providecommand\pkgoptpa{\docarg{Param}}
+\providecommand\pkgoptse{\docarg{Separ}}
+\providecommand\pkgoptwr{\docarg{Write}}
+\providecommand\pkgparap{\texttt{+}}%append
+\providecommand\pkgparex{\texttt{*}}%expand
+\providecommand\pkgparhe{tl$_{1}$}%head
+\providecommand\pkgparin{code$_{1}$}%inner
+\providecommand\pkgparkvlnxt{kvl$_{2}$}
+\providecommand\pkgparkvl{kvl$_{1}$}
+\providecommand\pkgparou{code$_{2}$}%outer
+\providecommand\pkgparpa{tl$_{2}$}%param
+\providecommand\pkgparsiii{tl$_{5}$}
+\providecommand\pkgparsii{tl$_{4}$}
+\providecommand\pkgparsi{tl$_{3}$}
+\providecommand\pkgpars{\Arg{\pkgparsi}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}%separ
+\providecommand\pkgparta{tl$_{6}$}%tail
 \providecommand\pkgsep[1]{\Arg{#1}}
+\providecommand\pkgval{val$_{i}$}
 \providecommand\pkgwrite{\cs{Ccool}\docarg{\meta{\pkgparpa}}\docopte{i}{\meta{\pkgparin}}\Arg{\pkgparkvl}}
-\newenvironment{poliabstract}[1]%https://latex.org/forum/viewtopic.php?t=12156
-{\renewcommand{\abstractname}{#1}\begin{abstract}}
-  {\end{abstract}} 
+%^^A Sort<---
 \ExplSyntaxOff
 \begin{document}
 \DocInput{\jobname.dtx}
@@ -206,31 +219,31 @@ ccool.sty, and ccool.pdf.
 %   \maketitle
 %   
 %   \selectlanguage{english}
-%   \begin{poliabstract}{Abstract}
+%   \begin{docabstract}{Abstract}
 %     The package \pkg{ccool} for \LaTeX~provides a \textit{key-value} interface,\nameref{usage:cs:ccool}, meant to facilitate the generation of commands.
 %     Optional parameters that control the processing of
 %     the input and its expansion are set to their most likely usage.
 %     This can be used to encode notational conventions
-%     (such as \docassign{\cs{Real}}{}|\mathbb{R}|) at the point where they are introduced in the \env{document} (``Let $\mathbb{R}$ denote real numbers'').
+%     (such as \docexpand{\cs{Real}}{}|\mathbb{R}|) at the point where they are introduced in the \env{document} (``Let $\mathbb{R}$ denote real numbers'').
 %     Polymorphic commands can be generated by parameterizing the keys
 %    (for instance, one parameter value for style, another for a property).
 %     User input to \cs{Ccool} can optionally be serialized.
 %     This can useful for typesetting documents sharing the same notation.
-%   \end{poliabstract}
+%   \end{docabstract}
 %   
 %   \selectlanguage{french}
-%   \begin{poliabstract}{Résumé}
+%   \begin{docabstract}{Résumé}
 %     L'extension~\pkg{ccool} pour \LaTeX~met à disposition une interface de type \textit{clé-valeur}, \nameref{usage:cs:ccool},
 %     destinée à faciliter la géneration de commandes. Les 
 %     paramètre optionnels contrôlant le traitement de ces \textit{clé-valeur} sont fixés
 %     par défaut pour répondre aux besoins courants. Ceci peut-être utilisé pour 
-%     la command-isation des conventions de notation (\docassign{\cs{Reel}}{} |\mathbb{R}|),
+%     la command-isation des conventions de notation (\docexpand{\cs{Reel}}{} |\mathbb{R}|),
 %     au point dans le \env{document} où elles sont introduites (``Soit~$\mathbb{R}$~les nombres réels.'').
 %     Des commandes polymorphes peuvent être générées, en associant aux clés un paramètre
 %     (par exemple, une valeur pour le style typographique, une autre pour la description du concept associé).
 %     En option, les instructions passées à cette interface peuvent être sauvegardées,
 %     ce qui peut être utile pour la rédaction de documents faisant appel à des conventions typographiques communes.
-%   \end{poliabstract}
+%   \end{docabstract}
 %   \selectlanguage{english}
 %   
 %   \tableofcontents 
@@ -286,7 +299,7 @@ ccool.sty, and ccool.pdf.
 %   \item Creates \cs{\meta{\pkgkey}}, such that \docexpand{ \cs{\meta{\pkgkey} } }{\meta{\pkgval}},
 %     \label{step:key}
 %   \end{enumerate}where \cs{function} is controled by \doccceptopt~\nameref{usage:opt:in}.
-%   For instance, the side effect of |\Ccool{ Real = \mathbb{R} }| is \docassign{\cs{Real}}{\docarg{\textbackslash{}mathbb\{R\}}}.
+%   For instance, the side effect of |\Ccool{ Real = \mathbb{R} }| is \docexpand{\cs{Real}}{\docarg{\textbackslash{}mathbb\{R\}}}.
 %   To be sparingly used, \docccept{\doccceptopt}~\nameref{usage:opt:ex} controls the way \meta{\pkgkey}~and \meta{\pkgval}~are expanded.
 %   
 %   See \nameref{usage:cs:lambda} to allow command \cs{\meta{\pkgkey}} to take arguments.
@@ -439,7 +452,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Syntax] \meta{\doccceptbool}
 %   \end{description}
 %   
-%   \docphsection{subsection}{\cs{CcoolRead}}{usage:cs:read}
+%   \docphsection{section}{\cs{CcoolRead}}{usage:cs:read}
 %   \begin{function}{\CcoolRead}
 %     \begin{syntax}
 %       \cs{CcoolRead}\docopto{\meta{\doccceptpath}}
