@@ -74,8 +74,8 @@ ccool.sty, and ccool.pdf.
 %<package> \RequirePackage{xparse}[2020/03/06]
 %<package> \ProvidesExplPackage
 %<package> {ccool}                                                                                      % Package name
-%<package> {2020/04/17}                                                                                 % Release date
-%<package> {2.3}                                                                                        % Release version
+%<package> {2020/04/16}                                                                                 % Release date
+%<package> {2.4}                                                                                        % Release version
 %<package> {cool --- A key-value interface for generating commands}                                     % Description
 % 
 %<*driver> 
@@ -134,7 +134,7 @@ ccool.sty, and ccool.pdf.
 \providecommand\docissuedo{Do: }
 \providecommand\docissuedont{Don't: }
 \providecommand\docissuesymp{Symptom: }
-\providecommand\doclist[1]{Listing~\ref{listing:#1}}
+\providecommand\docreflist[1]{Listing~\ref{listing:#1}}
 \providecommand\docopto[1]{\texttt{[}#1\texttt{]}}
 \providecommand\docopte[2]{\texttt{#1}\doceval{#2}}
 \providecommand\docoptd[1]{\texttt{\textless}#1\texttt{\textgreater}}
@@ -311,14 +311,14 @@ ccool.sty, and ccool.pdf.
 %   \nameref{usage:cs:ccool}\Arg{\pkgparkvl}\pkgparex~supplements the \nameref{ccool:core} with 
 %   the expansion of the \meta{\pkgval}'s using typesetting rules controlled by \docccept{\doccceptopt}~\nameref{usage:opt:se} 
 %   and~\nameref{usage:opt:ou}. The first are \docccept{\doccceptsep} applied to the \meta{\pkgval}'s to form a \docccept{\docccepttl},
-%   and the second a function applied to the latter.
+%   and the second a function applied to the latter. 
+%
 %   They can be overriden inline by appending further \docopte{s}{\meta{\doccceptsep}}~and~\docopte{c}{\meta{\pkgparou}}, respectively,
 %   to the list of arguments.
 %   
 %   \subsection{Head}
 %   \label{ccool:he}
 %   \nameref{usage:cs:ccool}\docopto{\meta{\pkgparhe}}\Arg{\pkgparkvl}~expands \meta{\pkgparhe} and executes the \nameref{ccool:core}.
-%   In our example, passing \docarg{Let\~} as \meta{\pkgparhe}, the whole expression expands to ``\Ccool[Let~]{ Real = \mathbb{R} }*''.
 %   
 %   There may be situations where it is convenient to pass \meta{\pkgparhe}~as \doccceptempty.
 %   
@@ -327,10 +327,10 @@ ccool.sty, and ccool.pdf.
 %   \nameref{usage:cs:ccool}\Arg{\pkgparkvl}\docopto{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}~is identical to
 %   \nameref{usage:cs:ccool}\Arg{\pkgparkvl} followed by \nameref{usage:cs:ccool}\docopto{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}.
 %   
-%   It is the combination of \nameref{ccool:core}, \nameref{ccool:he}, and \nameref{ccool:ta}, that allows to integrate typesetting and
-%   the creation of commands. 
+%   The combination of \nameref{ccool:core}, \nameref{ccool:he}, and \nameref{ccool:ta} allows to integrate typesetting and
+%   the creation of commands.
 %   
-%   \subsection{Parametrize the \docccept{\pkgkey}'s}
+%   \subsection{Parameterize the \docccept{\pkgkey}'s}
 %   \label{ccool:pa}
 %   \nameref{usage:cs:ccool}\docoptd{\meta{\pkgparpa}}\Arg{\pkgparkvl} is identical to the  \nameref{ccool:core},
 %   except \meta{\pkgkey} is replaced by \meta{\pkgkey\docoptd{\pkgparpa}}.
@@ -366,7 +366,7 @@ ccool.sty, and ccool.pdf.
 %   \begin{function}{\CcoolLambda}
 %     \begin{syntax}
 %       \cs{CcoolLambda}\docopto{\meta{\doccceptargspec}}\Arg{\doccceptcode},
-%     \end{syntax} where \docccept{\doccceptargspec} is by default to an \docccept{\docxparseo}.
+%     \end{syntax} where \docccept{\doccceptargspec} is by default an \docccept{\docxparseo}.
 %     \begin{description}
 %     \item[Example] \cs{Ccool}|{ EvalAt = \CcoolLambda{(#1)} }|
 %     \item[Semantics] Returns a command of type  \cs{DeclareDocumentCommand}\cite{xparse},
@@ -608,7 +608,7 @@ ccool.sty, and ccool.pdf.
   \Ccool<Style>c{\mathbb{#1}}{ Nat = {N}, Real = {R} }
   [Let $\Nat<Style>$ and $\Real<Style>$ denote the natural and real numbers.]{}
   %^^A<---
-  \CcoolClear
+  \CcoolClear<Style>
 \end{listing}
 % \iffalse
 %</guardlisting> 
@@ -669,11 +669,11 @@ ccool.sty, and ccool.pdf.
 % \fi
 % 
 % \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:hw:ii}. \doclist{hw:i} read from file}
+% {\ref{listing:hw:ii}. \docreflist{hw:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\doclist{hw:i} read from file]
+\begin{listing}[\docreflist{hw:i} read from file]
   {label=listing:hw:ii}
   %^^A--->
   \CcoolRead
@@ -718,11 +718,11 @@ ccool.sty, and ccool.pdf.
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:proba:ii}. \doclist{proba:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:proba:ii}. \docreflist{proba:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\doclist{proba:i} read from file]
+\begin{listing}[\docreflist{proba:i} read from file]
   {label=listing:proba:ii}
   %^^A--->
   \CcoolRead \tab $\Omega$ $\Field$ $\Meas$
@@ -767,11 +767,11 @@ ccool.sty, and ccool.pdf.
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:mvt:ii}. \doclist{mvt:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:mvt:ii}. \docreflist{mvt:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\doclist{mvt:i} read from file]
+\begin{listing}[\docreflist{mvt:i} read from file]
   {label=listing:mvt:ii}
   %^^A--->
   \CcoolRead \tab $\N$ $\R$ $\OffMenge$ $\Ci$ $\Strecke$ 
@@ -803,11 +803,11 @@ ccool.sty, and ccool.pdf.
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:real:ii}. \doclist{poly:real:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:real:ii}. \docreflist{poly:real:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\doclist{poly:real:i} read from file]
+\begin{listing}[\docreflist{poly:real:i} read from file]
   {label=listing:poly:real:ii}
   %^^A--->
   \CcoolRead \tab $\PolyR[n]$ et $\PolyR$
@@ -818,11 +818,11 @@ ccool.sty, and ccool.pdf.
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:gen:i}. Same as \doclist{poly:real:i}, but arbitrary number system}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:gen:i}. Same as \docreflist{poly:real:i}, but arbitrary number system}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[Same as \doclist{poly:gen:i}, but arbitrary number system]
+\begin{listing}[Same as \docreflist{poly:gen:i}, but arbitrary number system]
   {label=listing:poly:gen:i}
   \CcoolOption{ Write = \BooleanTrue }
 %^^A--->
@@ -830,7 +830,7 @@ ccool.sty, and ccool.pdf.
 [Soient~]
 {
   Poly = \CcoolLambda[om]{#2\IfValueT{#1}{_#1}[X] },
-  PolyR = \CcoolLambda[o]{\Poly[#1]{\Real}}
+  PolyR = \CcoolLambda[o]{\Poly[#1]{\Reel}}
 }
 [$\Poly[n]{\Corps}$ et $\Poly{\Corps}$, les familles de polyn\^omes sur $\Corps$, de degr\'e $n$ et leur union pour $n \in \Nat$, respectivement. En particulier,
 ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
@@ -843,11 +843,11 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:real:ii}. \doclist{poly:gen:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:real:ii}. \docreflist{poly:gen:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\doclist{poly:gen:i} read from file]
+\begin{listing}[\docreflist{poly:gen:i} read from file]
   {label=listing:poly:gen:ii}
   %^^A--->
   \CcoolRead \tab $\PolyR[n]$ et $\PolyR$
@@ -876,11 +876,11 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:fonc:ii}. \doclist{fonc:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:fonc:ii}. \docreflist{fonc:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\doclist{fonc:i} read from file]
+\begin{listing}[\docreflist{fonc:i} read from file]
   {label=listing:fonc:ii}
   %^^A--->
   \CcoolRead \tab $f\EvalAt{t}$, $\ApplyOp{S}{f}$
@@ -923,11 +923,11 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:cusum:ii}. \doclist{cusum:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:cusum:ii}. \docreflist{cusum:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-% \begin{listing}[\doclist{cusum:i} read from file]
+% \begin{listing}[\docreflist{cusum:i} read from file]
 %   {label=listing:cusum:ii}
 % ^^A--->
 %   \CcoolRead \tab $\Time $ $\Process$ $\Scale$ $\Real$ $\CUSUMthresh$ $\LogWald$  $\CUSUMst$ $\CUSUM$ $\LogWaldInf$ 
@@ -1093,7 +1093,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % {Add: Listing~1., 2., 3., 4., 6., and 9.}
 % \changes{\docvers{1}{1}}
 % {2020/04/04}
-% {Fix: apparent anomaly in \docvers{1}{0}'s Listing~4, see \doclist{hw:i}}
+% {Fix: apparent anomaly in \docvers{1}{0}'s Listing~4, see \docreflist{hw:i}}
 % \changes{\docvers{1}{2}}
 % {2020/04/06}
 % {Add: optional \pkgparex to \cs{OopsNew} as instruction to expand \pkgparkvl}
@@ -1178,7 +1178,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % {Add: Listing showing part of the preamble }
 % \changes{\docvers{1}{7}}
 % {2020/04/11}
-% {Add: \doclist{cusum:i} (CUSUM) }
+% {Add: \docreflist{cusum:i} (CUSUM) }
 % \changes{\docvers{1}{7}}
 % {2020/04/11}
 % {Add: Legends to listings }
@@ -1193,13 +1193,13 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % {Add: \hyperref[usage:cs:lambda]{\cs{CcoolLambda}} }
 % \changes{\docvers{1}{8}}
 % {2020/04/12}
-% {Add: \doclist{fonc:i}, \doclist{fonc:ii} }
+% {Add: \docreflist{fonc:i}, \docreflist{fonc:ii} }
 % \changes{\docvers{1}{8}}
 % {2020/04/12}
 % {Add: \cs{CcoolVers} }
 % \changes{\docvers{1}{8}}
 % {2020/04/12}
-% {Add: \doclist{vers} }
+% {Add: \docreflist{vers} }
 % \changes{\docvers{1}{9}}
 % {2020/04/14}
 % {Add: support for \LuaTeX }
@@ -1248,13 +1248,19 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % {Replace: In \docstep{key}, the created command's implementation, from \cs{ProvideDocumentCommand} to \cs{DeclareDocumentCommand}}
 % \changes{\docvers{2}{3}}
 % {2020/05/16}
-% {Complete: \doclist{poly:real:i}}
+% {Complete: \docreflist{poly:real:i}}
 % \changes{\docvers{2}{3}}
 % {2020/05/16}
-% {Add: \doclist{poly:real:ii}, \doclist{poly:gen:i}, and \doclist{poly:gen:ii}}
+% {Add: \docreflist{poly:real:ii}, \docreflist{poly:gen:i}, and \docreflist{poly:gen:ii}}
 % \changes{\docvers{2}{3}}
 % {2020/05/16}
 % {Remove: Listing showing part of the preamble }
+% \changes{\docvers{2}{4}}
+% {2020/05/16}
+% {Fix: minor error in the listings (\cs{Real} rather than \cs{Reel}, hitherto unnoticed). }
+% \changes{\docvers{2}{4}}
+% {2020/05/16}
+% {Remove: examples from \autoref{part:usage},~\autoref{usage:cs:ccool}, as redundant with \autoref{part:listing}~\docreflist{numbrsys:base}-\ref{listing:numbrsys:pa} }
 %
 % \PrintChanges
 % \PrintIndex
@@ -1266,6 +1272,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % \end{documentation}
 % ^^A% Commented out to eliminate WARNING: Reference `doc/function//
 % \begin{implementation}
+%   \selectlanguage{english}
 %   \part{Implementation}\label{part:impl}
 %   
 %   \iffalse
