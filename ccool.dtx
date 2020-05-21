@@ -20,7 +20,7 @@
 \fi
 %</internal> 
 %<*install> 
-\input docstrip.tex
+\input l3docstrip.tex
 \keepsilent
 \askforoverwritefalse
 \preamble
@@ -69,13 +69,14 @@ ccool.sty, and ccool.pdf.
 \fi
 %</internal> 
 %<package> \NeedsTeXFormat{LaTeX2e}[2020/02/02]
+%<package> \RequirePackage{erw-l3}[2020/05/18]
 %<package> \RequirePackage{etoolbox}[2019/09/21]
 %<package> \RequirePackage{l3keys2e}[2020/03/06]
 %<package> \RequirePackage{xparse}[2020/03/06]
 %<package> \ProvidesExplPackage
 %<package> {ccool}                                                                                      % Package name
-%<package> {2020/04/16}                                                                                 % Release date
-%<package> {2.4}                                                                                        % Release version
+%<package> {2020/04/21}                                                                                 % Release date
+%<package> {2.5}                                                                                        % Release version
 %<package> {cool --- A key-value interface for generating commands}                                     % Description
 % 
 %<*driver> 
@@ -107,15 +108,17 @@ ccool.sty, and ccool.pdf.
 {\renewcommand{\abstractname}{#1}\begin{abstract}}
   {\end{abstract}} 
 \cs_new:Nn \__erw_docu:n{\MakeUppercase #1}
-\providecommand\docphsection[3]
+\ProvideDocumentCommand\DocPhantomSection{smmm}
 {
   \leavevmode
-  \refstepcounter{#1}
-  \addcontentsline{toc}{#1}{\protect\numberline{\use:c{the#1}}#2}
-  \docsetnameref{#2}
-  \label{#3}
+  \refstepcounter{#2}
+  \IfBooleanT{#1}
+  {
+    \addcontentsline{toc}{#2}{\protect\numberline{\use:c{the#2}}#3}
+  }
+  \docsetnameref{#3}
+  \label{#4}
 }
-\cs_new:Nn \__ccool_docu:n{\MakeUppercase #1}
 %^^A Sort--->
 \providecommand\docU[1]{\exp_args:Nx \__erw_docu:n{#1}}
 \providecommand\docarg[1]{\texttt{#1}} % fun[param] (macro) vs fun[arg] (eval)
@@ -279,7 +282,7 @@ ccool.sty, and ccool.pdf.
 %     \end{description}  
 %   \end{function}
 %   
-%  \docphsection{section}{\cs{Ccool}}{usage:cs:ccool}
+%  \DocPhantomSection*{section}{\cs{Ccool}}{usage:cs:ccool}
 %   \begin{function}{\Ccool}
 %     \begin{syntax}
 %       \cs{Ccool}\docopto{\meta{\pkgparhe}}\docoptd{\meta{\pkgparpa}}\docopte{c}{\meta{\pkgparin}}\Arg{\pkgparkvl}\pkgparap\pkgparex\docopte{s}{\meta{\doccceptsep}}\docopte{c}{\meta{\pkgparou}}\docopto{\meta{\pkgparta}}
@@ -355,7 +358,7 @@ ccool.sty, and ccool.pdf.
 %   If \docccept{\doccceptopt}~\nameref{usage:opt:wr}~is set to \cs{BooleanTrue}, the \nameref{ccool:core}
 %   is supplemented with the code  written to a file, whose \doccceptpath~is controlled by \docccept{\doccceptopt}~\nameref{usage:opt:fi}.
 %
-%  \docphsection{section}{\cs{CcoolClear}}{usage:cs:clear}
+%  \DocPhantomSection*{section}{\cs{CcoolClear}}{usage:cs:clear}
 %   \begin{function}{\CcoolClear}
 %     \begin{syntax}
 %       \cs{CcoolClear}\docoptd{\meta{\pkgparpa}}\Arg{\doccceptclist}
@@ -365,7 +368,7 @@ ccool.sty, and ccool.pdf.
 %     \end{description}
 %   \end{function}
 %   
-% \docphsection{section}{\cs{CcoolHook}}{usage:cs:hook}
+% \DocPhantomSection*{section}{\cs{CcoolHook}}{usage:cs:hook}
 % \begin{function}{\CcoolHook}
 %     \begin{syntax}
 %       \cs{CcoolHook}
@@ -375,7 +378,7 @@ ccool.sty, and ccool.pdf.
 %     \end{description}
 %   \end{function}
 %   
-% \docphsection{section}{\cs{CcoolLambda}}{usage:cs:lambda}
+% \DocPhantomSection*{section}{\cs{CcoolLambda}}{usage:cs:lambda}
 %   \begin{function}{\CcoolLambda}
 %     \begin{syntax}
 %       \cs{CcoolLambda}\docopto{\meta{\doccceptargspec}}\Arg{\doccceptcode},
@@ -386,7 +389,7 @@ ccool.sty, and ccool.pdf.
 %     \end{description}
 %   \end{function}
 %   
-% \docphsection{section}{\cs{CcoolOption}}{usage:cs:option}
+% \DocPhantomSection*{section}{\cs{CcoolOption}}{usage:cs:option}
 %   \begin{function}{\CcoolOption}
 %     \begin{syntax}
 %       \cs{CcoolOption}\Arg{\doccceptkvl}
@@ -396,7 +399,7 @@ ccool.sty, and ccool.pdf.
 %     \end{description}
 %   \end{function}
 %   
-%   \docphsection{subsection}{\pkgoptex}{usage:opt:ex}
+%   \DocPhantomSection*{subsection}{\pkgoptex}{usage:opt:ex}
 %   \DescribeOption{\pkgoptex}
 %   \begin{description}
 %   \item[Also see] \autoref{part:impl}, \nameref{impl:opt:ex}
@@ -404,7 +407,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Syntax] \texttt{eo\docpipe{}ee\docpipe{}ex\docpipe{}xo\docpipe{}xe\docpipe{}xx}
 %   \end{description}
 %   
-%   \docphsection{subsection}{\pkgoptfi}{usage:opt:fi}
+%   \DocPhantomSection{subsection}{\pkgoptfi}{usage:opt:fi}
 %   \DescribeOption{\pkgoptfi}
 %   \begin{description}
 %   \item[Also see] \autoref{part:impl}, \nameref{impl:opt:fi}
@@ -412,7 +415,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Syntax] \meta{\doccceptpath}
 %   \end{description}
 %   
-%   \docphsection{subsection}{\pkgoptin}{usage:opt:in}
+%   \DocPhantomSection*{subsection}{\pkgoptin}{usage:opt:in}
 %   \DescribeOption{\pkgoptin}
 %   \begin{description}
 %   \item[Also see] \autoref{part:impl}, \nameref{impl:opt:in}
@@ -420,7 +423,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Syntax] \meta{\doccceptcode}, with |####1| as the argument to be replaced
 %   \end{description}
 %   
-%   \docphsection{subsection}{\pkgoptpa}{usage:opt:pa}
+%   \DocPhantomSection*{subsection}{\pkgoptpa}{usage:opt:pa}
 %   \DescribeOption{\pkgoptpa}
 %   \begin{description}
 %   \item[Also see] \autoref{part:impl}, \nameref{impl:opt:pa}
@@ -428,7 +431,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Syntax] \meta{\docccepttl}
 %   \end{description}
 %   
-%   \docphsection{subsection}{\pkgoptou}{usage:opt:ou}
+%   \DocPhantomSection*{subsection}{\pkgoptou}{usage:opt:ou}
 %   \DescribeOption{\pkgoptou}
 %   \begin{description}
 %   \item[Also see] \autoref{part:impl}, \nameref{impl:opt:ou}
@@ -436,7 +439,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Syntax] \meta{\doccceptcode}, with |####1| as the argument to be replaced
 %   \end{description}
 %   
-%   \docphsection{subsection}{\pkgoptse}{usage:opt:se}
+%   \DocPhantomSection*{subsection}{\pkgoptse}{usage:opt:se}
 %   \DescribeOption{\pkgoptse}
 %   \begin{description}
 %   \item[Also see] \autoref{part:impl}, \nameref{impl:opt:se}
@@ -444,7 +447,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Syntax] That of \docccept{\doccceptsep} in \cite[Section 8 of \pkg{l3seq}]{interface3}
 %   \end{description}
 %   
-%   \docphsection{subsection}{\pkgoptwr}{usage:opt:wr}
+%   \DocPhantomSection*{subsection}{\pkgoptwr}{usage:opt:wr}
 %   \DescribeOption{\pkgoptwr}
 %   \begin{description}
 %   \item[Also see] \autoref{part:impl}, \nameref{impl:opt:wr}
@@ -452,7 +455,7 @@ ccool.sty, and ccool.pdf.
 %   \item[Syntax] \meta{\doccceptbool}
 %   \end{description}
 %   
-%   \docphsection{section}{\cs{CcoolRead}}{usage:cs:read}
+%   \DocPhantomSection*{section}{\cs{CcoolRead}}{usage:cs:read}
 %   \begin{function}{\CcoolRead}
 %     \begin{syntax}
 %       \cs{CcoolRead}\docopto{\meta{\doccceptpath}}
@@ -467,7 +470,7 @@ ccool.sty, and ccool.pdf.
 %     \end{description}  
 %   \end{function}
 %   
-%   \docphsection{section}{\cs{CcoolVers}}{usage:cs:vers}
+%   \DocPhantomSection*{section}{\cs{CcoolVers}}{usage:cs:vers}
 %   \begin{function}{\CcoolVers}
 %     \begin{syntax}
 %       \cs{CcoolVers}
@@ -638,12 +641,12 @@ ccool.sty, and ccool.pdf.
   \CcoolOption{
     Separ={{\ \char`@\ }{\ \%\ }{\ \char`@\ }}}
   \Ccool{ X = x, Y = y }*[\\]
+  { X = x, Y = y }*s{{~\&~}}[\\]
+  { X = x, Y = y }*s{{,~}{~\&~}}[\\[1em]]
   { X = x, Y = y, Z = z }*[\\]
-  { X = x, Y = y }*s{{\ \&\ }}[\\]
-  { X = x, Y = y }*s{{\ \&\ }{,\ }}[\\]
-  { X = x, Y = y, Z = z }*s{{\ \&\ }}[\\]
-  { X = x, Y = y, Z = z }*s{{\ \&\ }{,\ }}[\\]
-  { X = x, Y = y, Z = z }*s{{\ \&\ }{,\ }{\ \&\ }}\\
+  { X = x, Y = y, Z = z }*s{{~\&~}}[\\]
+  { X = x, Y = y, Z = z }*s{{,~}{\&~}}[\\]
+  { X = x, Y = y, Z = z }*s{{~\&~}{,~}{,~\&~}}\\
   %^^A<---
   \CcoolClear
 \end{listing}
@@ -1051,7 +1054,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % \item \nameref{impl:cs:option} should behave in away similar to that described in \autoref{part:usage}~\autoref{usage:opt:wr}
 % \end{enumerate}
 % 
-% \docphsection{section}{References}{other:bib}
+% \DocPhantomSection*{section}{References}{other:bib}
 % \begin{thebibliography}{1}
 % \bibitem{cool} Nick Setzer {\em The \pkg{cool} package}, 2005, \url{https://www.ctan.org/pkg/cool}
 % \bibitem{interface3} The \LaTeX3 Project Team {\em The \LaTeX3 interfaces}, 2019,
@@ -1234,7 +1237,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % by a standard argument list}
 % \changes{\docvers{2}{1}}
 % {2020/04/17}
-% {Replace: \hyperref[usage:par:pa]{\meta{\pkgparpa}}'s position within \cs{Ccool}'s argument list, from first to second. Greater versatility }
+% {Replace: \hyperref[ccool:pa]{\meta{\pkgparpa}}'s position within \cs{Ccool}'s argument list, from first to second. Greater versatility }
 % \changes{\docvers{2}{1}}
 % {2020/04/17}
 % {Replace: as~the~default~of~\pkgoptpa,~\docarg{Math}~by~\pkgoptpad}
@@ -1273,7 +1276,14 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % {Fix: minor error in the listings (\cs{Real} rather than \cs{Reel}, hitherto unnoticed). }
 % \changes{\docvers{2}{4}}
 % {2020/05/16}
-% {Remove: examples from \autoref{part:usage},~\autoref{usage:cs:ccool}, as redundant with \autoref{part:listing}~\docreflist{numbrsys:base}-\ref{listing:numbrsys:pa} }
+% {Remove: examples from \autoref{part:usage},~\nameref{usage:cs:ccool}, as redundant with \autoref{part:listing}~\docreflist{numbrsys:base}-\ref{listing:numbrsys:pa}}
+% \changes{\docvers{2}{5}}
+% {2020/05/21}
+% {Modify: behavior of \autoref{part:usage}, \nameref{ccool:ex}, rely on \pkg{erw-l3}'s \cs{erw_seq_use:Nn} }
+%
+% \changes{\docvers{2}{5}}
+% {2020/05/21}
+% {Modify: \nameref{impl:opt:fi}, rely on \pkg{erw-l3}'s \cs{erw_jobnametimestamp:} }
 %
 % \PrintChanges
 % \PrintIndex
@@ -1283,16 +1293,13 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % ^^A   \PrintIndex
 % }
 % \end{documentation}
-% ^^A% Commented out to eliminate WARNING: Reference `doc/function//
 % \begin{implementation}
 %   \selectlanguage{english}
 %   \part{Implementation}\label{part:impl}
 %   
-%   \iffalse
-%<*package>   
-%   \fi
 %   \section{Opening}
 %    \begin{macrocode}
+%<*package>      
 %<@@=ccool>      
 \ExplSyntaxOn
 %    \end{macrocode}
@@ -1408,48 +1415,48 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\@@_aux_separ:nn}
-%   \begin{arguments}
-%   \item \meta{ int }
-%   \item \meta{ tokens }
-%   \end{arguments}
-%    \begin{macrocode}
-\cs_new:Nn \@@_aux_separ:nn
-{
-  \int_case:nnTF {#1}
-  {
-    {1}
-    { \prg_replicate:nn{ 3 }{#2} }
-    {2}
-    {
-      { \use_i:nn #2 }
-      { \use_ii:nn #2 }
-      { \use_i:nn #2 }
-    }
-    {3}{#2}
-  }
-  { \c_empty_tl }
-  {
-    \msg_error:nnnn { @@ }
-    { separ }
-    { \exp_not:N \_@@_aux_separ:nn }
-    {#2}
-  }
-}
-\cs_generate_variant:Nn \@@_aux_separ:nn { e }
-%    \end{macrocode}
-% \end{macro}
-% \begin{macro}{\@@_aux_separ:n}
-%   \begin{arguments}
-%   \item \meta{ tokens }
-%   \end{arguments}
-%    \begin{macrocode}
-\cs_new:Nn \@@_aux_separ:n
-{
-  \@@_aux_separ:en{ \tl_count:n{#1} }{#1}
-}
-%    \end{macrocode}
-% \end{macro}
+%^^A% \begin{macro}{\@@_aux_separ:nn}
+%^^A%   \begin{arguments}
+%^^A%   \item \meta{ int }
+%^^A%   \item \meta{ tokens }
+%^^A%   \end{arguments}
+%^^A%    \begin{macrocode}
+%^^A\cs_new:Nn \@@_aux_separ:nn
+%^^A{
+%^^A  \int_case:nnTF {#1}
+%^^A  {
+%^^A    {1}
+%^^A    { \prg_replicate:nn{ 3 }{#2} }
+%^^A    {2}
+%^^A    {
+%^^A      { \use_i:nn #2 }
+%^^A      { \use_ii:nn #2 }
+%^^A      { \use_i:nn #2 }
+%^^A    }
+%^^A    {3}{#2}
+%^^A  }
+%^^A  { \c_empty_tl }
+%^^A  {
+%^^A    \msg_error:nnnn { @@ }
+%^^A    { separ }
+%^^A    { \exp_not:N \_@@_aux_separ:nn }
+%^^A    {#2}
+%^^A  }
+%^^A}
+%^^A\cs_generate_variant:Nn \@@_aux_separ:nn { e }
+%^^A%    \end{macrocode}
+%^^A% \end{macro}
+%^^A% \begin{macro}{\@@_aux_separ:n}
+%^^A%   \begin{arguments}
+%^^A%   \item \meta{ tokens }
+%^^A%   \end{arguments}
+%^^A%    \begin{macrocode}
+%^^A\cs_new:Nn \@@_aux_separ:n
+%^^A{
+%^^A  \@@_aux_separ:en{ \tl_count:n{#1} }{#1}
+%^^A}
+%^^A%    \end{macrocode}
+%^^A% \end{macro}
 % \begin{macro}{\@@_aux_val:Nn}
 %   \begin{arguments}
 %   \item \meta{ seq }
@@ -1588,7 +1595,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
   \@@_aux_outer:n
   {
     \exp_args:NNf
-    \@@_seq_use:Nn
+    \erw_seq_use:Nn
     \g@@_aux_val_seq
     {#2}
   }
@@ -1667,12 +1674,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % \end{macro}
 % \section{\texttt{msg}}
 %    \begin{macrocode}
-\msg_new:nnn {@@}{ generic }{#1}
 \msg_new:nnn {@@}{ iow }{#1~is~closed~can't~write}
-\msg_new:nnn {@@}{ keyonly }{#1~does~not~take~values;~keyval~is~#2}
-\msg_new:nnn {@@}{ keywrong }{#1~does~not~recognize~key~#2}
-\msg_new:nnn {@@}{ separ }{#1~expects~1~to~3~items,~#2}
-\msg_new:nnn {@@}{ unset }{#1~unset}
 %    \end{macrocode}
 % \section{\texttt{option}}
 % \begin{macro}{\@@_option_inner:n}
@@ -1686,7 +1688,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 }
 \@@_option_inner:n
 {
-  \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_inner_tl }
+  \msg_warning:nnn{ erw }{ csnset }{ \exp_not:N \g@@_option_inner_tl }
 }
 %    \end{macrocode}
 % \end{macro}
@@ -1718,7 +1720,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 }
 \@@_option_outer:n
 {
-  \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_outer_tl }
+  \msg_warning:nnn{ erw }{ csnset }{ \exp_not:N \g@@_option_outer_tl }
 }
 %    \end{macrocode}
 % \end{macro}
@@ -1733,7 +1735,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 }
 \@@_option_separ:n
 {
-  \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_separ_tl }
+  \msg_warning:nnn{ erw }{ csnset }{ \exp_not:N \g@@_option_separ_tl }
 }
 %    \end{macrocode}
 % \end{macro}
@@ -1852,70 +1854,8 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\@@_erw_seq_use:Nn}
-%    \begin{macrocode}
-%      \begin{arguments}
-%      \item \meta{ seq }
-%      \item \meta{ tokens }
-%      \end{arguments}
-\cs_new:Nn \@@_seq_use:Nn
-{
-  \exp_last_unbraced:NNf
-  \seq_use:Nnnn #1
-  \@@_aux_separ:n{#2}
-}
-%    \end{macrocode}
-% \end{macro}
-% \section{sys}\label{impl:sys}
-% \begin{macro}{\@@_sys_date:}
-%    \begin{macrocode}
-\cs_new:Nn \@@_sys_date:
-{
-  \int_eval:n
-  {
-    \c_sys_year_int * 10000
-    +\c_sys_month_int * 100
-    +\c_sys_day_int *  1
-  }
-}
-%    \end{macrocode}
-% \end{macro}
-% \begin{macro}{\@@_sys_date_hex:}
-%    \begin{macrocode}
-\cs_new:Nn \@@_sys_date_hex:
-{\int_to_hex:n{\@@_sys_date:}}
-%    \end{macrocode}
-% \end{macro}
-% \begin{macro}{\@@_sys_time:}
-%    \begin{macrocode}
-\cs_new:Nn \@@_sys_time:
-{
-  \int_eval:n
-  {
-    \c_sys_hour_int * 100 
-    +\c_sys_minute_int * 1 
-  }
-}
-%    \end{macrocode}
-% \end{macro}
-% \begin{macro}{\@@_sys_time_hex:}
-%    \begin{macrocode}
-\cs_new:Nn\@@_sys_time_hex:
-{\int_to_hex:n{\@@_sys_time:}}
-%    \end{macrocode}
-% \end{macro}
-% \begin{macro}{\@@_sys_filename:}
-%    \begin{macrocode}
-\cs_new:Nn\@@_sys_filename:
-{
-  \c_sys_jobname_str--
-  \@@_sys_date_hex:--
-  \@@_sys_time_hex:
-}
-%    \end{macrocode}
-% \end{macro}
 % \section{Front-end}\label{impl:frontend}
-% \docphsection{subsection}{\cs{CcoolClear}}{impl:cs:read}
+% \DocPhantomSection*{subsection}{\cs{CcoolClear}}{impl:cs:read}
 % \begin{macro}{\CcoolClear}
 %    \begin{macrocode}
 \NewDocumentCommand{ \CcoolClear }
@@ -1925,13 +1865,13 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 }
 %    \end{macrocode}
 % \end{macro}
-% \docphsection{subsection}{\cs{CcoolHook}}{impl:cs:hook}
+% \DocPhantomSection*{subsection}{\cs{CcoolHook}}{impl:cs:hook}
 % \begin{macro}{\CcoolHook}
 %    \begin{macrocode}
 \NewDocumentCommand{\CcoolHook}{}{\c_empty_tl}
 %    \end{macrocode}
 % \end{macro}
-% \docphsection{subsection}{\cs{CcoolLambda}}{impl:cs:lambda}
+% \DocPhantomSection*{subsection}{\cs{CcoolLambda}}{impl:cs:lambda}
 % \begin{macro}{\CcoolLambda}
 %    \begin{macrocode}
 \ProvideDocumentCommand \CcoolLambda { O{m} m }
@@ -1940,7 +1880,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 }
 %    \end{macrocode}
 % \end{macro}
-% \docphsection{subsection}{\cs{CcoolOption}}{impl:cs:option}
+% \DocPhantomSection*{subsection}{\cs{CcoolOption}}{impl:cs:option}
 % \begin{macro}{\CcoolOption}
 %    \begin{macrocode}
 \NewDocumentCommand{ \CcoolOption }
@@ -1964,7 +1904,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 \keys_define:nn { @@ }
 {
 %    \end{macrocode}
-% \docphsection{subsection}{\pkgoptex}{impl:opt:ex}
+% \DocPhantomSection*{subsubsection}{\pkgoptex}{impl:opt:ex}
 % \DescribeOption{\pkgoptex}
 %    \begin{macrocode}
 Expans .multichoices:nn = { eo, ee, ex, xo, xe, xx }
@@ -1972,16 +1912,16 @@ Expans .multichoices:nn = { eo, ee, ex, xo, xe, xx }
 Expans .default:n = { xo },
 Expans .initial:n = { xo },
 %    \end{macrocode}
-% \docphsection{subsection}{\pkgoptfi}{impl:opt:fi}
+% \DocPhantomSection*{subsubsection}{\pkgoptfi}{impl:opt:fi}
 % \DescribeOption{\pkgoptfi}
 %    \begin{macrocode}
 File .code:n = {
   \tl_gset:Nx \g@@_log_file_tl{#1}  
 },
-File .default:n = { \@@_sys_filename: },
-File .initial:n = { \@@_sys_filename: },
+File .default:n = { \erw_sys_jobnametimestamp: },
+File .initial:n = { \erw_sys_jobnametimestamp: },
 %    \end{macrocode}
-% \docphsection{subsection}{\pkgoptin}{impl:opt:in}
+% \DocPhantomSection*{subsubsection}{\pkgoptin}{impl:opt:in}
 % \DescribeOption{\pkgoptin}
 %    \begin{macrocode}
 Inner .code:n={
@@ -1999,7 +1939,7 @@ Inner .value_required:n = false,
 Inner .default:n = {####1},
 Inner .initial:n = {####1},
 %    \end{macrocode}
-% \docphsection{subsection}{\pkgoptpa}{impl:opt:pa}
+% \DocPhantomSection*{subsubsection}{\pkgoptpa}{impl:opt:pa}
 % \DescribeOption{\pkgoptpa}
 %    \begin{macrocode}
 Param .code:n={
@@ -2017,7 +1957,7 @@ Param .value_required:n = false,
 Param .default:n = { Default },
 Param .initial:n = { Default },
 %    \end{macrocode}
-% \docphsection{subsection}{\pkgoptou}{impl:opt:ou}
+% \DocPhantomSection*{subsubsection}{\pkgoptou}{impl:opt:ou}
 % \DescribeOption{\pkgoptou}
 %    \begin{macrocode}
 Outer .code:n={
@@ -2035,7 +1975,7 @@ Outer .value_required:n = false,
 Outer .default:n = { \ensuremath{####1} },
 Outer .initial:n = { \ensuremath{####1} },
 %    \end{macrocode}
-% \docphsection{subsection}{\pkgoptse}{impl:opt:se}
+% \DocPhantomSection*{subsubsection}{\pkgoptse}{impl:opt:se}
 % \DescribeOption{\pkgoptse}
 %    \begin{macrocode}
 Separ .code:n={
@@ -2053,7 +1993,7 @@ Separ .value_required:n = false,
 Separ .default:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } },
 Separ .initial:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } },
 %    \end{macrocode}
-% \docphsection{subsection}{\pkgoptwr}{impl:opt:wr}
+% \DocPhantomSection*{subsubsection}{\pkgoptwr}{impl:opt:wr}
 % \DescribeOption{\pkgoptwr}
 %    \begin{macrocode}
 Write .code:n = {
@@ -2068,7 +2008,7 @@ Write .initial:n = \BooleanFalse
 %    \begin{macrocode}
 }
 %    \end{macrocode}
-% \docphsection{subsection}{\cs{CcoolRead}}{impl:cs:read}
+% \DocPhantomSection*{subsection}{\cs{CcoolRead}}{impl:cs:read}
 % \begin{macro}{\CcoolRead}
 %    \begin{macrocode}
 \NewDocumentCommand{\CcoolRead}
@@ -2080,7 +2020,7 @@ Write .initial:n = \BooleanFalse
 }
 %    \end{macrocode}
 % \end{macro}
-% \docphsection{subsection}{\cs{CcoolVers}}{impl:cs:vers}
+% \DocPhantomSection*{subsection}{\cs{CcoolVers}}{impl:cs:vers}
 % \begin{macro}{\CcoolVers}
 %    \begin{macrocode}
 \NewDocumentCommand{\CcoolVers}
@@ -2089,13 +2029,13 @@ Write .initial:n = \BooleanFalse
 %    \end{macrocode}
 % \end{macro} 
 % \section{Closing}
+%
 %    \begin{macrocode}
 \ExplSyntaxOff
+%</package>      
 %    \end{macrocode}
+%
 % \end{implementation}
 % 
-% \iffalse
-%</package> 
-% \fi
 % \Finale
 \endinput

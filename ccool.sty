@@ -12,197 +12,171 @@
 %% ----------------------------------------------------------------------------
 %% 
  \NeedsTeXFormat{LaTeX2e}[2020/02/02]
+ \RequirePackage{erw-l3}[2020/05/18]
  \RequirePackage{etoolbox}[2019/09/21]
  \RequirePackage{l3keys2e}[2020/03/06]
  \RequirePackage{xparse}[2020/03/06]
  \ProvidesExplPackage
  {ccool}                                                                                      % Package name
- {2020/04/16}                                                                                 % Release date
- {2.4}                                                                                        % Release version
+ {2020/04/21}                                                                                 % Release date
+ {2.5}                                                                                        % Release version
  {cool --- A key-value interface for generating commands}                                     % Description
 \ExplSyntaxOn
-\cs_new_protected:Nn \@@_aux_inner_set:n
+\cs_new_protected:Nn \__ccool_aux_inner_set:n
 {
-  \cs_gset:Npn \@@_aux_inner:n ##1 {#1}
-  \cs_generate_variant:Nn \@@_aux_inner:n { e }
+  \cs_gset:Npn \__ccool_aux_inner:n ##1 {#1}
+  \cs_generate_variant:Nn \__ccool_aux_inner:n { e }
 }
-\cs_new_protected:Npn \@@_aux_key:w #1 = #2 \q_stop
+\cs_new_protected:Npn \__ccool_aux_key:w #1 = #2 \q_stop
 {
-  \seq_gput_right:Nx \g@@_aux_key_seq { \tl_trim_spaces:n{#1} }
+  \seq_gput_right:Nx \g__ccool_aux_key_seq { \tl_trim_spaces:n{#1} }
 }
-\cs_new_protected:Nn \@@_aux_key:n
+\cs_new_protected:Nn \__ccool_aux_key:n
 {
-  \@@_aux_key:w #1 \q_stop
+  \__ccool_aux_key:w #1 \q_stop
 }
-\cs_new_protected:Nn \@@_aux_key:N
+\cs_new_protected:Nn \__ccool_aux_key:N
 {
-  \seq_gclear_new:N \g@@_aux_key_seq
-  \seq_map_function:NN #1 \@@_aux_key:n
+  \seq_gclear_new:N \g__ccool_aux_key_seq
+  \seq_map_function:NN #1 \__ccool_aux_key:n
 }
-\cs_new_protected:Nn \@@_aux_outer_set:n
+\cs_new_protected:Nn \__ccool_aux_outer_set:n
 {
-  \cs_gset:Npn \@@_aux_outer:n ##1 {#1}
+  \cs_gset:Npn \__ccool_aux_outer:n ##1 {#1}
 }
-\prop_new:N \g@@_aux_prop
-\cs_new_protected:Nn \@@_aux_prop:nn
+\prop_new:N \g__ccool_aux_prop
+\cs_new_protected:Nn \__ccool_aux_prop:nn
 {
-  \prop_gput:Nnn \g@@_aux_prop{#1}{#2}
+  \prop_gput:Nnn \g__ccool_aux_prop{#1}{#2}
 }
-\cs_generate_variant:Nn \@@_aux_prop:nn { eo, ee, ex, xo, xe, xx }
-\tl_new:N \g@@_option_expans_tl
-\cs_new_protected:Npn \@@_aux_prop:w #1 = #2 \q_stop
+\cs_generate_variant:Nn \__ccool_aux_prop:nn { eo, ee, ex, xo, xe, xx }
+\tl_new:N \g__ccool_option_expans_tl
+\cs_new_protected:Npn \__ccool_aux_prop:w #1 = #2 \q_stop
 {
   \exp_args:Nx
-  \use:c{@@_aux_prop:\g@@_option_expans_tl}
+  \use:c{__ccool_aux_prop:\g__ccool_option_expans_tl}
   { \tl_trim_spaces:n{#1} }
-  { \@@_aux_inner:n{ \tl_trim_spaces:n{#2} } }
+  { \__ccool_aux_inner:n{ \tl_trim_spaces:n{#2} } }
 }
-\cs_new_protected:Nn \@@_aux_prop:n
+\cs_new_protected:Nn \__ccool_aux_prop:n
 {
-  \@@_aux_prop:w #1 \q_stop
+  \__ccool_aux_prop:w #1 \q_stop
 }
-\cs_new_protected:Nn \@@_aux_prop:N
+\cs_new_protected:Nn \__ccool_aux_prop:N
 {
-  \prop_gclear_new:N \g@@_aux_prop
+  \prop_gclear_new:N \g__ccool_aux_prop
   \seq_if_empty:NTF #1
   { \c_empty_tl }
   {
-    \seq_map_function:NN #1 \@@_aux_prop:n
+    \seq_map_function:NN #1 \__ccool_aux_prop:n
   }
 }
-\cs_new:Nn \@@_aux_separ:nn
+\cs_new_protected:Nn \__ccool_aux_val:Nn
 {
-  \int_case:nnTF {#1}
-  {
-    {1}
-    { \prg_replicate:nn{ 3 }{#2} }
-    {2}
-    {
-      { \use_i:nn #2 }
-      { \use_ii:nn #2 }
-      { \use_i:nn #2 }
-    }
-    {3}{#2}
-  }
-  { \c_empty_tl }
-  {
-    \msg_error:nnnn { @@ }
-    { separ }
-    { \exp_not:N \_@@_aux_separ:nn }
-    {#2}
-  }
+  \seq_gclear_new:N \g__ccool_aux_val_seq
+  \__ccool_seq_from_prop:NNn \g__ccool_aux_val_seq #1 { \__ccool_prop_name:n{#2} }
 }
-\cs_generate_variant:Nn \@@_aux_separ:nn { e }
-\cs_new:Nn \@@_aux_separ:n
-{
-  \@@_aux_separ:en{ \tl_count:n{#1} }{#1}
-}
-\cs_new_protected:Nn \@@_aux_val:Nn
-{
-  \seq_gclear_new:N \g@@_aux_val_seq
-  \@@_seq_from_prop:NNn \g@@_aux_val_seq #1 { \@@_prop_name:n{#2} }
-}
-\cs_new_protected:Npn \@@_lambda:nn #1 #2
+\cs_new_protected:Npn \__ccool_lambda:nn #1 #2
 {
   \exp_args:NNx
-  \DeclareDocumentCommand \@@_lambda_expression
+  \DeclareDocumentCommand \__ccool_lambda_expression
   {#1}
   {#2}
-  \@@_lambda_expression
+  \__ccool_lambda_expression
 }
-\iow_new:N \g@@_log_iow
-\AtEndDocument{\iow_close:N \g@@_log_iow}
-\bool_set_false:N \g@@_log_open_bool
-\cs_new_protected:Nn \@@_log_close:
+\iow_new:N \g__ccool_log_iow
+\AtEndDocument{\iow_close:N \g__ccool_log_iow}
+\bool_set_false:N \g__ccool_log_open_bool
+\cs_new_protected:Nn \__ccool_log_close:
 {
-  \iow_close:N \g@@_log_iow
-  \bool_gset_false:N \g@@_log_open_bool
+  \iow_close:N \g__ccool_log_iow
+  \bool_gset_false:N \g__ccool_log_open_bool
 }
-\tl_new:N \g@@_log_file_tl
-\cs_new_protected:Nn \@@_log_open:
+\tl_new:N \g__ccool_log_file_tl
+\cs_new_protected:Nn \__ccool_log_open:
 {
-  \tl_gset:Nx \g@@_log_to_tl{\g@@_log_file_tl}
-  \iow_open:Nn \g@@_log_iow {\g@@_log_to_tl}
-  \bool_gset_true:N \g@@_log_open_bool
+  \tl_gset:Nx \g__ccool_log_to_tl{\g__ccool_log_file_tl}
+  \iow_open:Nn \g__ccool_log_iow {\g__ccool_log_to_tl}
+  \bool_gset_true:N \g__ccool_log_open_bool
 }
-\cs_new_protected:Nn \@@_log_read:n
+\cs_new_protected:Nn \__ccool_log_read:n
 {
   \file_input:n{#1}
   \tl_log:n{read~from~#1}
 }
-\cs_generate_variant:Nn \@@_log_read:n { e }
-\cs_new_protected:Nn \@@_log_read:
+\cs_generate_variant:Nn \__ccool_log_read:n { e }
+\cs_new_protected:Nn \__ccool_log_read:
 {
-  \@@_log_read:e{\g@@_log_to_tl}
+  \__ccool_log_read:e{\g__ccool_log_to_tl}
 }
-\tl_new:N \g@@_log_to_tl
-\cs_new_protected:Nn \@@_log_write:n
+\tl_new:N \g__ccool_log_to_tl
+\cs_new_protected:Nn \__ccool_log_write:n
 {
-  \bool_if:nTF{ \g@@_log_open_bool }
+  \bool_if:nTF{ \g__ccool_log_open_bool }
   {
-    \iow_now:Nn \g@@_log_iow {#1}
+    \iow_now:Nn \g__ccool_log_iow {#1}
     \tl_log:n{ write~to~#1 }
   }
-  { \msg_error:nnn{ @@ }{ iow }{ \g@@_log_iow }  }
+  { \msg_error:nnn{ __ccool }{ iow }{ \g__ccool_log_iow }  }
 }
-\cs_generate_variant:Nn \@@_log_write:n { e }
-\cs_new_protected:Nn \@@_make_key:Nn
+\cs_generate_variant:Nn \__ccool_log_write:n { e }
+\cs_new_protected:Nn \__ccool_make_key:Nn
 {
   \exp_args:NNx
   \DeclareDocumentCommand{#1}
-  { D<>{\g@@_option_param_tl} }
+  { D<>{\g__ccool_option_param_tl} }
   {
-    \@@_prop_item:nn{##1}{#2}
+    \__ccool_prop_item:nn{##1}{#2}
   }
 }
-\cs_generate_variant:Nn \@@_make_key:Nn {c}
-\cs_new_protected:Nn \@@_make_key:n
+\cs_generate_variant:Nn \__ccool_make_key:Nn {c}
+\cs_new_protected:Nn \__ccool_make_key:n
 {
-  \@@_make_key:cn{#1}{#1}
+  \__ccool_make_key:cn{#1}{#1}
 }
-\cs_generate_variant:Nn \@@_make_key:n { e }
-\cs_new_protected:Nn \@@_make_key:N
+\cs_generate_variant:Nn \__ccool_make_key:n { e }
+\cs_new_protected:Nn \__ccool_make_key:N
 {
-  \seq_map_function:NN #1 \@@_make_key:e
+  \seq_map_function:NN #1 \__ccool_make_key:e
 }
-\cs_new_protected:Nn \@@_make_ccool_exp:nnn
+\cs_new_protected:Nn \__ccool_make_ccool_exp:nnn
 {
-  \@@_aux_val:Nn \g@@_aux_key_seq {#1}
-  \@@_aux_outer_set:n{#3}
-  \@@_aux_outer:n
+  \__ccool_aux_val:Nn \g__ccool_aux_key_seq {#1}
+  \__ccool_aux_outer_set:n{#3}
+  \__ccool_aux_outer:n
   {
     \exp_args:NNf
-    \@@_seq_use:Nn
-    \g@@_aux_val_seq
+    \erw_seq_use:Nn
+    \g__ccool_aux_val_seq
     {#2}
   }
 }
-\cs_new_protected:Nn \@@_make_ccool_key:nnn
+\cs_new_protected:Nn \__ccool_make_ccool_key:nnn
 {
-  \@@_prop_if_exist:nTF{#1}
+  \__ccool_prop_if_exist:nTF{#1}
   { \c_empty_tl }
-  { \@@_prop_new:n{#1} }
-  \exp_args:No \@@_aux_inner_set:n{#2}
-  \seq_set_from_clist:Nn \g@@_aux_keyval_seq {#3}
-  \@@_aux_prop:N \g@@_aux_keyval_seq
-  \@@_prop_append:Nn \g@@_aux_prop {#1}
-  \@@_aux_key:N \g@@_aux_keyval_seq
-  \@@_make_key:N \g@@_aux_key_seq
+  { \__ccool_prop_new:n{#1} }
+  \exp_args:No \__ccool_aux_inner_set:n{#2}
+  \seq_set_from_clist:Nn \g__ccool_aux_keyval_seq {#3}
+  \__ccool_aux_prop:N \g__ccool_aux_keyval_seq
+  \__ccool_prop_append:Nn \g__ccool_aux_prop {#1}
+  \__ccool_aux_key:N \g__ccool_aux_keyval_seq
+  \__ccool_make_key:N \g__ccool_aux_key_seq
 }
-\cs_new_protected:Nn \@@_make_ccool_sideeffect:nnn
+\cs_new_protected:Nn \__ccool_make_ccool_sideeffect:nnn
 {
-  \@@_make_ccool_key:nnn{#1}{#2}{#3}
-  \bool_if:nTF{ \g@@_log_open_bool }
+  \__ccool_make_ccool_key:nnn{#1}{#2}{#3}
+  \bool_if:nTF{ \g__ccool_log_open_bool }
   {
-    \@@_log_write:n
+    \__ccool_log_write:n
     {
       \begingroup
-      \def \@@_log_entry { \Ccool<#1>c{#2}{#3} } \expandafter
-      \endgroup \@@_log_entry
+      \def \__ccool_log_entry { \Ccool<#1>c{#2}{#3} } \expandafter
+      \endgroup \__ccool_log_entry
     }
   }{\c_empty_tl}
 }
-\cs_new_protected:Npn \@@_make_ccool:nnnn #1 #2 #3 #4
+\cs_new_protected:Npn \__ccool_make_ccool:nnnn #1 #2 #3 #4
 {
   \exp_args:NNx \DeclareDocumentCommand \Ccool
   {%^^A      2    3         4 5  6    7 8              9
@@ -210,16 +184,16 @@
   }
   {
     \IfValueT{##1}{##1}
-    \@@_make_ccool_sideeffect:nnn{##2}{##3}{##4}
+    \__ccool_make_ccool_sideeffect:nnn{##2}{##3}{##4}
     \IfBooleanT{##6}
     {
-      \@@_make_ccool_exp:nnn{##2}{##7}{##8}
+      \__ccool_make_ccool_exp:nnn{##2}{##7}{##8}
     }
     \bool_if:nTF{##5}
     {
       \gappto{\CcoolHook}
       {
-        \@@_make_ccool_sideeffect:nnn{##2}{##3}{##4}
+        \__ccool_make_ccool_sideeffect:nnn{##2}{##3}{##4}
       }
     }
     {\c_empty_tl}
@@ -229,199 +203,161 @@
     }
   }
 }
-\msg_new:nnn {@@}{ generic }{#1}
-\msg_new:nnn {@@}{ iow }{#1~is~closed~can't~write}
-\msg_new:nnn {@@}{ keyonly }{#1~does~not~take~values;~keyval~is~#2}
-\msg_new:nnn {@@}{ keywrong }{#1~does~not~recognize~key~#2}
-\msg_new:nnn {@@}{ separ }{#1~expects~1~to~3~items,~#2}
-\msg_new:nnn {@@}{ unset }{#1~unset}
-\cs_new_protected:Nn \@@_option_inner:n
+\msg_new:nnn {__ccool}{ iow }{#1~is~closed~can't~write}
+\cs_new_protected:Nn \__ccool_option_inner:n
 {
-  \tl_gset:Nn \g@@_option_inner_tl {#1}
+  \tl_gset:Nn \g__ccool_option_inner_tl {#1}
 }
-\@@_option_inner:n
+\__ccool_option_inner:n
 {
-  \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_inner_tl }
+  \msg_warning:nnn{ erw }{ csnset }{ \exp_not:N \g__ccool_option_inner_tl }
 }
-\cs_new:Nn \@@_option_param:n
+\cs_new:Nn \__ccool_option_param:n
 {
-  \tl_gset:Nn \g@@_option_param_tl{#1}
+  \tl_gset:Nn \g__ccool_option_param_tl{#1}
 }
-\@@_option_param:n
+\__ccool_option_param:n
 {
-  \msg_error:nnx{ @@ }
+  \msg_error:nnx{ __ccool }
   { generic }
-  { \exp_not:N\g@@_option_param_tl~undefined }
+  { \exp_not:N\g__ccool_option_param_tl~undefined }
 }
-\cs_new_protected:Nn \@@_option_outer:n
+\cs_new_protected:Nn \__ccool_option_outer:n
 {
-  \tl_gset:Nn \g@@_option_outer_tl {#1}
+  \tl_gset:Nn \g__ccool_option_outer_tl {#1}
 }
-\@@_option_outer:n
+\__ccool_option_outer:n
 {
-  \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_outer_tl }
+  \msg_warning:nnn{ erw }{ csnset }{ \exp_not:N \g__ccool_option_outer_tl }
 }
-\cs_new_protected:Nn \@@_option_separ:n
+\cs_new_protected:Nn \__ccool_option_separ:n
 {
-  \cs_gset:Npn \g@@_option_separ_tl {#1}
+  \cs_gset:Npn \g__ccool_option_separ_tl {#1}
 }
-\@@_option_separ:n
+\__ccool_option_separ:n
 {
-  \msg_warning:nnn{ @@ }{ unset }{ \exp_not:N \g@@_option_separ_tl }
+  \msg_warning:nnn{ erw }{ csnset }{ \exp_not:N \g__ccool_option_separ_tl }
 }
-\cs_new_protected:Npn \@@_prop_append:NN #1 #2
+\cs_new_protected:Npn \__ccool_prop_append:NN #1 #2
 {
-  \cs_set:Nn \@@_prop_append:nn
+  \cs_set:Nn \__ccool_prop_append:nn
   {
     \prop_gput:Nnx #1 {##1}{ \prop_item:Nn #2{##1} }
   }
-  \prop_map_function:NN #2 \@@_prop_append:nn
+  \prop_map_function:NN #2 \__ccool_prop_append:nn
 }
-\cs_generate_variant:Nn \@@_prop_append:NN { cN }
-\cs_new_protected:Nn \@@_prop_append:Nn
+\cs_generate_variant:Nn \__ccool_prop_append:NN { cN }
+\cs_new_protected:Nn \__ccool_prop_append:Nn
 {
-  \@@_prop_append:cN{ \@@_prop_name:n {#2} } #1
+  \__ccool_prop_append:cN{ \__ccool_prop_name:n {#2} } #1
 }
-\cs_new_protected:Nn \@@_prop_clear_new:n
+\cs_new_protected:Nn \__ccool_prop_clear_new:n
 {
-  \exp_args:No \prop_clear_new:c{ \@@_prop_name:n {#1} }
+  \exp_args:No \prop_clear_new:c{ \__ccool_prop_name:n {#1} }
 }
-\cs_new_protected:Nn \@@_prop_clear_new_map:n
+\cs_new_protected:Nn \__ccool_prop_clear_new_map:n
 {
-  \seq_set_from_clist:Nn \g@@_aux_key_seq {#1}
-  \seq_map_function:NN \g@@_aux_key_seq \@@_prop_clear_new:n
+  \seq_set_from_clist:Nn \g__ccool_aux_key_seq {#1}
+  \seq_map_function:NN \g__ccool_aux_key_seq \__ccool_prop_clear_new:n
 }
-\cs_new:Nn \@@_prop_if_exist:nTF
+\cs_new:Nn \__ccool_prop_if_exist:nTF
 {
-  \prop_if_exist:cTF{ \@@_prop_name:n {#1} }{#2}{#3}
+  \prop_if_exist:cTF{ \__ccool_prop_name:n {#1} }{#2}{#3}
 }
-\cs_new:Nn \@@_prop_item:nn
+\cs_new:Nn \__ccool_prop_item:nn
 {
-  \prop_item:cn { \@@_prop_name:n {#1} } {#2}
+  \prop_item:cn { \__ccool_prop_name:n {#1} } {#2}
 }
-\cs_new:Npn \@@_prop_name:n #1{ @@_#1 }
-\cs_new_protected:Nn \@@_prop_new:n
+\cs_new:Npn \__ccool_prop_name:n #1{ __ccool_#1 }
+\cs_new_protected:Nn \__ccool_prop_new:n
 {
-  \prop_new:c{ \@@_prop_name:n {#1} }
+  \prop_new:c{ \__ccool_prop_name:n {#1} }
 }
-\cs_new_protected:Nn \@@_seq_from_prop:NNn
+\cs_new_protected:Nn \__ccool_seq_from_prop:NNn
 {
-  \cs_set_protected:Nn \@@_seq_from_prop:n
+  \cs_set_protected:Nn \__ccool_seq_from_prop:n
   {
     \seq_gput_right:No #1 { \prop_item:cn{#3}{##1} }
   }
-  \seq_map_function:NN #2 \@@_seq_from_prop:n
-}
-\cs_new:Nn \@@_seq_use:Nn
-{
-  \exp_last_unbraced:NNf
-  \seq_use:Nnnn #1
-  \@@_aux_separ:n{#2}
-}
-\cs_new:Nn \@@_sys_date:
-{
-  \int_eval:n
-  {
-    \c_sys_year_int * 10000
-    +\c_sys_month_int * 100
-    +\c_sys_day_int *  1
-  }
-}
-\cs_new:Nn \@@_sys_date_hex:
-{\int_to_hex:n{\@@_sys_date:}}
-\cs_new:Nn \@@_sys_time:
-{
-  \int_eval:n
-  {
-    \c_sys_hour_int * 100
-    +\c_sys_minute_int * 1
-  }
-}
-\cs_new:Nn\@@_sys_time_hex:
-{\int_to_hex:n{\@@_sys_time:}}
-\cs_new:Nn\@@_sys_filename:
-{
-  \c_sys_jobname_str--
-  \@@_sys_date_hex:--
-  \@@_sys_time_hex:
+  \seq_map_function:NN #2 \__ccool_seq_from_prop:n
 }
 \NewDocumentCommand{ \CcoolClear }
-{ D<>{\g@@_option_param_tl} }
+{ D<>{\g__ccool_option_param_tl} }
 {
-  \@@_prop_clear_new_map:n{#1}
+  \__ccool_prop_clear_new_map:n{#1}
 }
 \NewDocumentCommand{\CcoolHook}{}{\c_empty_tl}
 \ProvideDocumentCommand \CcoolLambda { O{m} m }
 {
-  \@@_lambda:nn { #1 } { #2 }
+  \__ccool_lambda:nn { #1 } { #2 }
 }
 \NewDocumentCommand{ \CcoolOption }
 { m }
 {
-  \keys_set:nn{ @@ }{#1}
+  \keys_set:nn{ __ccool }{#1}
 }
-\keys_define:nn { @@ }
+\keys_define:nn { __ccool }
 {
 Expans .multichoices:nn = { eo, ee, ex, xo, xe, xx }
-{ \tl_gset_eq:NN \g@@_option_expans_tl \l_keys_choice_tl },
+{ \tl_gset_eq:NN \g__ccool_option_expans_tl \l_keys_choice_tl },
 Expans .default:n = { xo },
 Expans .initial:n = { xo },
 File .code:n = {
-  \tl_gset:Nx \g@@_log_file_tl{#1}
+  \tl_gset:Nx \g__ccool_log_file_tl{#1}
 },
-File .default:n = { \@@_sys_filename: },
-File .initial:n = { \@@_sys_filename: },
+File .default:n = { \erw_sys_jobnametimestamp: },
+File .initial:n = { \erw_sys_jobnametimestamp: },
 Inner .code:n={
-  \@@_option_inner:n{#1}
+  \__ccool_option_inner:n{#1}
   \exp_last_unbraced:Nf
-  \@@_make_ccool:nnnn
+  \__ccool_make_ccool:nnnn
   {
-    { \g@@_option_param_tl }
-    { \g@@_option_inner_tl }
-    { \g@@_option_separ_tl }
-    { \g@@_option_outer_tl }
+    { \g__ccool_option_param_tl }
+    { \g__ccool_option_inner_tl }
+    { \g__ccool_option_separ_tl }
+    { \g__ccool_option_outer_tl }
   }
 },
 Inner .value_required:n = false,
 Inner .default:n = {####1},
 Inner .initial:n = {####1},
 Param .code:n={
-  \@@_option_param:n{#1}
+  \__ccool_option_param:n{#1}
   \exp_last_unbraced:Nf
-  \@@_make_ccool:nnnn
+  \__ccool_make_ccool:nnnn
   {
-    { \g@@_option_param_tl }
-    { \g@@_option_inner_tl }
-    { \g@@_option_separ_tl }
-    { \g@@_option_outer_tl }
+    { \g__ccool_option_param_tl }
+    { \g__ccool_option_inner_tl }
+    { \g__ccool_option_separ_tl }
+    { \g__ccool_option_outer_tl }
   }
 },
 Param .value_required:n = false,
 Param .default:n = { Default },
 Param .initial:n = { Default },
 Outer .code:n={
-  \@@_option_outer:n{#1}
+  \__ccool_option_outer:n{#1}
   \exp_last_unbraced:Nf
-  \@@_make_ccool:nnnn
+  \__ccool_make_ccool:nnnn
   {
-    { \g@@_option_param_tl }
-    { \g@@_option_inner_tl }
-    { \g@@_option_separ_tl }
-    { \g@@_option_outer_tl }
+    { \g__ccool_option_param_tl }
+    { \g__ccool_option_inner_tl }
+    { \g__ccool_option_separ_tl }
+    { \g__ccool_option_outer_tl }
   }
 },
 Outer .value_required:n = false,
 Outer .default:n = { \ensuremath{####1} },
 Outer .initial:n = { \ensuremath{####1} },
 Separ .code:n={
-  \@@_option_separ:n{#1}
+  \__ccool_option_separ:n{#1}
   \exp_last_unbraced:Nf
-  \@@_make_ccool:nnnn
+  \__ccool_make_ccool:nnnn
   {
-    { \g@@_option_param_tl }
-    { \g@@_option_inner_tl }
-    { \g@@_option_separ_tl }
-    { \g@@_option_outer_tl }
+    { \g__ccool_option_param_tl }
+    { \g__ccool_option_inner_tl }
+    { \g__ccool_option_separ_tl }
+    { \g__ccool_option_outer_tl }
   }
 },
 Separ .value_required:n = false,
@@ -429,8 +365,8 @@ Separ .default:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } },
 Separ .initial:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } },
 Write .code:n = {
   \bool_if:nTF{#1}
-  {\@@_log_open:}
-  {\@@_log_close:}
+  {\__ccool_log_open:}
+  {\__ccool_log_close:}
 },
 Write .value_required:n = false,
 Write .default:n = \BooleanFalse,
@@ -440,8 +376,8 @@ Write .initial:n = \BooleanFalse
 {o}
 {
   \IfValueTF{#1}
-  {\@@_log_read:e{#1}}
-  {\@@_log_read:}
+  {\__ccool_log_read:e{#1}}
+  {\__ccool_log_read:}
 }
 \NewDocumentCommand{\CcoolVers}
 {}
