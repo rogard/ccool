@@ -75,8 +75,8 @@ ccool.sty, and ccool.pdf.
 %<package> \RequirePackage{xparse}[2020/03/06]
 %<package> \ProvidesExplPackage
 %<package> {ccool}                                                                                      % Package name
-%<package> {2020/04/21}                                                                                 % Release date
-%<package> {2.5}                                                                                        % Release version
+%<package> {2020/04/22}                                                                                 % Release date
+%<package> {2.6}                                                                                        % Release version
 %<package> {cool --- A key-value interface for generating commands}                                     % Description
 % 
 %<*driver> 
@@ -294,12 +294,12 @@ ccool.sty, and ccool.pdf.
 %   
 %   \subsection{Core feature}
 %   \label{ccool:core} 
-%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl} creates for each \meta{\pkgkey}|=|\meta{\pkgval},
-%   the command \cs{\meta{\pkgkey}}, according to the following algorithm:
+%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl} defines for each \meta{\pkgkey}|=|\meta{\pkgval},
+%   the command \cs{\meta{\pkgkey}}, in two steps:
 %   \begin{enumerate}[label=\emph{\arabic*)}]
 %   \item \docassign{\meta{\pkgval} }
 %     { \cs{function}\Arg{\pkgval} }\label{step:val}
-%   \item Creates \cs{\meta{\pkgkey}}, such that \docexpand{ \cs{\meta{\pkgkey} } }{\meta{\pkgval}},
+%   \item defins \cs{\meta{\pkgkey}} such that \docexpand{ \cs{\meta{\pkgkey} } }{\meta{\pkgval}},
 %     \label{step:key}
 %   \end{enumerate}where \cs{function} is controled by \doccceptopt~\nameref{usage:opt:in}.
 %   For instance, the side effect of |\Ccool{ Real = \mathbb{R} }| is \docexpand{\cs{Real}}{\docarg{\textbackslash{}mathbb\{R\}}}.
@@ -1066,8 +1066,6 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % \bibitem{ccool-thesis} Erwann Rogard and Olympia Hadjiliadis {\em Typesetting a math thesis with \pkg{ccool}}, 2020,
 %   \url{https://github.com/rogard/ccool/blob/master/thesis.pdf}
 % \bibitem{user-erw} \url{https://tex.stackexchange.com/users/112708/erwann?tab=questions}
-% \bibitem{a-188053} \href{https://tex.stackexchange.com/users/17423/sean-allred}{@{}sean-allred}'s answer to
-%   ``How to create lambda expressions?'', \url{https://tex.stackexchange.com/a/188053/112708}
 % \bibitem{a-534100} \href{https://tex.stackexchange.com/users/73/joseph-wright}{@{}joseph-wright}'s answer to
 %   ``Checking a function's expansion against a string'', \url{https://tex.stackexchange.com/a/534100}
 % \bibitem{a-536597} \href{https://tex.stackexchange.com/users/73317/frougon}{@{}frougon}'s answer to ``Journaling calls to a function \textdel{taking inline code as argument}'', \url{https://tex.stackexchange.com/a/536620}
@@ -1285,6 +1283,10 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 % {2020/05/21}
 % {Modify: \nameref{impl:opt:fi}, rely on \pkg{erw-l3}'s \cs{erw_jobnametimestamp:} }
 %
+% \changes{\docvers{2}{6}}
+% {2020/05/22}
+% {Modify: \nameref{impl:cs:lambda}, rely on \pkg{erw-l3}'s \cs{erw_lambda:nnn} }
+%
 % \PrintChanges
 % \PrintIndex
 % \clearpage
@@ -1415,48 +1417,6 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 }
 %    \end{macrocode}
 % \end{macro}
-%^^A% \begin{macro}{\@@_aux_separ:nn}
-%^^A%   \begin{arguments}
-%^^A%   \item \meta{ int }
-%^^A%   \item \meta{ tokens }
-%^^A%   \end{arguments}
-%^^A%    \begin{macrocode}
-%^^A\cs_new:Nn \@@_aux_separ:nn
-%^^A{
-%^^A  \int_case:nnTF {#1}
-%^^A  {
-%^^A    {1}
-%^^A    { \prg_replicate:nn{ 3 }{#2} }
-%^^A    {2}
-%^^A    {
-%^^A      { \use_i:nn #2 }
-%^^A      { \use_ii:nn #2 }
-%^^A      { \use_i:nn #2 }
-%^^A    }
-%^^A    {3}{#2}
-%^^A  }
-%^^A  { \c_empty_tl }
-%^^A  {
-%^^A    \msg_error:nnnn { @@ }
-%^^A    { separ }
-%^^A    { \exp_not:N \_@@_aux_separ:nn }
-%^^A    {#2}
-%^^A  }
-%^^A}
-%^^A\cs_generate_variant:Nn \@@_aux_separ:nn { e }
-%^^A%    \end{macrocode}
-%^^A% \end{macro}
-%^^A% \begin{macro}{\@@_aux_separ:n}
-%^^A%   \begin{arguments}
-%^^A%   \item \meta{ tokens }
-%^^A%   \end{arguments}
-%^^A%    \begin{macrocode}
-%^^A\cs_new:Nn \@@_aux_separ:n
-%^^A{
-%^^A  \@@_aux_separ:en{ \tl_count:n{#1} }{#1}
-%^^A}
-%^^A%    \end{macrocode}
-%^^A% \end{macro}
 % \begin{macro}{\@@_aux_val:Nn}
 %   \begin{arguments}
 %   \item \meta{ seq }
@@ -1467,19 +1427,6 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 {
   \seq_gclear_new:N \g@@_aux_val_seq
   \@@_seq_from_prop:NNn \g@@_aux_val_seq #1 { \@@_prop_name:n{#2} } 
-}
-%    \end{macrocode}
-% \end{macro}
-% \section{\texttt{lambda}}
-% \begin{macro}{\@@_lambda:nn}\cite{a-188053}
-%    \begin{macrocode}
-\cs_new_protected:Npn \@@_lambda:nn #1 #2 
-{
-  \exp_args:NNx 
-  \DeclareDocumentCommand \@@_lambda_expression 
-  {#1}
-  {#2}
-  \@@_lambda_expression
 }
 %    \end{macrocode}
 % \end{macro}
@@ -1876,7 +1823,7 @@ ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
 %    \begin{macrocode}
 \ProvideDocumentCommand \CcoolLambda { O{m} m }
 {
-  \@@_lambda:nn { #1 } { #2 }
+  \erw_lambda:nnn \DeclareDocumentCommand { #1 } { #2 }
 }
 %    \end{macrocode}
 % \end{macro}
