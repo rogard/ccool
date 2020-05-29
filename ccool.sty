@@ -12,14 +12,14 @@
 %% ----------------------------------------------------------------------------
 %% 
  \NeedsTeXFormat{LaTeX2e}[2020/02/02]
- \RequirePackage{erw-l3}[2020/05/18]
+ \RequirePackage{erw-l3}[2020/05/27]
  \RequirePackage{etoolbox}[2019/09/21]
  \RequirePackage{l3keys2e}[2020/03/06]
  \RequirePackage{xparse}[2020/03/06]
  \ProvidesExplPackage
  {ccool}                                                                                      % Package name
- {2020/04/22}                                                                                 % Release date
- {2.6}                                                                                        % Release version
+ {2020/04/28}                                                                                 % Release date
+ {2.7}                                                                                        % Release version
  {cool --- A key-value interface for generating commands}                                     % Description
 \ExplSyntaxOn
 \cs_new_protected:Nn \__ccool_aux_inner_set:n
@@ -75,6 +75,72 @@
 {
   \seq_gclear_new:N \g__ccool_aux_val_seq
   \__ccool_seq_from_prop:NNn \g__ccool_aux_val_seq #1 { \__ccool_prop_name:n{#2} }
+}
+\prop_new:N \g__ccool_lang_and_prop
+\cs_new_protected:Nn \__ccool_lang_and_update:n
+{
+  \erw_prop_keyval_parse:NNNn
+  \g__ccool_lang_and_prop
+  \erw_keyval_error:Nn
+  \prop_gput:Nnn
+  { #1 }
+}
+\cs_generate_variant:Nn \__ccool_lang_and_update:n { e }
+\cs_new:Nn \__ccool_lang_and:n
+{
+  \prop_if_in:NnTF
+  \g__ccool_lang_and_prop
+  {#1}
+  {\prop_item:Nn\g__ccool_lang_and_prop{#1}}
+  {
+    \msg_warning:nnn{__ccool}{lang_and}{#1}
+    \__ccool_lang_and:n{english}
+  }
+}
+\ifcsdef{languagename}
+{
+  \cs_new:Nn \__ccool_lang_and:{\exp_args:No\__ccool_lang_and:n{\languagename}}
+}
+{
+  \cs_new:Nn \__ccool_lang_and:{english}
+}
+\tl_const:Nn \g__ccool_lang_and_tl
+{
+afrikaans=en,
+basque=eta,
+catalan=i,
+croatian=i,
+czech=a,
+danish=og,
+dutch=en,
+english=and,
+esperanto=kaj,
+estonian=ja,
+finnish=ja,
+french=et,
+galician=e,
+german=und,
+hungarian=\'es,
+icelandic=og,
+indonesian=dan,
+irish=agus,
+italian=e,
+kurmanji=\^u,
+latin=et,
+latvian=un,
+lithuanian=ir,
+ngerman=und,
+polish=i,
+portuguese=e,
+romanian=\c{s}i,
+slovak=a,
+spanish=y,
+swedish=och,
+swissgerman=und,
+turkish=ve,
+turkmen=we,
+ukrainian=i,
+welsh=a
 }
 \iow_new:N \g__ccool_log_iow
 \AtEndDocument{\iow_close:N \g__ccool_log_iow}
@@ -171,7 +237,7 @@
 \cs_new_protected:Npn \__ccool_make_ccool:nnnn #1 #2 #3 #4
 {
   \exp_args:NNx \DeclareDocumentCommand \Ccool
-  {%^^A      2    3         4 5  6    7 8              9
+  {%^^A      2         3    4 5  6           7   8    9
     +o D<>{#1} E{ c }{{#2}} m t+ s E{ s c }{{#3}{#4}} +o
   }
   {
@@ -196,13 +262,14 @@
   }
 }
 \msg_new:nnn {__ccool}{ iow }{#1~is~closed~can't~write}
+\msg_new:nnn {__ccool}{lang_and}{~key~#1~missing~for~global~option~'And';~falling~back~on~'english'}
 \cs_new_protected:Nn \__ccool_option_inner:n
 {
   \tl_gset:Nn \g__ccool_option_inner_tl {#1}
 }
 \__ccool_option_inner:n
 {
-  \msg_warning:nnn{ erw }{ csnset }{ \exp_not:N \g__ccool_option_inner_tl }
+  \msg_warning:nnn{ erw }{ notset }{ \exp_not:N \g__ccool_option_inner_tl }
 }
 \cs_new:Nn \__ccool_option_param:n
 {
@@ -220,7 +287,7 @@
 }
 \__ccool_option_outer:n
 {
-  \msg_warning:nnn{ erw }{ csnset }{ \exp_not:N \g__ccool_option_outer_tl }
+  \msg_warning:nnn{ erw }{ notset }{ \exp_not:N \g__ccool_option_outer_tl }
 }
 \cs_new_protected:Nn \__ccool_option_separ:n
 {
@@ -228,7 +295,24 @@
 }
 \__ccool_option_separ:n
 {
-  \msg_warning:nnn{ erw }{ csnset }{ \exp_not:N \g__ccool_option_separ_tl }
+  \msg_warning:nnn{ erw }{ notset }{ \exp_not:N \g__ccool_option_separ_tl }
+}
+\ifcsdef{text}
+{
+  \tl_const:Nn \c__ccool_option_separ_default_tl
+  {
+    { \text{{\ }\__ccool_lang_and:{\ }} }
+    { \text{,{\ }} }
+    { \text{,{\ }\__ccool_lang_and:{\ }} }
+  }
+}
+{
+  \tl_const:Nn \c__ccool_option_separ_default_tl
+  {
+    { {\ }\__ccool_lang_and:{\ } }
+    { ,{\ } }
+    { ,{\ }\__ccool_lang_and:{\ } }
+  }
 }
 \cs_new_protected:Npn \__ccool_prop_append:NN #1 #2
 {
@@ -284,12 +368,15 @@
   \erw_lambda:nnn \DeclareDocumentCommand { #1 } { #2 }
 }
 \NewDocumentCommand{ \CcoolOption }
-{ m }
+{ O{ And, Expans, File, Inner, Param, Outer, Separ, Write } }
 {
   \keys_set:nn{ __ccool }{#1}
 }
 \keys_define:nn { __ccool }
 {
+And .code:n = { \__ccool_lang_and_update:e{ #1 } },
+And .default:n = { \g__ccool_lang_and_tl },
+And .initial:n = { \g__ccool_lang_and_tl },
 Expans .multichoices:nn = { eo, ee, ex, xo, xe, xx }
 { \tl_gset_eq:NN \g__ccool_option_expans_tl \l_keys_choice_tl },
 Expans .default:n = { xo },
@@ -353,8 +440,8 @@ Separ .code:n={
   }
 },
 Separ .value_required:n = false,
-Separ .default:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } },
-Separ .initial:n = { {\ }and{\ } } { ,{\ } } { ,{\ }and{\ } },
+Separ .default:n = { \c__ccool_option_separ_default_tl },
+Separ .initial:n = { \c__ccool_option_separ_default_tl },
 Write .code:n = {
   \bool_if:nTF{#1}
   {\__ccool_log_open:}
