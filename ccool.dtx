@@ -82,6 +82,7 @@ ccool.sty, and ccool.pdf.
 %<*driver> 
 \documentclass[full, show-notes]{l3doc}
 \listfiles
+\usepackage{fvextra}%^^A \NB{bug}{Warning:csquotes should be loaded after fvextra->nope}
 \usepackage{amsmath, amssymb}
 \usepackage[
 afrikaans,
@@ -95,7 +96,7 @@ dutch,
 estonian,
 finnish,
 french,
-% ^^A galician,          % ERROR
+% ^^A galician,         % ERROR
 german,
 hungarian,
 icelandic,
@@ -111,19 +112,16 @@ polish,
 portuguese,
 romanian,
 slovak,
-% ^^A spanish,           % ERROR
+%^^A spanish,                % ERROR
 swedish,
 swissgerman,
 turkish,
 turkmen,
-ukrainian,
 welsh,
 english
 ]{babel}
 \usepackage{bookmark}
 \usepackage{ccool}
-\usepackage{fvextra}
-\usepackage{csquotes}% \NB{fix}{warning:csquotes should be loaded after fvextra}
 \usepackage[T1]{fontenc}% \char`[
 \usepackage{microtype}
 \usepackage{tabto}
@@ -259,7 +257,7 @@ english
 %   
 %   \selectlanguage{english}
 %   \begin{docabstract}{Abstract}
-%     The package \pkg{ccool} for \LaTeX~provides a \textit{key-value} interface,\nameref{usage:cs:ccool}, meant to facilitate the generation of commands.
+%     The package \pkg{ccool} for \LaTeX~provides a \textit{key-value} interface,\nameref{usage:cs:ccool}, to facilitate the generation of commands.
 %     Optional parameters that control the processing of the input and its expansion are set through global options to their most likely usage.
 %     This can be used to encode notational conventions
 %     (such as \docexpand{\cs{Real}}{}|\mathbb{R}|) at the point where they are introduced in the \env{document} (``Let $\mathbb{R}$ denote real numbers'').
@@ -334,7 +332,7 @@ english
 %   \begin{enumerate}[label=\emph{\arabic*)}]
 %   \item \docassign{\meta{\pkgval} }
 %     { \cs{function}\Arg{\pkgval} }\label{step:val}
-%   \item defins \cs{\meta{\pkgkey}} such that \docexpand{ \cs{\meta{\pkgkey} } }{\meta{\pkgval}},
+%   \item defines \cs{\meta{\pkgkey}} such that \docexpand{ \cs{\meta{\pkgkey} } }{\meta{\pkgval}},
 %     \label{step:key}
 %   \end{enumerate}where \cs{function} is controled by \doccceptgopt~\nameref{usage:opt:in}.
 %   For instance, the side effect of |\Ccool{ Real = \mathbb{R} }| is \docexpand{\cs{Real}}{\docarg{\textbackslash{}mathbb\{R\}}}.
@@ -348,7 +346,7 @@ english
 %   except it overrides \nameref{usage:opt:in}.
 %   
 %   In our example, if multiple number systems are defined with \cs{Ccool} (natural, reals, \dots),
-%   it is more efficient to omit |\mathbb{.}| inside \meta{\pkgval} and, instead,
+%   it is more efficient to omit |\mathbb{.}| inside \meta{\pkgval}, and instead
 %   use |c{\mathbb{#1}}|, where |#1| means ``parameter to be replaced''.
 %   
 %   \subsection{Append to a hook}
@@ -385,13 +383,14 @@ english
 %   \label{ccool:pa}
 %   \nameref{usage:cs:ccool}\docoptd{\meta{\pkgparpa}}\Arg{\pkgparkvl} is identical to the  \nameref{ccool:core},
 %   except \meta{\pkgkey} is replaced by \meta{\pkgkey\docoptd{\pkgparpa}}.
-%   The default parameter, that implicit in \meta{\pkgkey},  is controlled by \nameref{usage:opt:pa}.
+%   The default value of \meta{\pkgparpa} is controlled by \nameref{usage:opt:pa}.
 %   In our example, \meta{\pkgparpa} could be \docarg{Style}.
 %   
 %   \subsection{Write}
 %   \label{ccool:wr} 
-%   If \docccept{\doccceptgopt}~\nameref{usage:opt:wr}~is set to \cs{BooleanTrue}, the \nameref{ccool:core}
-%   is supplemented with the code  written to a file, whose \doccceptpath~is controlled by \docccept{\doccceptgopt}~\nameref{usage:opt:fi}.
+%   \docccept{\doccceptgopt}~\nameref{usage:opt:wr}~is identical to the  \nameref{ccool:core},
+%   except that if \nameref{usage:opt:wr} is set to \cs{BooleanTrue},
+%   the code is written to a file whose \doccceptpath~is controlled by \docccept{\doccceptgopt}~\nameref{usage:opt:fi}.
 %   
 %   \DocPhantomSection*{section}{\cs{CcoolClear}}{usage:cs:clear}
 %   \begin{function}{\CcoolClear}
@@ -433,7 +432,7 @@ english
 %     \nameref{usage:opt:se}, and \nameref{usage:opt:wr}.
 %     \begin{description}
 %     \item[Semantics] Set \docccept{\doccceptgopt} that control the default behavior of \nameref{usage:cs:ccool};
-%       Passing only the \doccceptkey's resets the behavior to the default.
+%       passing only the \doccceptkey's resets the behavior to the default.
 %     \end{description}
 %   \end{function}
 %   
@@ -441,8 +440,8 @@ english
 %   \DescribeOption{\pkgoptan}
 %   \begin{description}
 %   \item[Also see] \autoref{part:impl}~\nameref{impl:opt:an}
-%   \item[Semantics] \meta{\doccceptkey} is a language and \meta{\doccceptval} is the translation of \textit{and}
-%   \item[Syntax] \meta{\doccceptkvl}, 
+%   \item[Semantics] Sets the translation of \textit{and} in language \meta{\doccceptkey} to \meta{\doccceptval}
+%   \item[Syntax] \meta{\doccceptkvl}
 %   \end{description}
 %   
 %   \DocPhantomSection*{subsection}{\pkgoptex}{usage:opt:ex}
@@ -455,7 +454,7 @@ english
 %   \DocPhantomSection{subsection}{\pkgoptfi}{usage:opt:fi}
 %   \DescribeOption{\pkgoptfi}
 %   \begin{description}
-%   \item[Also see] \nameref{ccool:wr} and \autoref{part:impl}~\nameref{impl:opt:fi}
+%   \item[Also see] \autoref{part:usage}~\nameref{ccool:wr} and \autoref{part:impl}~\nameref{impl:opt:fi}
 %   \item[Syntax] \meta{\doccceptpath}
 %   \end{description}
 %   
@@ -796,10 +795,6 @@ english
   \CcoolOption[ Separ ]
   \Ccool{ X = x, Y = y }*
   \selectlanguage{turkmen}\\
-  \noindent\textbf{\languagename}{:}\\
-  \CcoolOption[ Separ ]
-  \Ccool{ X = x, Y = y }*
-  \selectlanguage{ukrainian}\\
   \noindent\textbf{\languagename}{:}\\
   \CcoolOption[ Separ ]
   \Ccool{ X = x, Y = y }*
@@ -1713,10 +1708,11 @@ english
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{variable}{\g@@_lang_and_tl}
+% \begin{variable}{\c@@_lang_and_tl}
 %    \begin{macrocode}
-\tl_const:Nn \g@@_lang_and_tl
+\tl_const:Nn \c@@_lang_and_tl
 {
+% ^^A https://www.overleaf.com/learn/latex/International_language_support  
 % ^^A  ancientgreek,     % not latin
 % ^^A  arabic,           % not latin
 % ^^A  armenian,         % not latin
@@ -1753,9 +1749,9 @@ english
 % ^^A  tamil,            % not latin
 % ^^A  telugu,           % not latin
 % ^^A  uppersorbian,     % translation unknown
-% ^^A https://www.overleaf.com/learn/latex/International_language_support  
 % ^^A slovenian=in,     % not supported by babel
 % ^^A ukenglish=and,    % not supported by babel
+% ^^A ukrainian=i,      % not latin
 % ^^A usenglishmax=and, % not supported by babel
 afrikaans=en,
 basque=eta,
@@ -1790,7 +1786,6 @@ swedish=och,
 swissgerman=und,
 turkish=ve,
 turkmen=we,
-ukrainian=i,
 welsh=a
 }
 %    \end{macrocode}
@@ -2189,7 +2184,7 @@ welsh=a
 %    \end{macrocode}
 % \end{macro}
 % \section{Front-end}\label{impl:frontend}
-% \DocPhantomSection*{subsection}{\cs{CcoolClear}}{impl:cs:read}
+% \DocPhantomSection*{subsection}{\cs{CcoolClear}}{impl:cs:clear}
 % \begin{macro}{\CcoolClear}
 %    \begin{macrocode}
 \NewDocumentCommand{ \CcoolClear }
@@ -2235,8 +2230,8 @@ welsh=a
 % \DescribeOption{\pkgoptan}
 %    \begin{macrocode}
 And .code:n = { \@@_lang_and_update:e{ #1 } },
-And .default:n = { \g@@_lang_and_tl },
-And .initial:n = { \g@@_lang_and_tl },
+And .default:n = { \c@@_lang_and_tl },
+And .initial:n = { \c@@_lang_and_tl },
 %    \end{macrocode}
 % \DocPhantomSection*{subsubsection}{\pkgoptex}{impl:opt:ex}
 % \DescribeOption{\pkgoptex}

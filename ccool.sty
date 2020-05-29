@@ -104,7 +104,7 @@
 {
   \cs_new:Nn \__ccool_lang_and:{english}
 }
-\tl_const:Nn \g__ccool_lang_and_tl
+\tl_const:Nn \c__ccool_lang_and_tl
 {
 afrikaans=en,
 basque=eta,
@@ -139,7 +139,6 @@ swedish=och,
 swissgerman=und,
 turkish=ve,
 turkmen=we,
-ukrainian=i,
 welsh=a
 }
 \iow_new:N \g__ccool_log_iow
@@ -375,8 +374,8 @@ welsh=a
 \keys_define:nn { __ccool }
 {
 And .code:n = { \__ccool_lang_and_update:e{ #1 } },
-And .default:n = { \g__ccool_lang_and_tl },
-And .initial:n = { \g__ccool_lang_and_tl },
+And .default:n = { \c__ccool_lang_and_tl },
+And .initial:n = { \c__ccool_lang_and_tl },
 Expans .multichoices:nn = { eo, ee, ex, xo, xe, xx }
 { \tl_gset_eq:NN \g__ccool_option_expans_tl \l_keys_choice_tl },
 Expans .default:n = { xo },
