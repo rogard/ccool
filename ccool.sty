@@ -6,7 +6,7 @@
 %%
 %% ccool.dtx  (with options: `package')
 %% ----------------------------------------------------------------------------
-%% ccool --- A key-value interface for generating commands
+%% ccool --- A key-value document command parser
 %% Released under the LaTeX Project Public License v1.3c or later
 %% See http://www.latex-project.org/lppl.txt
 %% ----------------------------------------------------------------------------
@@ -17,10 +17,10 @@
  \RequirePackage{l3keys2e}[2020/03/06]
  \RequirePackage{xparse}[2020/03/06]
  \ProvidesExplPackage
- {ccool}                                                                                      % Package name
- {2020/04/28}                                                                                 % Release date
- {2.7}                                                                                        % Release version
- {cool --- A key-value interface for generating commands}                                     % Description
+ {ccool}                                                                            % Package name
+ {2020/04/28}                                                                       % Release date
+ {2.8}                                                                              % Release version
+ {cool --- A key-value document command parser}                                     % Description
 \ExplSyntaxOn
 \cs_new_protected:Nn \__ccool_aux_inner_set:n
 {
@@ -106,40 +106,40 @@
 }
 \tl_const:Nn \c__ccool_lang_and_tl
 {
-afrikaans=en,
-basque=eta,
-catalan=i,
-croatian=i,
-czech=a,
-danish=og,
-dutch=en,
-english=and,
-esperanto=kaj,
-estonian=ja,
-finnish=ja,
-french=et,
-galician=e,
-german=und,
-hungarian=\'es,
-icelandic=og,
-indonesian=dan,
-irish=agus,
-italian=e,
-kurmanji=\^u,
-latin=et,
-latvian=un,
-lithuanian=ir,
-ngerman=und,
-polish=i,
-portuguese=e,
-romanian=\c{s}i,
-slovak=a,
-spanish=y,
-swedish=och,
-swissgerman=und,
-turkish=ve,
-turkmen=we,
-welsh=a
+  afrikaans=en,
+  basque=eta,
+  catalan=i,
+  croatian=i,
+  czech=a,
+  danish=og,
+  dutch=en,
+  english=and,
+  esperanto=kaj,
+  estonian=ja,
+  finnish=ja,
+  french=et,
+  galician=e,
+  german=und,
+  hungarian=\'es,
+  icelandic=og,
+  indonesian=dan,
+  irish=agus,
+  italian=e,
+  kurmanji=\^u,
+  latin=et,
+  latvian=un,
+  lithuanian=ir,
+  ngerman=und,
+  polish=i,
+  portuguese=e,
+  romanian=\c{s}i,
+  slovak=a,
+  spanish=y,
+  swedish=och,
+  swissgerman=und,
+  turkish=ve,
+  turkmen=we,
+  welsh=a
 }
 \iow_new:N \g__ccool_log_iow
 \AtEndDocument{\iow_close:N \g__ccool_log_iow}
@@ -260,41 +260,31 @@ welsh=a
     }
   }
 }
-\msg_new:nnn {__ccool}{ iow }{#1~is~closed~can't~write}
-\msg_new:nnn {__ccool}{lang_and}{~key~#1~missing~for~global~option~'And';~falling~back~on~'english'}
+\msg_new:nnn {__ccool}
+{ iow }
+{#1~is~closed~can't~write}
+\msg_new:nnn {__ccool}
+{lang_and}
+{~key~#1~missing~for~global~option~'And';~falling~back~on~'english'}
+\tl_new:N \g__ccool_option_inner_tl
 \cs_new_protected:Nn \__ccool_option_inner:n
 {
   \tl_gset:Nn \g__ccool_option_inner_tl {#1}
 }
-\__ccool_option_inner:n
-{
-  \msg_warning:nnn{ erw }{ notset }{ \exp_not:N \g__ccool_option_inner_tl }
-}
-\cs_new:Nn \__ccool_option_param:n
+\tl_new:N \g__ccool_option_param_tl
+\cs_new_protected:Nn \__ccool_option_param:n
 {
   \tl_gset:Nn \g__ccool_option_param_tl{#1}
 }
-\__ccool_option_param:n
-{
-  \msg_error:nnx{ __ccool }
-  { generic }
-  { \exp_not:N\g__ccool_option_param_tl~undefined }
-}
+\tl_new:N \g__ccool_option_outer_tl
 \cs_new_protected:Nn \__ccool_option_outer:n
 {
   \tl_gset:Nn \g__ccool_option_outer_tl {#1}
 }
-\__ccool_option_outer:n
-{
-  \msg_warning:nnn{ erw }{ notset }{ \exp_not:N \g__ccool_option_outer_tl }
-}
+\tl_new:N \g__ccool_option_separ_tl
 \cs_new_protected:Nn \__ccool_option_separ:n
 {
   \cs_gset:Npn \g__ccool_option_separ_tl {#1}
-}
-\__ccool_option_separ:n
-{
-  \msg_warning:nnn{ erw }{ notset }{ \exp_not:N \g__ccool_option_separ_tl }
 }
 \ifcsdef{text}
 {
