@@ -69,14 +69,14 @@ ccool.sty, and ccool.pdf.
 \fi
 %</internal> 
 %<package> \NeedsTeXFormat{LaTeX2e}[2020/02/02]
-%<package> \RequirePackage{erw-l3}[2020/05/27]
+%<package> \RequirePackage{erw-l3}[2020/06/03]
 %<package> \RequirePackage{etoolbox}[2019/09/21]
 %<package> \RequirePackage{l3keys2e}[2020/03/06]
 %<package> \RequirePackage{xparse}[2020/03/06]
 %<package> \ProvidesExplPackage
 %<package> {ccool}                                                                            % Package name
-%<package> {2020/04/28}                                                                       % Release date
-%<package> {2.8}                                                                              % Release version
+%<package> {2020/06/03}                                                                       % Release date
+%<package> {2.9}                                                                              % Release version
 %<package> {cool --- A key-value document command parser}                                     % Description
 % 
 %<*driver> 
@@ -185,17 +185,18 @@ english
 \providecommand\docconv[1]{convention~\autoref{conv:#1}}
 \providecommand\docdefaultfor{default~for~}
 \providecommand\docenvdoc{\env{document}}
-\providecommand\doceval[1]{\texttt{\char`\{}#1\texttt{\char`\}}}
+\providecommand\docparm[1]{\texttt{\char`\{}#1\texttt{\char`\}}}
 \providecommand\docexpand[2]{#1~$\rightarrow$~#2}
 \providecommand\docfillblank{\begin{minipage}[t]{\linewidth}\end{minipage}}
 \providecommand\docissuedont{Don't: }
 \providecommand\docissuedo{Do: }
 \providecommand\docissuesymp{Symptom: }
 \providecommand\doclist[1]{Listing~\ref{listing:#1}}
+\providecommand\docmetakeyorkeyval[1][i]{\meta{key_{#1}}|\meta{key_{#1}}=\meta{val_{#1}}}
 \providecommand\docnb{\noindent\textbf{NB}:~}
-\providecommand\docoptd[1]{\texttt{\textless}#1\texttt{\textgreater}}
-\providecommand\docopte[2]{\texttt{#1}\doceval{#2}}
-\providecommand\docopto[1]{\texttt{[}#1\texttt{]}}
+\providecommand\docpard[1]{\texttt{\textless}#1\texttt{\textgreater}}
+\providecommand\docpare[2]{\texttt{#1}\docparm{#2}}
+\providecommand\docparo[1]{\texttt{[}#1\texttt{]}}
 \providecommand\docpipe{\textbar}
 \providecommand\docreflist[1]{Listing~\ref{listing:#1}}
 \providecommand\docsee{See:~}
@@ -234,7 +235,7 @@ english
 \providecommand\pkgparta{tl$_{6}$}%tail
 \providecommand\pkgsep[1]{\Arg{#1}}
 \providecommand\pkgval{val$_{i}$}
-\providecommand\pkgwrite{\cs{Ccool}\docarg{\meta{\pkgparpa}}\docopte{i}{\meta{\pkgparin}}\Arg{\pkgparkvl}}
+\providecommand\pkgwrite{\cs{Ccool}\docarg{\meta{\pkgparpa}}\docpare{i}{\meta{\pkgparin}}\Arg{\pkgparkvl}}
 % ^^A Sort<---
 \ExplSyntaxOff
 \begin{document}
@@ -295,7 +296,7 @@ english
 %   \section*{Convention}
 %   \begin{enumerate}[label={\emph{\alph*)}}]
 %   \item \label{conv:expl3} Loosely, those of \cite{interface3}, for example as to the meaning of \meta{\docccepttl}.
-%   \item \label{conv:xparse} Those of \cite{xparse}, for example \docopto{arg} is a \docccept{\docxparseo}. 
+%   \item \label{conv:xparse} Those of \cite{xparse}, for example \docparo{arg} is a \docccept{\docxparseo}. 
 %   \item \docassign{\meta{X}}{\docarg{Y}}:  set \meta{X} to |Y|
 %   \item \docexpand{\cs{X}}{\docarg{Y}}: \cs{X} expands to |Y|
 %   \item If unspecified, the environment in which a macro is to be used is \docenvdoc.
@@ -306,7 +307,7 @@ english
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Loading the package}
 %   \begin{function}{\usepackage}
 %     \begin{syntax}
-%       \cs{usepackage}\doceval{\pkg{ccool}}
+%       \cs{usepackage}\docparm{\pkg{ccool}}
 %     \end{syntax}
 %     \begin{description}
 %     \item[Requirement]\docfillblank
@@ -320,7 +321,7 @@ english
 %   \DocPhantomSection*{section}{\cs{Ccool}}{usage:cs:ccool}
 %   \begin{function}{\Ccool}
 %     \begin{syntax}
-%       \cs{Ccool}\docopto{\meta{\pkgparhe}}\docoptd{\meta{\pkgparpa}}\docopte{c}{\meta{\pkgparin}}\Arg{\pkgparkvl}\pkgparap\pkgparex\docopte{s}{\meta{\doccceptsep}}\docopte{c}{\meta{\pkgparou}}\docopto{\meta{\pkgparta}}
+%       \cs{Ccool}\docparo{\meta{\pkgparhe}}\docpard{\meta{\pkgparpa}}\docpare{c}{\meta{\pkgparin}}\Arg{\pkgparkvl}\pkgparap\pkgparex\docpare{s}{\meta{\doccceptsep}}\docpare{c}{\meta{\pkgparou}}\docparo{\meta{\pkgparta}}
 %     \end{syntax}where \meta{\doccceptsep} is either of: \Arg{\pkgparsi}, \Arg{\pkgparsi}\Arg{\pkgparsii}, and \Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}.
 %     \begin{description}
 %     \item[Semantics] See \autoref{ccool:core}-\ref{ccool:wr}.
@@ -341,9 +342,9 @@ english
 %   
 %   See \nameref{usage:cs:lambda} to allow command \cs{\meta{\pkgkey}} to take arguments.
 %   
-%   \subsection{Process the \docccept{\pkgval}'s}
+%   \subsection{Process the \texorpdfstring{\docccept{\pkgval}}'s}
 %   \label{ccool:in} 
-%   \nameref{usage:cs:ccool}\ \docopte{c}{\meta{\pkgparin}}\Arg{\pkgparkvl} is identical to the \nameref{ccool:core},
+%   \nameref{usage:cs:ccool}\ \docpare{c}{\meta{\pkgparin}}\Arg{\pkgparkvl} is identical to the \nameref{ccool:core},
 %   except it overrides \nameref{usage:opt:in}.
 %   
 %   In our example, if multiple number systems are defined with \cs{Ccool} (natural, reals, \dots),
@@ -356,34 +357,34 @@ english
 %   repeats after \nameref{usage:cs:hook}.
 %   This is useful to make the side effect persist after a \docccept{\doccceptgroup} (such as \env{theorem}).
 %   
-%   \subsection{Expand the \docccept{\pkgval}'s}
+%   \subsection{Expand the \texorpdfstring{\docccept{\pkgval}}'s}
 %   \label{ccool:ex} 
 %   \nameref{usage:cs:ccool}\Arg{\pkgparkvl}\pkgparex~supplements the \nameref{ccool:core} with 
 %   the expansion of the \meta{\pkgval}'s using typesetting rules encoded in \docccept{\doccceptgopt}~\nameref{usage:opt:se} 
 %   and~\nameref{usage:opt:ou}. The first are \docccept{\doccceptsep} applied to the \meta{\pkgval}'s to form a \docccept{\docccepttl},
 %   and the second a function applied to the latter. 
 %   
-%   They can be overriden inline by appending further \docopte{s}{\meta{\doccceptsep}}~and~\docopte{c}{\meta{\pkgparou}}, respectively,
+%   They can be overriden inline by appending further \docpare{s}{\meta{\doccceptsep}}~and~\docpare{c}{\meta{\pkgparou}}, respectively,
 %   to the list of arguments.
 %   
 %   \subsection{Head}
 %   \label{ccool:he}
-%   \nameref{usage:cs:ccool}\docopto{\meta{\pkgparhe}}\Arg{\pkgparkvl}~expands \meta{\pkgparhe} and executes the \nameref{ccool:core}.
+%   \nameref{usage:cs:ccool}\docparo{\meta{\pkgparhe}}\Arg{\pkgparkvl}~expands \meta{\pkgparhe} and executes the \nameref{ccool:core}.
 %   
 %   There may be situations where it is convenient to pass \meta{\pkgparhe}~as \doccceptempty.
 %   
 %   \subsection{Tail}
 %   \label{ccool:ta}
-%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl}\docopto{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}~is identical to
-%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl} followed by \nameref{usage:cs:ccool}\docopto{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}.
+%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl}\docparo{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}~is identical to
+%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl} followed by \nameref{usage:cs:ccool}\docparo{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}.
 %   
 %   The combination of \nameref{ccool:core}, \nameref{ccool:he}, and \nameref{ccool:ta} allows to integrate typesetting and
 %   the creation of commands.
 %   
-%   \subsection{Parameterize the \docccept{\pkgkey}'s}
+%   \subsection{Parameterize the \texorpdfstring{\docccept{\pkgkey}}'s}
 %   \label{ccool:pa}
-%   \nameref{usage:cs:ccool}\docoptd{\meta{\pkgparpa}}\Arg{\pkgparkvl} is identical to the  \nameref{ccool:core},
-%   except \meta{\pkgkey} is replaced by \meta{\pkgkey\docoptd{\pkgparpa}}.
+%   \nameref{usage:cs:ccool}\docpard{\meta{\pkgparpa}}\Arg{\pkgparkvl} is identical to the  \nameref{ccool:core},
+%   except \meta{\pkgkey} is replaced by \meta{\pkgkey\docpard{\pkgparpa}}.
 %   The default value of \meta{\pkgparpa} is encoded in \nameref{usage:opt:pa}.
 %   In our example, \meta{\pkgparpa} could be \docarg{Style}.
 %   
@@ -396,10 +397,10 @@ english
 %   \DocPhantomSection*{section}{\cs{CcoolClear}}{usage:cs:clear}
 %   \begin{function}{\CcoolClear}
 %     \begin{syntax}
-%       \cs{CcoolClear}\docoptd{\meta{\pkgparpa}}\Arg{\doccceptclist}
+%       \cs{CcoolClear}\docpard{\meta{\pkgparpa}}\docparm{\dots\meta{\doccceptkey_i},\dots}
 %     \end{syntax}
 %     \begin{description}
-%     \item[Semantics] Clears all \cs{\meta{\pkgkey\docoptd{\pkgparpa}}}'s
+%     \item[Semantics] Clears all \cs{\meta{\pkgkey\docpard{\pkgparpa}}}'s
 %     \end{description}
 %   \end{function}
 %   
@@ -416,7 +417,7 @@ english
 %   \DocPhantomSection*{section}{\cs{CcoolLambda}}{usage:cs:lambda}
 %   \begin{function}{\CcoolLambda}
 %     \begin{syntax}
-%       \cs{CcoolLambda}\docopto{\meta{\doccceptargspec}}\Arg{\doccceptcode},
+%       \cs{CcoolLambda}\docparo{\meta{\doccceptargspec}}\Arg{\doccceptcode},
 %     \end{syntax} where \docccept{\doccceptargspec} is by default an \docccept{\docxparseo}.
 %     \begin{description}
 %     \item[Example] \cs{Ccool}|{ EvalAt = \CcoolLambda{(#1)} }|
@@ -427,12 +428,18 @@ english
 %   \DocPhantomSection*{section}{\cs{CcoolOption}}{usage:cs:option}
 %   \begin{function}{\CcoolOption}
 %     \begin{syntax}
-%       \cs{CcoolOption}\docopto{\dots\meta{\doccceptkey_i}=\meta{\doccceptval_i}\dots} or \cs{CcoolOption}\docopto{\dots\meta{\doccceptkey_i}\dots}
-%     \end{syntax}where the \meta{\doccceptkey_i}'s are either of
-%     \nameref{usage:opt:an}, \nameref{usage:opt:ex}, \nameref{usage:opt:fi}, \nameref{usage:opt:in}, \nameref{usage:opt:pa}, \nameref{usage:opt:ou},
-%     \nameref{usage:opt:se}, and \nameref{usage:opt:wr}.
+%       \cs{CcoolOption}\docparo{\dots{}\docmetakeyorkeyval[i],\dots}
+%     \end{syntax}where \meta{\doccceptkey_i} is either of
+%     \nameref{usage:opt:an},
+%     \nameref{usage:opt:ex},
+%     \nameref{usage:opt:fi},
+%     \nameref{usage:opt:in},
+%     \nameref{usage:opt:pa},
+%     \nameref{usage:opt:ou},
+%     \nameref{usage:opt:se},
+%     and \nameref{usage:opt:wr}.
 %     \begin{description}
-%     \item[Semantics] Modifies the behavior of \nameref{usage:cs:ccool}
+%     \item[Semantics] Modify the behavior of \nameref{usage:cs:ccool}
 %     \end{description}
 %   \end{function}
 %   
@@ -498,7 +505,7 @@ english
 %   \DocPhantomSection*{section}{\cs{CcoolRead}}{usage:cs:read}
 %   \begin{function}{\CcoolRead}
 %     \begin{syntax}
-%       \cs{CcoolRead}\docopto{\meta{\doccceptpath}}
+%       \cs{CcoolRead}\docparo{\meta{\doccceptpath}}
 %     \end{syntax}
 %     \begin{description}
 %     \item[Also see] \autoref{part:impl}~\nameref{impl:cs:read}
@@ -600,7 +607,7 @@ english
 % \fi
 % 
 % \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:numbrsys:base}. ``Let~$\mathbb{N}$ and $\mathbb{R}$ denote\dots'' (start of the tutorial)}
+% {\ref{listing:numbrsys:base}. \texorpdfstring{Let~$\mathbb{N}$ and $\mathbb{R}$ denote\dots} (start of the tutorial)}
 % \iffalse
 %<*guardlisting> 
 % \fi
@@ -980,7 +987,7 @@ english
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:mvt:i}. Mittelwertsatz f\"ur $n$ Variable.}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:mvt:i}. Mittelwertsatz f\"ur \texorpdfstring{$n$} Variable. }
 % \iffalse
 %<*guardlisting> 
 % \fi
@@ -1233,11 +1240,15 @@ english
 % \begin{enumerate}[label=\emph{\arabic*)}]
 % \item Compile \file{ccool.dtx} (under Unix, \texttt{\$pdflatex ccool.dtx})
 % \item Put the generated \file{ccool.sty} in the search path of the \LaTeX engine
+%^^A \NB{todo}{\pkg{l3buid} install}
 % \end{enumerate}
 % 
 % \section{Issue}\label{other:issue}
-% 
-% Look for \env{NOTE} or \cs{NB}\doceval{bug\docpipe{}fix} inside \jobname|.dtx|
+%
+% Listed under:
+% \begin{enumerate}[label={\emph{\alph*)}}]
+% \item \env{NOTE} or \cs{NB}, tagged either \texttt{bug} or \texttt{fixed}, inside \jobname|.dtx|
+% \end{enumerate}
 % 
 % \section{Support}\label{other:support}
 % 
@@ -1251,6 +1262,11 @@ english
 % \begin{enumerate}[label={\emph{\alph*)}}]
 % \item Follow the steps in \autoref{other:install} on one's own machine to generate \jobname|.pdf|
 % \item Visually check \autoref{part:listing}, against that \href{https://github.com/rogard/ccool}{of the repository}, for the same version.
+% \end{enumerate}
+% Also see:
+% \begin{enumerate}[label={\emph{\alph*)}}]
+% \setcounter{enumi}{2}
+% \item Also see: \autoref{other:todo}~\ref{todo:regtest}
 % \end{enumerate}
 % 
 % \subsection{Platform}
@@ -1303,15 +1319,24 @@ english
 % \subsection{Other}
 % Check \cite{ccool-thesis} for testing \pkg{ccool} with \cls{llncs}
 % 
-% \section{To do}
-% 
-% Look for \env{NOTE} or \cs{NB}\doceval{todo\docpipe{}abandon\docpipe{}done} inside \jobname|.dtx|
+% \section{To do}\label{other:todo}
+%
+% \begin{enumerate}[label=\emph{\alph*)}]
+% \item Regression testing using \cite[Section 3.2—Specifying expectations]{l3build}. \label{todo:regtest}
+% \end{enumerate}
+% Also see:
+% \begin{enumerate}[label=\emph{\alph*)}]
+% \setcounter{enumi}{1}
+% \item \env{NOTE} or \cs{NB} tagged \texttt{abandon\docpipe{}done\docpipe{}todo} inside \jobname|.dtx|
+% \end{enumerate}
 % 
 % \DocPhantomSection*{section}{References}{other:bib}
 % \begin{thebibliography}{1}
 % \bibitem{cool} Nick Setzer {\em The \pkg{cool} package}, 2005, \url{https://www.ctan.org/pkg/cool}
 % \bibitem{interface3} The \LaTeX3 Project Team {\em The \LaTeX3 interfaces}, 2019,
 %   \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3kernel/interface3.pdf}
+% \bibitem{l3build} The \LaTeX3 Project Team {\em The \pkg{l3build} package}, 2020,
+%   \url{http://mirror.utexas.edu/ctan/macros/latex/contrib/l3build/l3build.pdf}
 % \bibitem{tcolbox} Thomas F. Sturm {\em The \pkg{tcolorbox} package}, 2019,
 %   \url{http://www.texdoc.net/texmf-dist/doc/latex/tcolorbox/tcolorbox.pdf}
 % \bibitem{xparse} The \LaTeX3 Project Team {\em The \pkg{xparse} package}, 2020,
@@ -1334,7 +1359,7 @@ english
 % {Rearrange: much of the implementation}
 % \changes{\docvers{1}{1}}
 % {2020/04/04}
-% {Replace: \Arg{kvl_{2}}~by~\docoptd{kvl_{2}}~given that option type \texttt{G} not recommended\cite{xparse}}
+% {Replace: \Arg{kvl_{2}}~by~\docpard{kvl_{2}}~given that option type \texttt{G} not recommended\cite{xparse}}
 % \changes{\docvers{1}{1}}
 % {2020/04/04}
 % {Replace: \cs{OopsOptions}~by~\cs{OopsOption}}
@@ -1367,7 +1392,7 @@ english
 % {Add: optional \pkgparex to \cs{OopsNew} as instruction to expand \pkgparkvl}
 % \changes{\docvers{1}{2}}
 % {2020/04/06}
-% {Replace: \cs{OopsClear}\Arg{\pkgparpa} by \cs{OopsClear}\docopto{\meta{\doccceptkvl}}}
+% {Replace: \cs{OopsClear}\Arg{\pkgparpa} by \cs{OopsClear}\docparo{\meta{\doccceptkvl}}}
 % \changes{\docvers{1}{2}}
 % {2020/04/06}
 % {Delete: \meta{kvl_{2}}~and~\meta{code_{2}}}
@@ -1388,11 +1413,11 @@ english
 % {Replace: \cs{OopsNew} by \cs{Oops}}
 % \changes{\docvers{1}{3}}
 % {2020/04/06}
-% {Replace: \Arg{\pkgparpa} and \docopto{\meta{\pkgparpa}} by \docoptd{\meta{\pkgparpa}} }
+% {Replace: \Arg{\pkgparpa} and \docparo{\meta{\pkgparpa}} by \docpard{\meta{\pkgparpa}} }
 % \changes{\docvers{1}{4}}
 % {2020/04/10}
-% {Replace: \docopte{s}{\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
-% by \docopte{s}{\Arg{\pkgparsi}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}}
+% {Replace: \docpare{s}{\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
+% by \docpare{s}{\Arg{\pkgparsi}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}}
 % \changes{\docvers{1}{4}}
 % {2020/04/10}
 % {Add:optional \pkgparap to \cs{OopsNew} to make side effects presist beyond local group}
@@ -1507,7 +1532,7 @@ english
 % {Replace: part of the abstract's with more straighforward descriptions based on input from forum participtants}
 % \changes{\docvers{2}{3}}
 % {2020/05/16}
-% {Replace: for \cs{Ccool}, \docopte{i}{} by \docopte{c}{}}
+% {Replace: for \cs{Ccool}, \docpare{i}{} by \docpare{c}{}}
 % \changes{\docvers{2}{3}}
 % {2020/05/16}
 % {Rearranged: \nameref{usage:cs:ccool}'s subsections. Previously, by argument. Now, by feature. }
@@ -1559,7 +1584,11 @@ english
 %
 % \changes{\docvers{2}{8}}
 % {2020/05/28}
-% {Fix: spanish  / \nameref{ccool:pa} }
+% {Fix: conflict between \cs{usepackage}\docparo{spanish}\docparm{babel} and \nameref{ccool:pa} }
+%
+% \changes{\docvers{2}{9}}
+% {2020/06/03}
+% {Other: polish the doc }
 %
 % \PrintChanges
 % \PrintIndex
