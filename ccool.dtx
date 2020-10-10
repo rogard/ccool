@@ -75,16 +75,48 @@ ccool.sty, and ccool.pdf.
 %<package> \RequirePackage{xparse}[2020/03/06]
 %<package> \ProvidesExplPackage
 %<package> {ccool}                                                                            % Package name
-%<package> {2020/06/04}                                                                       % Release date
-%<package> {3.0}                                                                              % Release version
+%<package> {2020/10/10}                                                                       % Release date
+%<package> {3.1}                                                                              % Release version
 %<package> {cool --- A key-value document command parser}                                     % Description
 % 
 %<*driver> 
-\RequirePackage{fvextra}%^^A\NB{done}{Warning:csquotes should be loaded after fvextra->nope}
+\RequirePackage{fvextra, xparse}%^^A\NB{done}{Warning:csquotes should be loaded after fvextra->nope}
 \documentclass[full, show-notes]{l3doc}
 \listfiles
-\usepackage{amsmath, amssymb}
-\usepackage[
+%^^A\usepackage{xparse, longtable, array, booktabs}
+\ExplSyntaxOn
+\clist_new:N \g__ccooldoc_usepackage_clist
+\cs_new_protected:Nn \__ccooldoc_usepackage:n
+{
+  \clist_put_right:Nn \g__ccooldoc_usepackage_clist
+  {
+    \textbackslash{}usepackage\char`{ #1 \char`}
+  }
+  \usepackage{#1}
+}
+\cs_new_protected:Nn \__ccooldoc_usepackage:nn
+{
+  \clist_put_right:Nn \g__ccooldoc_usepackage_clist
+  {
+    {
+      \textbackslash{}
+      usepackage
+      \char`[ #1 \char`]
+      \char`{ #2 \char`}
+    }
+  }
+  \usepackage[#1]{#2}
+}
+\cs_new:Nn \__ccooldoc_usepackage:
+{
+  \texttt
+  {
+    \noindent
+    \clist_use:Nnnn \g__ccooldoc_usepackage_clist { \\ } { \\ } { \\ }
+  }
+}
+\__ccooldoc_usepackage:n{amsmath, amssymb}
+\__ccooldoc_usepackage:nn{
 %^^A afrikaans,
 %^^A basque,
 %^^A catalan,
@@ -119,13 +151,11 @@ spanish.noquoting,
 %^^A turkmen,
 %^^A welsh,
 english
-]{babel}
-\usepackage{bookmark}
-\usepackage{ccool}
-\usepackage[T1]{fontenc}% \char`[
-\usepackage{microtype}
-\usepackage{tabto}
-\usepackage{tcolorbox}
+}
+{babel}
+\__ccooldoc_usepackage:n{bookmark, ccool, microtype, tabto, tcolorbox}
+\__ccooldoc_usepackage:nn{T1}{fontenc}% \char`[
+  \ExplSyntaxOff
 \tcbuselibrary{listings, breakable}
 \makeatletter
 \newcommand*{\docsetnameref}{\def\@currentlabelname}%https://tex.stackexchange.com/questions/537751
@@ -214,7 +244,8 @@ english
 \providecommand\pkgoptex{\docarg{Expans}}
 \providecommand\pkgoptfi{\docarg{File}}
 \providecommand\pkgoptin{\docarg{Inner}}
-\providecommand\pkgoptions{kvl0}
+%^^A\providecommand\pkgoptions{kvl0}
+\providecommand\pkgoptions{\doccceptkvl$_0$}
 \providecommand\pkgoptou{\docarg{Outer}}
 \providecommand\pkgoptpad{\docarg{Default}}%default
 \providecommand\pkgoptpa{\docarg{Param}}
@@ -224,8 +255,8 @@ english
 \providecommand\pkgparex{\texttt{*}}%expand
 \providecommand\pkgparhe{tl$_{1}$}%head
 \providecommand\pkgparin{code$_{1}$}%inner
-\providecommand\pkgparkvlnxt{kvl$_{2}$}
-\providecommand\pkgparkvl{kvl$_{1}$}
+\providecommand\pkgparkvl{\doccceptkvl$_1$}
+\providecommand\pkgparkvlnxt{\doccceptkvl$_2$}
 \providecommand\pkgparou{code$_{2}$}%outer
 \providecommand\pkgparpa{tl$_{2}$}%param
 \providecommand\pkgparsiii{tl$_{5}$}
@@ -273,8 +304,7 @@ english
 %   \selectlanguage{french}
 %   \begin{docabstract}{Résumé}
 %     L'extension~\pkg{ccool} pour \LaTeX~met à disposition une interface de type \textit{clé-valeur}, \nameref{usage:cs:ccool},
-%     destinée à faciliter la géneration de commandes. Les 
-%     paramètres globaux contrôlant le traitement de ces \textit{clé-valeur} sont fixés
+%     destinée à faciliter la géneration de commandes. Les paramètres globaux contrôlant le traitement de ces \textit{clé-valeur} sont fixés
 %     par défaut pour répondre aux besoins courants, suivant le contexte (langage, mode textuel ou mathématique).
 %     Un exemple d'application, est la command-isation des conventions de notation (\docexpand{\cs{Reel}}{} |\mathbb{R}|),
 %     au point dans le \env{document} où elles sont introduites (``Soit~$\mathbb{R}$~les nombres réels.'').
@@ -295,8 +325,8 @@ english
 %   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Convention}
 %   \section*{Convention}
 %   \begin{enumerate}[label={\emph{\alph*)}}]
-%   \item \label{conv:expl3} Loosely, those of \cite{interface3}, for example as to the meaning of \meta{\docccepttl}.
-%   \item \label{conv:xparse} Those of \cite{xparse}, for example \docparo{arg} is a \docccept{\docxparseo}. 
+%   \item \label{conv:expl3} Loosely, those of \cite{interface3}, for example as to the meaning of \docccept{\docccepttl}, which may be abbreviated \docccept{tl}.
+%   \item \label{conv:xparse} Those of \cite{xparse}, for example \docparo{arg} is an \docccept{\docxparseo}. 
 %   \item \docassign{\meta{X}}{\docarg{Y}}:  set \meta{X} to |Y|
 %   \item \docexpand{\cs{X}}{\docarg{Y}}: \cs{X} expands to |Y|
 %   \item If unspecified, the environment in which a macro is to be used is \docenvdoc.
@@ -439,7 +469,7 @@ english
 %     \nameref{usage:opt:se},
 %     and \nameref{usage:opt:wr}.
 %     \begin{description}
-%     \item[Semantics] Modify the behavior of \nameref{usage:cs:ccool}
+%     \item[Semantics] Modify the default behavior of \nameref{usage:cs:ccool}
 %     \end{description}
 %   \end{function}
 %   
@@ -458,7 +488,7 @@ english
 %   \item[Syntax] \texttt{eo\docpipe{}ee\docpipe{}ex\docpipe{}xo\docpipe{}xe\docpipe{}xx}
 %   \end{description}
 %   
-%   \DocPhantomSection{subsection}{\pkgoptfi}{usage:opt:fi}
+%   \DocPhantomSection*{subsection}{\pkgoptfi}{usage:opt:fi}
 %   \DescribeOption{\pkgoptfi}
 %   \begin{description}
 %   \item[Also see] \autoref{part:usage}~\nameref{ccool:wr} and \autoref{part:impl}~\nameref{impl:opt:fi}
@@ -606,6 +636,22 @@ english
 %</guardlisting> 
 % \fi
 % 
+%   \phantomsection\addcontentsline{toc}{section}
+%   {\ref{listing:thisdeps}. This doc's dependencies}
+%   \iffalse
+%<*guardlisting>   
+%   \fi
+\begin{listing}[This doc's dependencies]
+  {label=listing:thisdeps}
+%^^A  \printfilelist
+  \ExplSyntaxOn
+  \__ccooldoc_usepackage:
+  \ExplSyntaxOff
+\end{listing}
+% \iffalse
+%</guardlisting> 
+% \fi
+%
 % \phantomsection\addcontentsline{toc}{section}
 % {\ref{listing:numbrsys:base}. \texorpdfstring{Let~$\mathbb{N}$ and $\mathbb{R}$ denote\dots} (start of the tutorial)}
 % \iffalse
@@ -813,7 +859,7 @@ english
 % \fi
 \begin{listing}[Language and mode]
   {label=listing:lang}
-  %^^A--->
+  % ^^A--->
   \textbf{\languagename}{:}~\Ccool{ X = x, Y = y }*
   \begin{otherlanguage}{spanish}
     \CcoolOption[ Separ ]\\
@@ -893,7 +939,7 @@ english
 % \fi
 % 
 % \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:hw:i}. Hello, world! (testing)}
+% {\ref{listing:hw:i}. Hello, world! (for testing's sake)}
 % \iffalse
 %<*guardlisting> 
 % \fi
@@ -1593,6 +1639,10 @@ english
 % \changes{\docvers{3}{0}}
 % {2020/06/04}
 % {Miscellaneous }
+%
+% \changes{\docvers{3}{1}}
+% {2020/10/10}
+% {Replaced: \doclist{thisdeps}'s content, from exhaustive dependencies to those explicit with \cs{usepackage}}
 %
 % \PrintChanges
 % \PrintIndex
