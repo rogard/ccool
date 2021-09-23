@@ -4,13 +4,12 @@
 \iffalse
 %</internal> 
 %<*readme> 
-----------------------------------------------------------------
-##### ccool --- A key-value document command parser
+-----------------------------------------------------------------
+##### ccool --- (Custom) COntext Oriented LaTeX
 - Source repository: https://github.com/rogard/ccool
 - Released under the LaTeX Project Public License v1.3c or later
 - See http://www.latex-project.org/lppl.txt
-----------------------------------------------------------------
-
+-----------------------------------------------------------------
 %</readme> 
 %<*internal> 
 \fi
@@ -24,8 +23,8 @@
 \keepsilent
 \askforoverwritefalse
 \preamble
-----------------------------------------------------------------------------
-ccool --- A key-value document command parser
+-----------------------------------------------------------------------------
+ccool ---  (Custom) COntext Oriented LaTeX 
 Released under the LaTeX Project Public License v1.3c or later
 See http://www.latex-project.org/lppl.txt
 ----------------------------------------------------------------------------
@@ -33,7 +32,7 @@ See http://www.latex-project.org/lppl.txt
 \endpreamble
 \postamble
 
-Copyright (C) 2020 by Erwann Rogard
+Copyright (C) 2020-2021 by Erwann Rogard
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License (LPPL), either
@@ -68,120 +67,111 @@ ccool.sty, and ccool.pdf.
 \expandafter\endgroup
 \fi
 %</internal> 
-%<package> \NeedsTeXFormat{LaTeX2e}[2020/02/02]
-%<package> \RequirePackage{erw-l3}[2020/06/04]
-%<package> \RequirePackage{etoolbox}[2019/09/21]
-%<package> \RequirePackage{l3keys2e}[2020/03/06]
-%<package> \RequirePackage{xparse}[2020/03/06]
+%<package> \NeedsTeXFormat{LaTeX2e}[2021-06-01]
+%<package> \RequirePackage{expl3, xparse, l3keys2e}[2021-06-01]
+%<package> \RequirePackage{lambdax}[2021-06-01]
 %<package> \ProvidesExplPackage
-%<package> {ccool}                                                                            % Package name
-%<package> {2020/10/10}                                                                       % Release date
-%<package> {3.1}                                                                              % Release version
-%<package> {cool --- A key-value document command parser}                                     % Description
-% 
-%<*driver> 
-\RequirePackage{fvextra, xparse}%^^A\NB{done}{Warning:csquotes should be loaded after fvextra->nope}
-\documentclass[full, show-notes]{l3doc}
-\listfiles
-%^^A\usepackage{xparse, longtable, array, booktabs}
-\ExplSyntaxOn
-\clist_new:N \g__ccooldoc_usepackage_clist
-\cs_new_protected:Nn \__ccooldoc_usepackage:n
-{
-  \clist_put_right:Nn \g__ccooldoc_usepackage_clist
-  {
-    \textbackslash{}usepackage\char`{ #1 \char`}
-  }
-  \usepackage{#1}
-}
-\cs_new_protected:Nn \__ccooldoc_usepackage:nn
-{
-  \clist_put_right:Nn \g__ccooldoc_usepackage_clist
-  {
-    {
-      \textbackslash{}
-      usepackage
-      \char`[ #1 \char`]
-      \char`{ #2 \char`}
-    }
-  }
-  \usepackage[#1]{#2}
-}
-\cs_new:Nn \__ccooldoc_usepackage:
-{
-  \texttt
-  {
-    \noindent
-    \clist_use:Nnnn \g__ccooldoc_usepackage_clist { \\ } { \\ } { \\ }
-  }
-}
-\__ccooldoc_usepackage:n{amsmath, amssymb}
-\__ccooldoc_usepackage:nn{
-%^^A afrikaans,
-%^^A basque,
-%^^A catalan,
-%^^A croatian,
-%^^A czech,
-%^^A danish,
-%^^A dutch,
-%^^A %^^A esperanto,        % ERROR
-%^^A estonian,
-%^^A finnish,
-french,
-%^^A % ^^A galician,         % ERROR
-german,
-%^^A hungarian,
-%^^A icelandic,
-%^^A indonesian,
-%^^A irish,
-%^^A italian,
-%^^A %^^A kurmanji,         % ERROR
-%^^A latin,
-%^^A %^^A latvian,          % ERROR
-%^^A lithuanian,
-%^^A ngerman,
-%^^A polish,
-%^^A portuguese,
-%^^A romanian,
-%^^A slovak,
-spanish.noquoting,      
-%^^A swedish,
-%^^A swissgerman,
-%^^A turkish,
-%^^A turkmen,
-%^^A welsh,
-english
-}
-{babel}
-\__ccooldoc_usepackage:n{bookmark, ccool, microtype, tabto, tcolorbox}
-\__ccooldoc_usepackage:nn{T1}{fontenc}% \char`[
-  \ExplSyntaxOff
-\tcbuselibrary{listings, breakable}
-\makeatletter
-\newcommand*{\docsetnameref}{\def\@currentlabelname}%https://tex.stackexchange.com/questions/537751
-\makeatother
-\ExplSyntaxOn
-\tl_gset:Nn \partname {Part}
-\ExplSyntaxOff
+%<package> {ccool}                                             % Package name
+%<package> {2021-09-20}                                        % Release date
+%<package> {3.2}                                               % Release version
+%<package> {ccool --- (Custom) COntext Oriented LaTeX  }       % Description
+%<*driver>
+\documentclass[show-notes]{l3doc}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
-% ^^A\AtEndDocument { \PrintChanges \PrintIndex }
-\ExplSyntaxOn
-\newenvironment{docabstract}[1]%https://latex.org/forum/viewtopic.php?t=12156
-{\renewcommand{\abstractname}{#1}\begin{abstract}}
-  {\end{abstract}} 
-\ProvideDocumentCommand\DocPhantomSection{smmm}
-{
-  \leavevmode
-  \refstepcounter{#2}
-  \IfBooleanT{#1}
-  {
-    \addcontentsline{toc}{#2}{\protect\numberline{\use:c{the#2}}#3}
-  }
-  \docsetnameref{#3}
-  \label{#4}
+%^^A\documentclass[full, show-notes]{l3doc}
+%^^A \listfiles
+\usepackage{amsmath, bookmark, enumitem, mathtools, microtype, tcolorbox, xparse}
+\usepackage[french, german, english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[bibencoding=auto, backend=biber, sorting=ynt]{biblatex}
+\begin{filecontents*}{\jobname.bib}
+@phdthesis{oh-2005,
+        author = {Olympia Hadjiliadis},
+        title = {Change--point detection of two--sided alternatives in the Brownian motion model and its connection to the gambler's ruin problem with relative wealth perception},
+        year = {2005},
+        school = {Columbia University}
 }
+@misc{a-547018,
+  author       = {@{}Javier Bezos},
+  title        = {When loading babel with spanish, spurious document command parser},
+  note         = {\url{https://tex.stackexchange.com/a/547018/112708}},
+  year         = {2020}}
+@misc{a-536597,
+  author       = {@{}frougon},
+  title        = {``Journaling calls to a function \textdel{taking inline code as argument}''},
+  year         = {2020},
+  note         = {\url{https://tex.stackexchange.com/a/536620}}}
+@manual{interface3,
+  title        = {The \LaTeX3 interfaces},
+  author       = {The \LaTeX3 Project Team},
+  year         = {2019},
+  note         = {\url{https://ctan.math.washington.edu/tex-archive/macros/latex/contrib/l3kernel/expl3.pdf}},
+  annote       = {} }
+@manual{xparse,
+  title        = {The \pkg{xparse} package},
+  author       = {The \LaTeX3 Project Team},
+  year         = {2019},
+  note         = {\url{https://ctan.math.illinois.edu/macros/latex/contrib/l3packages/xparse.pdf}},
+  annote       = {} }
+@manual{2005-cool,
+  title        = {The \pkg{cool} package},
+  author       = {Nick Setzer},
+  year         = {2005},
+  note         = {\url{https://www.ctan.org/pkg/cool}},
+  annote       = {} }
+@manual{l3build,
+  title        = {The \pkg{l3build} package},
+  author       = {The \LaTeX3 Project Team},
+  year         = {2019},
+  note         = {\url{https://ctan.math.washington.edu/tex-archive/macros/latex/contrib/l3build/l3build.pdf}},
+  annote       = {} }
+@manual{tcolorbox,
+  title        = {The \pkg{tcolorbox} package},
+  author       = {Sturm, Thomas F.},
+  year         = {2019},
+  note         = {\url{http://www.texdoc.net/texmf-dist/doc/latex/tcolorbox/tcolorbox.pdf}},
+  annote       = {} }
+@misc{p158966,
+  title        = {\cs{Ccool}, extension à \LaTeX~à vocation mathématique},
+  note         = {\url{http://forum.mathematex.net/latex-f6/ccool-extension-latex-a-vocation-mathematique-t17314.html}},
+  year         = {2020}}
+\end{filecontents*}
+\addbibresource{\jobname.bib}
+\ExplSyntaxOn
+%^^A *** Sectioning
+\tl_gset:Nn \partname {Part}%^^A allows to test w/o babel
+\makeatletter
+\newcommand*{\docsetnameref}
+{\def\@currentlabelname}%https://tex.stackexchange.com/questions/537751
+\makeatother
+\newcounter{cscounter}
+\ProvideDocumentCommand
+\DocPhantomSection{sO{subsection}D<>{}mo}
+{\leavevmode
+  \refstepcounter{cscounter}
+  \IfBooleanF{#1}{\addcontentsline{toc}{#2}{#4}}
+  \IfValueT{#5}
+  {\docsetnameref{#3#4}\label{#5}}}
+% ^^A *** Msg
+\msg_new:nnn{__ccool_doc}{unknown}{~#1:#2~unknown}
+% ^^A *** Expressions
+\ProvideDocumentCommand{\pkgpattpair}{mm}{\texttt{>\{#1\}\{#2\}}}
+\ProvideDocumentCommand{\pkgrule}{}{\texttt{$\rightarrow$}}
+% ^^A *** L3 package
+\ProvideDocumentCommand{\docplaceh}{mO{1}}{\texttt{\prg_replicate:nn{#2}{\#}#1}}
+% ^^A *** Lists
+\newlist{arab-inl}{enumerate*}{1}
+\setlist[arab-inl]{label=\arabic*)}
+\newlist{colon-inl}{itemize*}{1}
+\setlist[colon-inl]
+{ %^^Abefore=\noindent,
+  label={},
+  itemjoin={{; }},
+  after={{.}}}
+\newlist{descr}{description}{1}
+\setlist[descr]{nosep, align=right, itemindent=0pt, font=\sffamily\tiny}
 % ^^A Sort--->
 \providecommand\docarg[1]{\texttt{#1}} % fun[param] (macro) vs fun[arg] (eval)
 \providecommand\docargnoval{\c_novalue_tl}
@@ -269,6 +259,38 @@ english
 \providecommand\pkgwrite{\cs{Ccool}\docarg{\meta{\pkgparpa}}\docpare{i}{\meta{\pkgparin}}\Arg{\pkgparkvl}}
 % ^^A Sort<---
 \ExplSyntaxOff
+%^^A *** listing
+\tcbuselibrary{listings, breakable}
+\newtcblisting[auto counter]
+{listing}[2][]{
+  noparskip,
+  breakable,
+  colback=white,
+  colframe=black,
+  opacitybacktitle=.8,%
+  fonttitle=\bfseries,
+  title={Listing~\thetcbcounter. #1},
+  arc=0pt,
+  outer arc=0pt,
+  boxrule=1pt,
+  listing and text,
+  #2}
+\newtcblisting
+{internal}
+{text only,
+  breakable,
+  colback=white,
+  fontupper=\sffamily,
+  arc=1pt,
+  outer arc=1pt,
+  boxrule=0pt,
+  halign=left,
+  fontupper=\small\sffamily,
+  left=0pt,
+  top=0pt,
+  bottom=0pt}
+\usepackage{ccool}
+\usepackage{hyperref} %^^A comes last
 \begin{document}
 \DocInput{\jobname.dtx}
 \end{document}
@@ -276,79 +298,27 @@ english
 % \fi
 % 
 % \GetFileInfo{\jobname.sty}
-% \begin{documentation}
-%   \title{The \pkg{ccool} package\thanks{^^A
-%   This file describes version \fileversion, last revised \filedate.^^A
+% \title{The \pkg{ccool} package\thanks{^^A
+% This file describes version \fileversion, last revised \filedate.^^A
 % }^^A
 % }
-%   \author{Erwann Rogard\thanks{firstname dot lastname AusTria gmail dot com}}
+%   \author{Erwann Rogard\thanks{first.lastname at gmail.com}}
 %   
 %   \date{Released \filedate}
-%   
-%   \maketitle
-%   
-%   \selectlanguage{english}
-%   \begin{docabstract}{Abstract}
-%     The package \pkg{ccool} for \LaTeX~is a \textit{key-value} interface, \nameref{usage:cs:ccool},
-%     on top of \pkg{xparse}'s document command parser. Global options control input processing and its expansion.
-%     By default, they are set to meet likely requirements, depending on context: the selected language,
-%     and which of text and math mode is active. These options can be overriden inline.
-%     This versality could find its use, for example, to encode notational conventions (such as \docexpand{\cs{Real}}{}|\mathbb{R}|)
-%     at the point where they are introduced in the \env{document} (``Let $\mathbb{R}$ denote real numbers'').
-%     Polymorphic commands can be generated by parameterizing the keys
-%     (for instance, one parameter value for style, another for a property).
-%     User input to \cs{Ccool} can optionally be serialized.
-%     This can useful for typesetting documents sharing the same notation.
-%   \end{docabstract}
-%   
-%   \selectlanguage{french}
-%   \begin{docabstract}{Résumé}
-%     L'extension~\pkg{ccool} pour \LaTeX~met à disposition une interface de type \textit{clé-valeur}, \nameref{usage:cs:ccool},
-%     destinée à faciliter la géneration de commandes. Les paramètres globaux contrôlant le traitement de ces \textit{clé-valeur} sont fixés
-%     par défaut pour répondre aux besoins courants, suivant le contexte (langage, mode textuel ou mathématique).
-%     Un exemple d'application, est la command-isation des conventions de notation (\docexpand{\cs{Reel}}{} |\mathbb{R}|),
-%     au point dans le \env{document} où elles sont introduites (``Soit~$\mathbb{R}$~les nombres réels.'').
-%     Des commandes polymorphes peuvent être générées, en associant aux clés un paramètre
-%     (par exemple, une valeur pour le style typographique, une autre pour la description du concept associé).
-%     En option, les instructions passées à cette interface peuvent être sauvegardées,
-%     ce qui peut être utile pour la rédaction de documents faisant appel à des conventions typographiques communes.
-%   \end{docabstract}
-%   \selectlanguage{english}
-%   
-%   \tableofcontents 
-%   
-%   \part{Usage}\label{part:usage}
-%   ^^A   \VerbatimFootnotes
-%   
-%   \setcounter{section}{0}
-%   \label{usage:conv}
-%   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Convention}
-%   \section*{Convention}
-%   \begin{enumerate}[label={\emph{\alph*)}}]
-%   \item \label{conv:expl3} Loosely, those of \cite{interface3}, for example as to the meaning of \docccept{\docccepttl}, which may be abbreviated \docccept{tl}.
-%   \item \label{conv:xparse} Those of \cite{xparse}, for example \docparo{arg} is an \docccept{\docxparseo}. 
-%   \item \docassign{\meta{X}}{\docarg{Y}}:  set \meta{X} to |Y|
-%   \item \docexpand{\cs{X}}{\docarg{Y}}: \cs{X} expands to |Y|
-%   \item If unspecified, the environment in which a macro is to be used is \docenvdoc.
-%   \end{enumerate}
-%   
-%   \refstepcounter{section}
-%   \label{usage:load} 
-%   \addcontentsline{toc}{section}{\protect\numberline{\thesection}Loading the package}
-%   \begin{function}{\usepackage}
-%     \begin{syntax}
-%       \cs{usepackage}\docparm{\pkg{ccool}}
-%     \end{syntax}
-%     \begin{description}
-%     \item[Requirement]\docfillblank
-%       \begin{enumerate}
-%       \item \file{ccool.sty} is in the path of the \LaTeX~engine. See \autoref{part:other}, \autoref{other:support}.
-%       \item Put in the~\docccept{\doccceptpre}
-%       \end{enumerate}
-%     \end{description}  
-%   \end{function}
-%   
-%   \DocPhantomSection*{section}{\cs{Ccool}}{usage:cs:ccool}
+%   \begin{documentation}
+%     
+%     \maketitle
+%     
+%     \begin{abstract} 
+%       This \LaTeX package provides an interface to define and evaluate key-based replacement rules\cite{interface3}.
+%     It can be used to parse the argument specification of a document command\cite{xparse}.
+%     \end{abstract}
+%     
+%     \tableofcontents 
+%     
+%     \part{Usage}\label{part:usage}
+%
+%   \DocPhantomSection*{section}{\cs{Ccool}}[usage:cs:ccool]
 %   \begin{function}{\Ccool}
 %     \begin{syntax}
 %       \cs{Ccool}\docparo{\meta{\pkgparhe}}\docpard{\meta{\pkgparpa}}\docpare{c}{\meta{\pkgparin}}\Arg{\pkgparkvl}\pkgparap\pkgparex\docpare{s}{\meta{\doccceptsep}}\docpare{c}{\meta{\pkgparou}}\docparo{\meta{\pkgparta}}
@@ -360,22 +330,22 @@ english
 %   
 %   \subsection{Core feature}
 %   \label{ccool:core} 
-%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl} executes for each \meta{\pkgkey}|=|\meta{\pkgval},
+%   \cs{Ccool}\Arg{\pkgparkvl} executes for each \meta{\pkgkey}|=|\meta{\pkgval},
 %   \begin{enumerate}[label=\emph{\arabic*)}]
 %   \item \docassign{\meta{\pkgval} }
 %     { \cs{function}\Arg{\pkgval} }\label{step:val}
 %   \item define \cs{\meta{\pkgkey}} such that \docexpand{ \cs{\meta{\pkgkey} } }{\meta{\pkgval}},
 %     \label{step:key}
-%   \end{enumerate}where \cs{function} is encoded in \docccept{\doccceptgopt}~\nameref{usage:opt:in}.
+%   \end{enumerate}where \cs{function} is encoded in \docccept{\doccceptgopt}~\pkgoptin.
 %   For instance, the side effect of |\Ccool{ Real = \mathbb{R} }| is \docexpand{\cs{Real}}{\docarg{\textbackslash{}mathbb\{R\}}}.
-%   To be sparingly used, \docccept{\doccceptgopt}~\nameref{usage:opt:ex} controls the type of expansion of \meta{\pkgkey}~and \meta{\pkgval}.
+%   To be sparingly used, \docccept{\doccceptgopt}~\pkgoptex controls the type of expansion of \meta{\pkgkey}~and \meta{\pkgval}.
 %   
-%   See \nameref{usage:cs:lambda} to allow command \cs{\meta{\pkgkey}} to take arguments.
+%   if \cs{\meta{\pkgkey}} needs arguments, use \cs{lambdax} from \pkg{lambdax} on the rhs.
 %   
-%   \subsection{Process the \texorpdfstring{\docccept{\pkgval}}'s}
+%   \subsection{Process the \texorpdfstring{\docccept{\pkgval}}{val_i}'s}
 %   \label{ccool:in} 
-%   \nameref{usage:cs:ccool}\ \docpare{c}{\meta{\pkgparin}}\Arg{\pkgparkvl} is identical to the \nameref{ccool:core},
-%   except it overrides \nameref{usage:opt:in}.
+%   \cs{Ccool}\ \docpare{c}{\meta{\pkgparin}}\Arg{\pkgparkvl} is identical to the \nameref{ccool:core},
+%   except it overrides \pkgoptin.
 %   
 %   In our example, if multiple number systems are defined with \cs{Ccool} (natural, reals, \dots),
 %   it is more efficient to omit |\mathbb{.}| inside \meta{\pkgval}, and instead
@@ -383,15 +353,15 @@ english
 %   
 %   \subsection{Append to a hook}
 %   \label{ccool:ap} 
-%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl}\pkgparap~is identical to the \nameref{ccool:core}, except it
-%   repeats after \nameref{usage:cs:hook}.
+%   \cs{Ccool}\Arg{\pkgparkvl}\pkgparap~is identical to the \nameref{ccool:core}, except it
+%   repeats after \cs{CcoolHook}.
 %   This is useful to make the side effect persist after a \docccept{\doccceptgroup} (such as \env{theorem}).
 %   
-%   \subsection{Expand the \texorpdfstring{\docccept{\pkgval}}'s}
+%   \subsection{Expand the \texorpdfstring{\docccept{\pkgval}}{val_i}'s}
 %   \label{ccool:ex} 
-%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl}\pkgparex~supplements the \nameref{ccool:core} with 
-%   the expansion of the \meta{\pkgval}'s using typesetting rules encoded in \docccept{\doccceptgopt}~\nameref{usage:opt:se} 
-%   and~\nameref{usage:opt:ou}. The first are \docccept{\doccceptsep} applied to the \meta{\pkgval}'s to form a \docccept{\docccepttl},
+%   \cs{Ccool}\Arg{\pkgparkvl}\pkgparex~supplements the \nameref{ccool:core} with 
+%   the expansion of the \meta{\pkgval}'s using typesetting rules encoded in \docccept{\doccceptgopt}~\pkgoptse 
+%   and~\pkgoptou. The first are \docccept{\doccceptsep} applied to the \meta{\pkgval}'s to form a \docccept{\docccepttl},
 %   and the second a function applied to the latter. 
 %   
 %   They can be overriden inline by appending further \docpare{s}{\meta{\doccceptsep}}~and~\docpare{c}{\meta{\pkgparou}}, respectively,
@@ -399,30 +369,30 @@ english
 %   
 %   \subsection{Head}
 %   \label{ccool:he}
-%   \nameref{usage:cs:ccool}\docparo{\meta{\pkgparhe}}\Arg{\pkgparkvl}~expands \meta{\pkgparhe} and executes the \nameref{ccool:core}.
+%   \cs{Ccool}\docparo{\meta{\pkgparhe}}\Arg{\pkgparkvl}~expands \meta{\pkgparhe} and executes the \nameref{ccool:core}.
 %   
 %   There may be situations where it is convenient to pass \meta{\pkgparhe}~as \doccceptempty.
 %   
 %   \subsection{Tail}
 %   \label{ccool:ta}
-%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl}\docparo{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}~is identical to
-%   \nameref{usage:cs:ccool}\Arg{\pkgparkvl} followed by \nameref{usage:cs:ccool}\docparo{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}.
+%   \cs{Ccool}\Arg{\pkgparkvl}\docparo{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}~is identical to
+%   \cs{Ccool}\Arg{\pkgparkvl} followed by \cs{Ccool}\docparo{\meta{\pkgparta}}\Arg{\pkgparkvlnxt}.
 %   
 %   The combination of \nameref{ccool:core}, \nameref{ccool:he}, and \nameref{ccool:ta} allows to integrate typesetting and
 %   the creation of commands.
 %   
-%   \subsection{Parameterize the \texorpdfstring{\docccept{\pkgkey}}'s}
+%   \subsection{Parameterize the \texorpdfstring{\docccept{\pkgkey}}{key_i}'s}
 %   \label{ccool:pa}
-%   \nameref{usage:cs:ccool}\docpard{\meta{\pkgparpa}}\Arg{\pkgparkvl} is identical to the  \nameref{ccool:core},
+%   \cs{Ccool}\docpard{\meta{\pkgparpa}}\Arg{\pkgparkvl} is identical to the  \nameref{ccool:core},
 %   except \meta{\pkgkey} is replaced by \meta{\pkgkey\docpard{\pkgparpa}}.
-%   The default value of \meta{\pkgparpa} is encoded in \nameref{usage:opt:pa}.
+%   The default value of \meta{\pkgparpa} is encoded in \pkgoptpa.
 %   In our example, \meta{\pkgparpa} could be \docarg{Style}.
 %   
 %   \subsection{Write}
 %   \label{ccool:wr} 
-%   \docccept{\doccceptgopt}~\nameref{usage:opt:wr}~is identical to the  \nameref{ccool:core},
-%   except that if \nameref{usage:opt:wr} is set to \cs{BooleanTrue},
-%   the code is written to a file whose \doccceptpath~is encoded in \docccept{\doccceptgopt}~\nameref{usage:opt:fi}.
+%   \docccept{\doccceptgopt}~\pkgoptwr~is identical to the  \nameref{ccool:core},
+%   except that if \pkgoptwr is set to \cs{BooleanTrue},
+%   the code is written to a file whose \doccceptpath~is encoded in \docccept{\doccceptgopt}~\pkgoptfi.
 %   
 %   \DocPhantomSection*{section}{\cs{CcoolClear}}{usage:cs:clear}
 %   \begin{function}{\CcoolClear}
@@ -444,39 +414,31 @@ english
 %     \end{description}
 %   \end{function}
 %   
-%   \DocPhantomSection*{section}{\cs{CcoolLambda}}{usage:cs:lambda}
-%   \begin{function}{\CcoolLambda}
-%     \begin{syntax}
-%       \cs{CcoolLambda}\docparo{\meta{\doccceptargspec}}\Arg{\doccceptcode},
-%     \end{syntax} where \docccept{\doccceptargspec} is by default an \docccept{\docxparseo}.
-%     \begin{description}
-%     \item[Example] \cs{Ccool}|{ EvalAt = \CcoolLambda{(#1)} }|
-%     \item[Semantics] Returns a command of type  \cs{DeclareDocumentCommand}\cite{xparse},
-%     \end{description}
-%   \end{function}
+%   \changes{v3.2}
+%   {2021/09/20}
+%   {Removed~usage~for\cs[no-index]{CcoolLambda}~as~superseded~by~\cs[no-index]{LambdaX}.}
 %   
 %   \DocPhantomSection*{section}{\cs{CcoolOption}}{usage:cs:option}
 %   \begin{function}{\CcoolOption}
 %     \begin{syntax}
 %       \cs{CcoolOption}\docparo{\dots{}\docmetakeyorkeyval[i],\dots}
 %     \end{syntax}where \meta{\doccceptkey_i} is either of
-%     \nameref{usage:opt:an},
-%     \nameref{usage:opt:ex},
-%     \nameref{usage:opt:fi},
-%     \nameref{usage:opt:in},
-%     \nameref{usage:opt:pa},
-%     \nameref{usage:opt:ou},
-%     \nameref{usage:opt:se},
-%     and \nameref{usage:opt:wr}.
+%     \pkgoptan,
+%     \pkgoptex,
+%     \pkgoptfi,
+%     \pkgoptin,
+%     \pkgoptpa,
+%     \pkgoptou,
+%     \pkgoptse,
+%     and \pkgoptwr.
 %     \begin{description}
-%     \item[Semantics] Modify the default behavior of \nameref{usage:cs:ccool}
+%     \item[Semantics] Modify the default behavior of \cs{Ccool}
 %     \end{description}
 %   \end{function}
 %   
 %   \DocPhantomSection*{subsection}{\pkgoptan}{usage:opt:an}
 %   \DescribeOption{\pkgoptan}
 %   \begin{description}
-%   \item[Also see] \autoref{part:impl}~\nameref{impl:opt:an}
 %   \item[Semantics] Sets the translation of \textit{and} in language \meta{\doccceptkey} to \meta{\doccceptval}
 %   \item[Syntax] \meta{\doccceptkvl}
 %   \end{description}
@@ -484,35 +446,30 @@ english
 %   \DocPhantomSection*{subsection}{\pkgoptex}{usage:opt:ex}
 %   \DescribeOption{\pkgoptex}
 %   \begin{description}
-%   \item[Also see] \nameref{ccool:core} and \autoref{part:impl}~\nameref{impl:opt:ex}
 %   \item[Syntax] \texttt{eo\docpipe{}ee\docpipe{}ex\docpipe{}xo\docpipe{}xe\docpipe{}xx}
 %   \end{description}
 %   
 %   \DocPhantomSection*{subsection}{\pkgoptfi}{usage:opt:fi}
 %   \DescribeOption{\pkgoptfi}
 %   \begin{description}
-%   \item[Also see] \autoref{part:usage}~\nameref{ccool:wr} and \autoref{part:impl}~\nameref{impl:opt:fi}
 %   \item[Syntax] \meta{\doccceptpath}
 %   \end{description}
 %   
 %   \DocPhantomSection*{subsection}{\pkgoptin}{usage:opt:in}
 %   \DescribeOption{\pkgoptin}
 %   \begin{description}
-%   \item[Also see] \nameref{ccool:in} and \autoref{part:impl}~\nameref{impl:opt:in}
 %   \item[Syntax] \meta{\doccceptcode}, with |####1| as the \docccept{\doccceptplaceh}
 %   \end{description}
 %   
 %   \DocPhantomSection*{subsection}{\pkgoptpa}{usage:opt:pa}
 %   \DescribeOption{\pkgoptpa}
 %   \begin{description}
-%   \item[Also see] \nameref{ccool:pa}, and \autoref{part:impl}~\nameref{impl:opt:pa}
 %   \item[Syntax] \meta{\docccepttl}
 %   \end{description}
 %   
 %   \DocPhantomSection*{subsection}{\pkgoptou}{usage:opt:ou}
 %   \DescribeOption{\pkgoptou}
 %   \begin{description}
-%   \item[Also see] \nameref{ccool:ex}, and \autoref{part:impl}~\nameref{impl:opt:ou}
 %   \item[Default] |\ensuremath{####1}|
 %   \item[Syntax] \meta{\doccceptcode}, with |####1| as the \docccept{\doccceptplaceh}
 %   \end{description}
@@ -520,7 +477,6 @@ english
 %   \DocPhantomSection*{subsection}{\pkgoptse}{usage:opt:se}
 %   \DescribeOption{\pkgoptse}
 %   \begin{description}
-%   \item[Also see] \nameref{ccool:ex}; \doclist{lang}; and \autoref{part:impl}~\nameref{impl:opt:se}
 %   \item[Other] Default behavior depends on whether \pkg{babel} and \pkg{amsmath} are loaded
 %   \item[Syntax] That of \docccept{\doccceptsep} in \cite[Section 8 of \pkg{l3seq}]{interface3}
 %   \end{description}
@@ -528,7 +484,6 @@ english
 %   \DocPhantomSection*{subsection}{\pkgoptwr}{usage:opt:wr}
 %   \DescribeOption{\pkgoptwr}
 %   \begin{description}
-%   \item[Also see] \autoref{part:usage}~\nameref{ccool:wr} and \autoref{part:impl}~\nameref{impl:opt:wr}
 %   \item[Syntax] \cs{BooleanFalse}\docpipe\cs{BooleanTrue}
 %   \end{description}
 %   
@@ -538,7 +493,6 @@ english
 %       \cs{CcoolRead}\docparo{\meta{\doccceptpath}}
 %     \end{syntax}
 %     \begin{description}
-%     \item[Also see] \autoref{part:impl}~\nameref{impl:cs:read}
 %     \item[Semantics]\docfillblank
 %       \begin{enumerate}
 %       \item Reads the definitions in \meta{\doccceptpath}.
@@ -556,11 +510,15 @@ english
 %     \item[Semantics] \docexpand{}{the package's version}
 %     \end{description}  
 %   \end{function}
+%   \part{Other}
+%   
+%   \section{Bibliograhy}
+%   \printbibliography[heading=none]
 %   
 %   \section{Do's and dont's}
 %   \label{usage:dosdont}
 %   
-%   \begin{enumerate}[label=\emph{\arabic*)}]
+%   \begin{enumerate}
 %   \item \docfillblank
 %     \begin{itemize}
 %     \item[\docissuedont] |Inner=\{####1\}|
@@ -587,76 +545,217 @@ english
 %     \item[\docissuedont] |\[x_0,x\]|
 %     \item[\docissuedo] |\left[x_0,x\right]|
 %     \end{itemize}
-%   \item \docfillblank
-%     \begin{itemize}
-%     \item[\docissuedont] Use \docccept{\docxparsed[]} or \docccept{\docxparsee[]}~arguments\cite{xparse} for \nameref{usage:cs:lambda}
-%     \item[\docissuedo] Use only \docccept{\docxparsem[]} and \docccept{\docxparseo[]}~arguments
-%     \end{itemize}
+%^^A   \item \docfillblank
+%^^A     \begin{itemize}
+%^^A     \item[\docissuedont] Use \docccept{\docxparsed[]} or \docccept{\docxparsee[]}~arguments\cite{xparse} for \nameref{usage:cs:lambda}
+%^^A     \item[\docissuedo] Use only \docccept{\docxparsem[]} and \docccept{\docxparseo[]}~arguments
+%^^A     \end{itemize}
 %   \item \docfillblank
 %     \begin{itemize}
 %     \item[\docissuedont] |\usepackage[spanish]{babel}|
 %     \item[\docissuedo] |\usepackage[spanish.noquoting]{babel}|\cite{a-547018}
 %     \end{itemize}
-%   \item Also see \autoref{part:other}, \autoref{other:issue}
 %   \end{enumerate}
-%   
+%
+%   \section{To do}
+%   \begin{enumerate}
+%   \item Create an environment for \cs{CoolHook}.
+%   \end{enumerate}
+%
+% \section{Support}\label{other:support}
+% 
+% This package is available from \url{https://github.com/rogard/ccool}.
+%
+% 
+% \changes{v1.0}
+% {2020/03/08}
+% {Initial version}
+% \changes{v1.1}
+% {2020/04/04}
+% {Rearrange: much of the implementation}
+% \changes{v1.1}
+% {2020/04/04}
+% {Replace: \Arg{kvl_{2}}~by~\docpard{\meta{kvl_{2}}}~given that option type \texttt{G} not recommended\cite{xparse}}
+% \changes{v1.1}
+% {2020/04/04}
+% {Replace: \cs[no-index]{OopsOptions}~by~\cs[no-index]{OopsOption}}
+% \changes{v1.1}
+% {2020/04/04}
+% {Replace: \docarg{GenericObject}~by~\docarg{Name}}
+% \changes{v1.1}
+% {2020/04/04}
+% {Replace: \docarg{Separators}~by~\docarg{Separ}}
+% \changes{v1.1}
+% {2020/04/04}
+% {Add:\cs[no-index]{OopsTest}}
+% \changes{v1.1}
+% {2020/04/04}
+% {Add:\cs[no-index]{OopsRestore}}
+% \changes{v1.1}
+% {2020/04/04}
+% {Add: \docarg{Save}}
+% \changes{v1.2}
+% {2020/04/06}
+% {Add: optional \pkgparex to \cs[no-index]{OopsNew} as instruction to expand \pkgparkvl}
+% \changes{v1.2}
+% {2020/04/06}
+% {Replace: \cs[no-index]{OopsClear}\Arg{\pkgparpa} by \cs[no-index]{OopsClear}\docparo{\meta{\doccceptkvl}}}
+% \changes{v1.2}
+% {2020/04/06}
+% {Delete: \meta{kvl_{2}}~and~\meta{code_{2}}}
+% \changes{v1.2}
+% {2020/04/06}
+% {Delete: \cs[no-index]{OopsTest}}
+% \changes{v1.2}
+% {2020/04/06}
+% {Replace: \cs[no-index]{Save} by \cs[no-index]{Write}}
+% \changes{v1.2}
+% {2020/04/06}
+% {Replace: \cs[no-index]{Restore} by \cs[no-index]{Read}}
+% \changes{v1.3}
+% {2020/04/06}
+% {Replace: \cs[no-index]{OopsNew} by \cs[no-index]{Oops}}
+% \changes{v1.3}
+% {2020/04/06}
+% {Replace: \Arg{\pkgparpa} and \docparo{\meta{\pkgparpa}} by \docpard{\meta{\pkgparpa}} }
+% \changes{v1.4}
+% {2020/04/10}
+% {Replace: \docpare{s}{\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
+% by \docpare{s}{\Arg{\pkgparsi}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}}
+% \changes{v1.4}
+% {2020/04/10}
+% {Add:optional \pkgparap to \cs[no-index]{OopsNew} to make side effects presist beyond local group}
+% \changes{v1.4}
+% {2020/04/10}
+% {Add: \cs[no-index]{OopsHook}}
+% \changes{v1.4}
+% {2020/04/10}
+% {Add: \docarg{Expans} (for debugging' sake, but...) }
+% \changes{v1.4}
+% {2020/04/10}
+% {Add: \autoref{usage:dosdont} }
+% \changes{v1.4}
+% {2020/04/10}
+% {Add: \cs[no-index]{OopsDebug} }
+% \changes{v1.5}
+% {2020/04/10}
+% {Delete: dependence on \pkg{datetime} }
+% \changes{v1.5}
+% {2020/04/10}
+% {Add: \pkgoptfi }
+% \changes{v1.6}
+% {2020/04/10}
+% {Rename: \pkg{oops} to \pkg{ccool} (better describes the purpose) }
+% \changes{v1.6}
+% {2020/04/10}
+% {Rename: \cs[no-index]{Oops} to \cs[no-index]{Ccool}}
+% \changes{v1.6}
+% {2020/04/10}
+% {Rename: \cs[no-index]{OopsClear} to \cs[no-index]{CcoolClear}}
+% \changes{v1.6}
+% {2020/04/10}
+% {Rename: \cs[no-index]{OopsDebug} to \cs[no-index]{CcoolDebug}}
+% \changes{v1.6}
+% {2020/04/10}
+% {Rename: \cs[no-index]{OopsHook} to \cs[no-index]{CcoolHook}}
+% \changes{v1.6}
+% {2020/04/10}
+% {Rename: \cs[no-index]{OopsOption} to \cs[no-index]{CcoolOption}}
+% \changes{v1.6}
+% {2020/04/10}
+% {Rename: \cs[no-index]{OopsRead} to \cs[no-index]{CcoolRead}}
+% \changes{v1.7}
+% {2020/04/11}
+% {Delete: \cs[no-index]{CcoolDebug} }
+% \changes{v1.8}
+% {2020/04/12}
+% {Add: \hyperref[usage:cs:lambda]{\cs[no-index]{CcoolLambda}} }
+% \changes{v1.8}
+% {2020/04/12}
+% {Add: \cs[no-index]{CcoolVers} }
+% \changes{v1.9}
+% {2020/04/14}
+% {Add: support for \LuaTeX }
+% \changes{v1.9}
+% {2020/04/14}
+% {Move: from \autoref{part:usage} to \autoref{part:impl}, what is now that part's \autoref{impl:frontend}}
+% \changes{v2.0}
+% {2020/04/15}
+% {Delete: \pkgoptfi's dependency on \pkg{texosquery} and \cs[no-index]{pdfcreationdate}}
+% \changes{v2.0}
+% {2020/04/15}
+% {Add: support for \XeTeX}
+% \changes{v2.0}
+% {2020/04/15}
+% {Update: \cs[no-index]{RequirePackage}, \cs[no-index]{NeedsTeXFormat}'s second argument / TeX Live 2020}
+% \changes{v2.1}
+% {2020/04/17}
+% {Replace: \hyperref[usage:cs:lambda]{\cs[no-index]{CcoolLambda}}'s optional integer argument (number of \texttt{m}'s)
+% by a standard argument list}
+% \changes{v2.1}
+% {2020/04/17}
+% {Replace: \hyperref[ccool:pa]{\meta{\pkgparpa}}'s position within \cs[no-index]{Ccool}'s argument list, from first to second. Greater versatility }
+% \changes{v2.1}
+% {2020/04/17}
+% {Replace: as~the~default~of~\pkgoptpa,~\docarg{Math}~by~\pkgoptpad}
+% \changes{v2.1}
+% {2020/04/17}
+% {Replace: \docccept{\doccceptgopt}~\docarg{Name} by \pkgoptpa }
+% \changes{v2.2}
+% {2020/04/20}
+% {Replace: part of the abstract's with more straighforward descriptions based on input from forum participtants}
+% \changes{v2.3}
+% {2020/05/16}
+% {Replace: for \cs[no-index]{Ccool}, \docpare{i}{} by \docpare{c}{}}
+% \changes{v2.3}
+% {2020/05/16}
+% {Rearranged: \cs{Ccool}'s subsections. Previously, by argument. Now, by feature. }
+% \changes{v2.3}
+% {2020/05/16}
+% {Replace: In \docstep{key}, the created command's implementation, from \cs[no-index]{ProvideDocumentCommand} to \cs[no-index]{DeclareDocumentCommand}}
+% \changes{v2.5}
+% {2020/05/21}
+% {Modify: behavior of \autoref{part:usage}~\nameref{ccool:ex}, rely on \pkg{erw-l3}'s \cs[no-index]{erw_seq_use:Nn} }
+% \changes{v2.5}
+% {2020/05/21}
+% {Modify: Rely on \pkg{erw-l3}'s \cs[no-index]{erw_jobnametimestamp:} }
+% \changes{v2.6}
+% {2020/05/22}
+% {Modify: Rely on \pkg{erw-l3}'s \cs[no-index]{erw_lambda:nnn} }
+% \changes{v2.7}
+% {2020/05/28}
+% {Add: \docccept{\doccceptgopt}~\pkgoptan }
+% \changes{v2.7}
+% {2020/05/28}
+% {Modify: \pkgoptse's default rely on \pkg{babel} and \pkg{amsmath}, if applicable}
+% \changes{v2.7}
+% {2020/05/28}
+% {Modify: Replace \docxparsem by \docxparseo}
+% \changes{v2.8}
+% {2020/05/28}
+% {Fix: conflict between \cs[no-index]{usepackage}\docparo{spanish}\docparm{babel} and \nameref{ccool:pa} }
+% \changes{v2.9}
+% {2020/06/03}
+% {Miscellaneous }
+% \changes{v3.0}
+% {2020/06/04}
+% {Miscellaneous }
+% \changes{v3.1}
+% {2020/10/10}
+% {Replaced: \doclist{thisdeps}'s content, from exhaustive dependencies to those explicit with \cs[no-index]{usepackage}}
+% \changes{v3.2}
+% {2021/09/20}
+% {Removed~listing~changes~(little~information,~difficult~to~keep~track)}
+%
 %   \clearpage
 %   \part{Listing}\label{part:listing}
-%   
-%   \newtcblisting[auto counter]
-%   {listing}[2][]{
-%   noparskip,
-%   breakable,
-%   colback=white,
-%   colframe=black,
-%   opacitybacktitle=.8,%
-%   fonttitle=\bfseries,
-%   title={Listing~\thetcbcounter. #1},
-%   arc=0pt,
-%   outer arc=0pt,
-%   boxrule=1pt,
-%   listing and text,
-%   #2}
-%   
-%   \docnb
-%   \begin{enumerate}
-%   \item Some statements  affect only the output of listings that come after that in which they appear.
-%     The demarcation is indicated by |%^^||A--->| and |%^^||A<---|, where applicable
-%   \end{enumerate}
-%   \phantomsection\addcontentsline{toc}{section}
-%   {\ref{listing:vers}.\cs{CcoolVers}}
-%   \iffalse
-%<*guardlisting>   
-%   \fi
-\begin{listing}[\cs{CcoolVers}]
-  {label=listing:vers}
-  \CcoolVers
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
-% 
-%   \phantomsection\addcontentsline{toc}{section}
-%   {\ref{listing:thisdeps}. This doc's dependencies}
-%   \iffalse
-%<*guardlisting>   
-%   \fi
-\begin{listing}[This doc's dependencies]
-  {label=listing:thisdeps}
-  \ExplSyntaxOn
-  \__ccooldoc_usepackage:
-  \ExplSyntaxOff
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
 %
-% \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:numbrsys:base}. \texorpdfstring{Let~$\mathbb{N}$ and $\mathbb{R}$ denote\dots} (start of the tutorial)}
+%\phantomsection\addcontentsline{toc}{section}{Tutorial\textgreater}
+%\phantomsection\addcontentsline{toc}{section}{\ref{listing:numbrsys:base}. Let~\texorpdfstring{$\mathbb{N}$}{N} and \texorpdfstring{$\mathbb{R}$}{R} denote\dots}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[``Let~$\mathbb{N}$ and $\mathbb{R}$ denote\dots'' (start of the tutorial)]
+\begin{listing}[``Let~$\mathbb{N}$ and $\mathbb{R}$ denote\dots'']
   {label=listing:numbrsys:base, listing and text}
   Let~$\mathbb{N}$ and $\mathbb{R}$ denote the natural and real numbers.
 \end{listing}
@@ -665,11 +764,11 @@ english
 % \fi
 % 
 % \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:numbrsys:cmd}. Equivalent to \ref{listing:numbrsys:base}, with \cs{NewDocumentCommand}}
+% {\ref{listing:numbrsys:cmd}. Same as \ref{listing:numbrsys:base}, with \cs{NewDocumentCommand}}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[ Equivalent to \ref{listing:numbrsys:base}, with \cs{NewDocumentCommand}]
+\begin{listing}[ Same as \ref{listing:numbrsys:base}, with \cs{NewDocumentCommand}]
   {label=listing:numbrsys:cmd, listing and text}
   \DeclareDocumentCommand\Nat{}{\mathbb{N}}
   \DeclareDocumentCommand\Real{}{\mathbb{R}}
@@ -680,366 +779,71 @@ english
 % \fi
 % 
 % \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:numbrsys:in}.  Equivalent to \ref{listing:numbrsys:cmd}, with \cs{Ccool}}
+% {\ref{listing:numbrsys:in}.  Same as \ref{listing:numbrsys:cmd}, with \cs{Ccool}}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[ Equivalent to \ref{listing:numbrsys:cmd}, with \cs{Ccool}]
+\begin{listing}[ Same as \ref{listing:numbrsys:cmd}, with \cs{Ccool} ]
   {label=listing:numbrsys:in, listing and text}
-  % ^^A--->
+  \begingroup
   \Ccool c{\mathbb{#1}}{ Nat = {N}, Real = {R} }
   Let~$\Nat$ and $\Real$~denote the natural and real numbers.
-  % ^^A<---
-  \CcoolClear
+  \endgroup
 \end{listing}
 % \iffalse
 %</guardlisting> 
 % \fi
 % 
 % \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:numbrsys:ex}.  Equivalent to \ref{listing:numbrsys:in}, with expansion}
+% {\ref{listing:numbrsys:ex}.  Same as \ref{listing:numbrsys:in}, with expansion}
 % \iffalse
 %<*guardlisting> 
 \fi
-\begin{listing}[ Equivalent to \ref{listing:numbrsys:in}, with expansion]
+\begin{listing}[ Same as \ref{listing:numbrsys:in}, with expansion]
   {label=listing:numbrsys:ex, listing and text}
-  % ^^A--->
+\begingroup
   \Ccool[Let~]
   c{\mathbb{#1}}{ Nat = {N}, Real = {R} }*
   [~denote the natural and real numbers.]{}
-  % ^^A<---
-  \CcoolClear
+\endgroup
 \end{listing}
 % \iffalse
 %</guardlisting> 
 % \fi
-% 
+%
+% \changes{v3.2}
+% {2021/09/20}
+% {\cs[no-index]{begingroup}~and~\cs[no-index]{endgroup}~inside~listings.}
+%
 % \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:numbrsys:pa}.  Equivalent to \ref{listing:numbrsys:in}, parameterized (end of the tutorial)}
+% {\ref{listing:numbrsys:pa}.  Same as \ref{listing:numbrsys:in}, parameterized}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[ Equivalent to \ref{listing:numbrsys:in}, parameterized (end of the tutorial)]
+\begin{listing}[ Same as \ref{listing:numbrsys:in}, parameterized]
   {label=listing:numbrsys:pa, listing and text}
-  % ^^A--->
-  \Ccool<Style>c{\mathbb{#1}}{ Nat = {N}, Real = {R} }
-  [Let $\Nat<Style>$ and $\Real<Style>$ denote the natural and real numbers.]{}
-  % ^^A<---
-  \CcoolClear<Style>
+\begingroup
+  \Ccool<foo>c{\mathbb{#1}}{ Nat = {N}, Real = {R} }
+  [Let $\Nat<foo>$ and $\Real<foo>$ denote the natural and real numbers.]{}
+\endgroup
 \end{listing}
 % \iffalse
 %</guardlisting> 
 % \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:lang}. Language and mode}
-%^^A   \selectlanguage{afrikaans}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{basque}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{catalan}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{croatian}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{czech}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{danish}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{dutch}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   % ^^A esperanto,                              % ERROR
-%^^A   \selectlanguage{estonian}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{finnish}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{french}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   % ^^A galician,                               % ERROR
-%^^A   \selectlanguage{german}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{hungarian}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{icelandic}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{indonesian}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{irish}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{italian}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   % ^^A kurmanji,                               % ERROR
-%^^A   \selectlanguage{latin}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   % ^^A latvian,                                % ERROR
-%^^A   \selectlanguage{lithuanian}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{ngerman}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{polish}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{portuguese}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{romanian}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{slovak}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{spanish}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{swedish}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{swissgerman}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{turkish}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{turkmen}\\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
-%^^A   \selectlanguage{welsh} \\
-%^^A   \noindent\textbf{\languagename}{:}\\
-%^^A   \CcoolOption[ Separ ]
-%^^A   \Ccool{ X = x, Y = y }*
+% \phantomsection\addcontentsline{toc}{section}{\textless}
+%
+% \changes{v3.2}
+% {2021/09/20}
+% {\cs[no-index]{texorpdfstring}~was~used~with~one~argument~instead~of~two~in~listing~titles,~so~removed~it.}
+%
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:mvt:i}. Mittelwertsatz f\"ur \texorpdfstring{$n$}{n} Variable. }
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[Language and mode]
-  {label=listing:lang}
-  % ^^A--->
-  \textbf{\languagename}{:}~\Ccool{ X = x, Y = y }*
-  \begin{otherlanguage}{spanish}
-    \CcoolOption[ Separ ]\\
-    \textbf{\languagename}{:}~\Ccool{ X = x, Y = y }*
-  \end{otherlanguage}\\
-  \textbf{\languagename}{:}~\Ccool{ X = x, Y = y }*
-  \\[1em]
-  \CcoolOption[ Outer = ####1 ]
-  \textbf{\languagename}{:}~\Ccool{ X = this, Y = that }*
-  \begin{otherlanguage}{spanish}
-    \CcoolOption[ Separ ]\\
-    \textbf{\languagename}{:}~\Ccool{ X = esto, Y = aquello }*
-  \end{otherlanguage}\\
-  \textbf{\languagename}{:}~\Ccool{ X = this, Y = that }*
-  \CcoolOption[ Separ ]\\
-  % ^^A<---
-  \CcoolOption
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:se}. Separators}
-% \iffalse
-%<*guardlisting> 
-% \fi   
-\begin{listing}[Separators
-  % \NB{bug}
-  % {Removing the closing \CcoolOption subsequently causes inconsistent separators between text and math mode (case replicated in uncommented form in dtx)
-  % ^^A% \begin{listing}[Separators]
-  % ^^A%   {label=listing:se}
-  % ^^A%  %   ^^A--->
-  % ^^A%   \CcoolOption[ Separ={{\ \char`@\ }{\ \%\ }{\ \char`@\ }} ]
-  % ^^A%   \Ccool{ X = x, Y = y }*[\\]
-  % ^^A%   { X = x, Y = y }*s{{~\&~}}[\\]
-  % ^^A%   { X = x, Y = y }*s{{,~}{~\&~}}[\\[1em]]
-  % ^^A%   { X = x, Y = y, Z = z }*[\\]
-  % ^^A%   { X = x, Y = y, Z = z }*s{{~\&~}}[\\]
-  % ^^A%   { X = x, Y = y, Z = z }*s{{,~}{\&~}}[\\]
-  % ^^A%   { X = x, Y = y, Z = z }*s{{~\&~}{,~}{,~\&~}}\\
-  % ^^A%%   ^^A<---
-  % ^^A%   \CcoolClear
-  % ^^A% \end{listing}
-  % ^^A% \begin{listing}[Controlling the mode]
-  % ^^A%   {label=listing:mode}
-  % ^^A%   \Ccool{ X = x, Y = y }*\\
-  % ^^A%   \Ccool{ X = x, Y = y, Z = z }*\\[1em]
-  % ^^A%   \CcoolOption[ Outer = ####1 ]
-  % ^^A%   \Ccool{ X = x, Y = y }*\\
-  % ^^A%   \Ccool{ X = x, Y = y, Z = z }*\\[1em]
-  % ^^A%   \CcoolOption[ Outer ]
-  % ^^A%   \Ccool{ X = x, Y = y }*\\
-  % ^^A%   \Ccool{ X = x, Y = y, Z = z }*
-  % ^^A%   {Symptom:} Inconsistent separators
-  % ^^A%   {Workaround:} Put \CcoolOption in listing:se
-  % ^^A% \end{listing}
-  % ^^A% }
-  % }
-  ]
-  {label=listing:se}
-  % ^^A--->
-  \CcoolOption[ Separ={{\ \char`@\ }{\ \%\ }{\ \char`@\ }} ]
-  \Ccool{ X = x, Y = y }*[\\]
-  { X = x, Y = y }*s{{~\&~}}[\\]
-  { X = x, Y = y }*s{{,~}{~\&~}}[\\[1em]]
-  { X = x, Y = y, Z = z }*[\\]
-  { X = x, Y = y, Z = z }*s{{~\&~}}[\\]
-  { X = x, Y = y, Z = z }*s{{,~}{\&~}}[\\]
-  { X = x, Y = y, Z = z }*s{{~\&~}{,~}{,~\&~}}\\
-  % ^^A<---
-  \CcoolOption
-  \CcoolClear
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:hw:i}. Hello, world! (for testing's sake)}
-% \iffalse
-%<*guardlisting> 
-% \fi
-\begin{listing}[Hello, world! (testing)]
-  {label=listing:hw:i}
-  \CcoolOption[ Write = \BooleanTrue ]
-  % ^^A--->
-  \CcoolOption[Separ = {{}{.}{.}}, Outer = {####1}]
-  \Ccool
-  <Test>{ KeyA = {.}, KeyB = {!}, KeyC = {\%} }[]
-  <Test>{ KeyD = {d}, KeyE = {\%} }[]
-  <Test>c{\{#1\}}{ KeyF = {H}, KeyG = {e}, KeyH = {l} }*[]
-  <Test>{ KeyI = {\%}, KeyJ = {\%}, KeyK = {\%} }[.\{l\}.\{o\}]
-  <Test>{ KeyL = {l}, KeyM = {\char`[}, KeyN = {\char`]} }[]
-  <Test>{ KeyO = {o}, KeyP = {\%}, KeyQ = {\%} }[{,\ }]
-  <Test>{ KeyR = {w}, KeyS = {o}, KeyT = {r} }*
-  s{{}{}{}}c{{\char`[}#1}[]
-  <Test>{ KeyU = {\%}, KeyV = {\%}, KeyW = {\%} }[]
-  <Test>{ KeyX = {\%}, KeyY = {\%}, KeyZ = {\KeyB<Test>} }\nobreak
-  \KeyL<Test>\KeyD<Test>\KeyZ<Test>\KeyN<Test>\\
-  % ^^A<---
-  \CcoolOption
-  \CcoolClear
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}
-% {\ref{listing:hw:ii}. \docreflist{hw:i} read from file}
-% \iffalse
-%<*guardlisting> 
-% \fi
-\begin{listing}[\docreflist{hw:i} read from file]
-  {label=listing:hw:ii}
-  % ^^A--->
-  \CcoolRead
-  \KeyF<Test>\KeyA<Test>\nobreak
-  \KeyG<Test>\KeyA<Test>\nobreak
-  \KeyH<Test>\KeyA<Test>\nobreak
-  \KeyH<Test>\KeyA<Test>\nobreak
-  {\{}\nobreak\KeyO<Test>{\}},{\ }\nobreak
-  \KeyM<Test>\KeyR<Test>\nobreak
-  \KeyO<Test>\nobreak
-  \KeyT<Test>\nobreak
-  \KeyL<Test>\nobreak
-  \KeyD<Test>\nobreak
-  \KeyZ<Test>\nobreak
-  \KeyN<Test>\nobreak
-  % ^^A<---
-  \CcoolClear
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:proba:i}. Probability space}
-% \iffalse
-%<*guardlisting> 
-% \fi
-\begin{listing}[Probability space]
-  {label=listing:proba:i}
-  \CcoolOption[ Write = \BooleanTrue ]
-  % ^^A--->
-  \Ccool[Let~]
-  { Space = \Omega, Field = \mathcal{F}, Meas = \mathcal{P} }
-  *s{{,}}c{$\{#1\}$}
-  [~denote the probability space, where~]{ PowerSet = { 2^{\Space} } }
-  [$\Field\subset \PowerSet$.]
-  {}
-  % ^^A<---
-  \CcoolClear
-  \CcoolOption
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:proba:ii}. \docreflist{proba:i} read from file}
-% \iffalse
-%<*guardlisting> 
-% \fi
-\begin{listing}[\docreflist{proba:i} read from file]
-  {label=listing:proba:ii}
-  % ^^A--->
-  \CcoolRead \tab $\Omega$ $\Field$ $\Meas$
-  % ^^A<---
-  \CcoolClear
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:mvt:i}. Mittelwertsatz f\"ur \texorpdfstring{$n$} Variable. }
-% \iffalse
-%<*guardlisting> 
-% \fi
-\begin{listing}[{Mittelwertsatz f\"ur $n$ Variable\cite[17.3]{tcolbox}}]
+\begin{listing}[{Mittelwertsatz f\"ur $n$ Variable\cite[17.3]{tcolorbox}}]
   {label=listing:mvt:i}
+  \begingroup
   \CcoolOption[ Write = \BooleanTrue ]
-  % ^^A--->
   \selectlanguage{german}
   \newtheorem{theorem}{Theorem}
   \AfterEndEnvironment{theorem}{\CcoolHook}
@@ -1059,29 +863,53 @@ english
   \end{theorem}]
   {}
   (Check: $\N$, $\Punkt$)
-  % ^^A<---
-  \CcoolClear
-  \CcoolOption
+    \endgroup
+\CcoolOption
 \end{listing}
 % \iffalse
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:mvt:ii}. \docreflist{mvt:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:mvt:ii}. Listing~\ref{listing:mvt:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\docreflist{mvt:i} read from file]
+\begin{listing}[Listing~\ref{listing:mvt:i} read from file]
   {label=listing:mvt:ii}
-  % ^^A--->
-  \CcoolRead \tab $\N$ $\R$ $\OffMenge$ $\Ci$ $\Strecke$ 
-  % ^^A<---
+  \CcoolRead ~$\N$ $\R$ $\OffMenge$ $\Ci$ $\Strecke$ 
   \CcoolClear
 \end{listing}
 % \iffalse
 %</guardlisting> 
 % \fi
-% 
+%
+% \changes{v3.2}
+% {2021/09/20}
+% {Removed~listing~`Hello, world! (for testing's sake)'.~That~should~be~for~l3build}
+%
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:proba:i}. Probability space}
+% \iffalse
+%<*guardlisting> 
+% \fi
+\begin{listing}[Probability space]
+  {label=listing:proba:i}
+  \begingroup
+  \Ccool[Let~]
+  { Space = \Omega, Field = \mathcal{F}, Meas = \mathcal{P} }
+  *s{{,}}c{$\{#1\}$}
+  [~denote the probability space, where~]{ PowerSet = { 2^{\Space} } }
+  [$\Field\subset \PowerSet$.]
+  {}
+  \endgroup
+\end{listing}
+% \iffalse
+%</guardlisting> 
+% \fi
+%
+% \changes{v3.2}
+% {2021/09/20}
+% {Updated~listings~with~\cs{LambdaX}~in~place~of~\cs{CcoolLambda}}
+%
 % \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:real:i}. Families of polynomial functions}
 % \iffalse
 %<*guardlisting> 
@@ -1089,13 +917,11 @@ english
 \begin{listing}[Families of polynomial functions]
   {label=listing:poly:real:i}
   \CcoolOption[ Write = \BooleanTrue ]
-  % ^^A--->
   \Ccool c{\mathbb{#1}}{ Nat = {N}, Real = {R} }
   [Let~]
-  { PolyR = \CcoolLambda[o]{\Real\IfValueT{#1}{_#1}[X] } }
+  { PolyR = \LambdaX[o]{\Real\IfValueT{#1}{_#1}[X] } }
   [$\PolyR[n]$ and $\PolyR$, denote the families of polynomial functions on $\Real$, of order $n$ et and their union over $n \in \Nat$, respectively. ]
   {}
-  % ^^A<---
   \CcoolClear
   \CcoolOption
 \end{listing}
@@ -1103,74 +929,32 @@ english
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:real:ii}. \docreflist{poly:real:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:real:ii}. Listing~\ref{listing:poly:real:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\docreflist{poly:real:i} read from file]
+\begin{listing}[\ref{listing:poly:real:i} read from file]
   {label=listing:poly:real:ii}
-  % ^^A--->
-  \CcoolRead \tab $\PolyR[n]$ et $\PolyR$
-  % ^^A<---
-  \CcoolClear
+  \begingroup
+  \CcoolRead $\PolyR[n]$ et $\PolyR$
+  \endgroup
 \end{listing}
 % \iffalse
 %</guardlisting> 
 % \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:arb:i}. Same as \docreflist{poly:real:i}, but arbitrary number system}
-% \iffalse
-%<*guardlisting> 
-% \fi
-\begin{listing}[Same as \docreflist{poly:real:i}, but arbitrary number system]
-  {label=listing:poly:arb:i}
-  \CcoolOption[ Write = \BooleanTrue ]
-  % ^^A--->
-  \selectlanguage{french}
-  \Ccool c{\mathbb{#1}}{ Corps = {K}, Nat = {N}, Reel = {R} }
-  [Soient~]
-  {
-    Poly = \CcoolLambda[om]{#2\IfValueT{#1}{_#1}[X] },
-    PolyR = \CcoolLambda[o]{\Poly[#1]{\Reel}}
-  }
-  [$\Poly[n]{\Corps}$ et $\Poly{\Corps}$, les familles de polyn\^omes sur $\Corps$, de degr\'e $n$ et leur union pour $n \in \Nat$, respectivement. En particulier,
-  ils sont d\'enot\'es $\PolyR[n]$ et $\PolyR$, pour $\Corps=\Reel$.]
-  {}
-  % ^^A<---
-  \CcoolClear
-  \CcoolOption
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:poly:real:ii}. \docreflist{poly:arb:i} read from file}
-% \iffalse
-%<*guardlisting> 
-% \fi
-\begin{listing}[\docreflist{poly:arb:i} read from file]
-  {label=listing:poly:arb:ii}
-  % ^^A--->
-  \CcoolRead \tab $\PolyR[n]$ et $\PolyR$
-  % ^^A<---
-  \CcoolClear
-\end{listing}
-% \iffalse
-%</guardlisting> 
-% \fi
-% 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:fonc:i}. Fonction et fonctionelle}
+%
+% \changes{v3.2}
+% {2021/09/20}
+% {Updated~listing~`Fonction~et~fonctionelle',~with~use~of~parameter}
 % \iffalse
 %<*guardlisting> 
 % \fi
 \begin{listing}[Fonction et fonctionelle]
   {label=listing:fonc:i}
   \CcoolOption[ Write = \BooleanTrue ]
-  % ^^A--->
   \selectlanguage{french}
-  \Ccool{ EvalAt = \CcoolLambda{(#1)}, ApplyOp = \CcoolLambda[mm]{#1[#2]} }
-  [Supposons une fonction $f\EvalAt{t}$, et \'etudions le probl\`eme o\`u la fonctionnelle $\ApplyOp{S}{f}$ est donn\'ee par\dots]{}
-  % ^^A<---
+  \Ccool<eval>{ fun = \LambdaX{(#1)} }[]<op>{ fun = \LambdaX[mm]{#1[#2]} }
+  [Supposons une fonction $f\fun<eval>{t}$, et \'etudions le probl\`eme o\`u la fonctionnelle $\fun<op>{S}{f}$ est donn\'ee par\dots]{}
   \CcoolClear
   \CcoolOption
 \end{listing}
@@ -1178,29 +962,27 @@ english
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:fonc:ii}. \docreflist{fonc:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:fonc:ii}. Listing~\ref{listing:fonc:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\docreflist{fonc:i} read from file]
+\begin{listing}[\ref{listing:fonc:i} read from file]
   {label=listing:fonc:ii}
-  % ^^A--->
-  \CcoolRead \tab $f\EvalAt{t}$, $\ApplyOp{S}{f}$
-  % ^^A<---
+  \CcoolRead $\fun<eval>{t}$, $\fun<op>{S}{f}$
   \CcoolClear
 \end{listing}
 % \iffalse
 %</guardlisting> 
 % \fi
-% 
+%
 % \phantomsection\addcontentsline{toc}{section}{\ref{listing:cusum:i}. CUSUM statistic.}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[CUSUM statistic\cite{ccool-thesis}]
+\begin{listing}[CUSUM statistic\cite{oh-2005}]
   {label=listing:cusum:i}
+  \begingroup
   \CcoolOption[ Write = \BooleanTrue ]
-  % ^^A--->
   \newtheorem{definition}{Definition}
   \AfterEndEnvironment{definition}{\CcoolHook}  
   \Ccool{
@@ -1208,7 +990,7 @@ english
     Time = { t },
     Process = { \xi },
     StopT = { T },
-    EvalAt = \CcoolLambda{(#1)}
+    EvalAt = \LambdaX{(#1)}
   }
   [The CUSUM statistic process and the corresponding one-sided CUSUM stopping time are defined as follows:
   \begin{definition}\label{the CUSUM statistic}. Let~]
@@ -1242,425 +1024,49 @@ english
   \end{definition}\par]{}
   
   (Check: $\Scale$, $\CUSUM$)
-  % ^^A<---
-  \CcoolClear
+  \endgroup
   \CcoolOption
 % \end{listing}
 % \iffalse
 %</guardlisting> 
 % \fi
 % 
-% \phantomsection\addcontentsline{toc}{section}{\ref{listing:cusum:ii}. \docreflist{cusum:i} read from file}
+% \phantomsection\addcontentsline{toc}{section}{\ref{listing:cusum:ii}. Listing~\ref{listing:cusum:i} read from file}
 % \iffalse
 %<*guardlisting> 
 % \fi
-\begin{listing}[\docreflist{cusum:i} read from file]
+\begin{listing}[Listing~\ref{listing:cusum:i} read from file]
   {label=listing:cusum:ii}
-  % ^^A--->
-  \CcoolRead \tab $\Time $ $\Process$ $\Scale$ $\Real$ $\CUSUMthresh$ $\LogWald$  $\CUSUMst$ $\CUSUM$ $\LogWaldInf$ 
-  % ^^A<---
-  \CcoolClear
+  \begingroup
+  \CcoolRead $\Time$ $\Process$ $\Scale$ $\Real$ $\CUSUMthresh$ $\LogWald$  $\CUSUMst$ $\CUSUM$ $\LogWaldInf$ 
+  \endgroup
 \end{listing}
 % \iffalse
 %</guardlisting> 
 % \fi
-% 
-% \clearpage
-% \part{Other}\label{part:other}
-% 
-% \section{Acknowledgment}\label{other:acknowl} 
-% 
-% This work has benefited from Q\&A's from the \LaTeX community\cite{user-erw}\cite{p158966}.
-% Specific attributions are made throughout this document.
-% 
-% \section{Genealogy}\label{other:geneal}
-% 
-% \textquote
-% [\pkg{cool}\cite{cool}]
-% {Give commands the ability to contain the mathematical meaning while retaining the typesetting versatility}.
-% The addition of `c', in \pkg{ccool}, is for \emph{custom}. With hinsdight it is restrictive to
-% describe \pkg{ccool} as a tool for encoding mathematical convention.
-% 
-% \section{Install}\label{other:install}
-% \begin{enumerate}[label=\emph{\arabic*)}]
-% \item Compile \file{ccool.dtx} (under Unix, \texttt{\$pdflatex ccool.dtx})
-% \item Put the generated \file{ccool.sty} in the search path of the \LaTeX engine
-%^^A \NB{todo}{\pkg{l3buid} install}
-% \end{enumerate}
-% 
-% \section{Issue}\label{other:issue}
 %
-% Listed under:
-% \begin{enumerate}[label={\emph{\alph*)}}]
-% \item \env{NOTE} or \cs{NB}, tagged either \texttt{bug} or \texttt{fixed}, inside \jobname|.dtx|
-% \end{enumerate}
-% 
-% \section{Support}\label{other:support}
-% 
-% This package is available from \url{https://www.ctan.org/pkg/ccool} and \url{https://github.com/rogard/ccool}.
-% 
-% \section{Testing}\label{other:testing}
-% 
-% \subsection{Technicality}
-% Not possible to compile-check the expansion of a certain class of macros against predefined values\cite{a-534100}. 
-% Instead, one can
-% \begin{enumerate}[label={\emph{\alph*)}}]
-% \item Follow the steps in \autoref{other:install} on one's own machine to generate \jobname|.pdf|
-% \item Visually check \autoref{part:listing}, against that \href{https://github.com/rogard/ccool}{of the repository}, for the same version.
-% \end{enumerate}
-% Also see:
-% \begin{enumerate}[label={\emph{\alph*)}}]
-% \setcounter{enumi}{2}
-% \item Also see: \autoref{other:todo}~\ref{todo:regtest}
-% \end{enumerate}
-% 
-% \subsection{Platform}
-% \begin{enumerate}[label=\emph{\roman*)}]
-% \item 
-%   ^^A uname -a
-%   \begin{Verbatim}[breaklines=true]
-%     Linux laptop 4.15.0-20-generic #21-Ubuntu SMP Tue Apr 24 06:16:15 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
-%   \end{Verbatim}
-%   \label{plat:lin}
-% \end{enumerate}
-% 
-% \subsection{Engine}
-% \begin{enumerate}[label=\emph{\alph*)}]
-% \item 
-%   \begin{Verbatim}[breaklines=true]
-%     pdfTeX 3.14159265-2.6-1.40.20 (TeX Live 2019)
-%   \end{Verbatim}
-%   \label{eng:tlxviiii:pdf}
-% \item 
-%   \begin{Verbatim}[breaklines=true]
-%     pdfTeX 3.14159265-2.6-1.40.21 (TeX Live 2020)
-%   \end{Verbatim}
-%   \label{eng:tlxx:pdf}
-% \item
-%   \begin{Verbatim}[breaklines=true]
-%     LuaHBTeX, Version 1.12.0 (TeX Live 2020)
-%   \end{Verbatim}
-%   \label{eng:tlxx:lua}
-% \item
-%   \begin{Verbatim}[breaklines=true]
-%     XeTeX 3.14159265-2.6-0.999992 (TeX Live 2020)
-%   \end{Verbatim}
-%   \label{eng:tlxx:xe}
-% \end{enumerate}
-% 
-% \subsection{Results}
-% 
-% \begin{enumerate}[label=\emph{\arabic*)}]
-% \item \pkg{ccool} \docvers{1}{8} compiles satisfactorily on platform \ref{plat:lin} and engine \ref{eng:tlxviiii:pdf}
-% \item \pkg{ccool} \docvers{1}{8} compiles satisfactorily on platform \ref{plat:lin} and engine \ref{eng:tlxx:pdf}
-% \item \pkg{ccool} \docvers{1}{9} compiles satisfactorily on platform \ref{plat:lin} and engines \ref{eng:tlxx:pdf} and \ref{eng:tlxx:lua}
-% \item \pkg{ccool} \docvers{2}{0} compiles satisfactorily on platform \ref{plat:lin} and engines \ref{eng:tlxx:pdf},  \ref{eng:tlxx:lua}, and \ref{eng:tlxx:xe}
-% \item \pkg{ccool} \docvers{2}{1} compiles satisfactorily on platform \ref{plat:lin} and engines \ref{eng:tlxx:pdf},  \ref{eng:tlxx:lua}, and \ref{eng:tlxx:xe}
-% \item \pkg{ccool} \docvers{2}{3} compiles satisfactorily on platform \ref{plat:lin} and engines \ref{eng:tlxx:pdf},  \ref{eng:tlxx:lua}, and \ref{eng:tlxx:xe}
-% \item \pkg{ccool} \docvers{2}{7} compiles satisfactorily on platform \ref{plat:lin} and engines \ref{eng:tlxx:pdf},  \ref{eng:tlxx:lua}, and \ref{eng:tlxx:xe}
-% \item \pkg{ccool} \docvers{2}{8} compiles satisfactorily on platform \ref{plat:lin} and engines \ref{eng:tlxx:pdf},  \ref{eng:tlxx:lua}, and \ref{eng:tlxx:xe}
-% \end{enumerate}
-% 
-% \subsection{Other}
-% Check \cite{ccool-thesis} for testing \pkg{ccool} with \cls{llncs}
-% 
-% \section{To do}\label{other:todo}
-%
-% \begin{enumerate}[label=\emph{\alph*)}]
-% \item Regression testing using \cite[Section 3.2—Specifying expectations]{l3build}. \label{todo:regtest}
-% \end{enumerate}
-% Also see:
-% \begin{enumerate}[label=\emph{\alph*)}]
-% \setcounter{enumi}{1}
-% \item \env{NOTE} or \cs{NB} tagged \texttt{abandon\docpipe{}done\docpipe{}todo} inside \jobname|.dtx|
-% \end{enumerate}
-% 
-% \DocPhantomSection*{section}{References}{other:bib}
-% \begin{thebibliography}{1}
-% \bibitem{cool} Nick Setzer {\em The \pkg{cool} package}, 2005, \url{https://www.ctan.org/pkg/cool}
-% \bibitem{interface3} The \LaTeX3 Project Team {\em The \LaTeX3 interfaces}, 2019,
-%   \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3kernel/interface3.pdf}
-% \bibitem{l3build} The \LaTeX3 Project Team {\em The \pkg{l3build} package}, 2020,
-%   \url{http://mirror.utexas.edu/ctan/macros/latex/contrib/l3build/l3build.pdf}
-% \bibitem{tcolbox} Thomas F. Sturm {\em The \pkg{tcolorbox} package}, 2019,
-%   \url{http://www.texdoc.net/texmf-dist/doc/latex/tcolorbox/tcolorbox.pdf}
-% \bibitem{xparse} The \LaTeX3 Project Team {\em The \pkg{xparse} package}, 2020,
-%   \url{http://ftp.math.purdue.edu/mirrors/ctan.org/macros/latex/contrib/l3packages/xparse.pdf}
-% \bibitem{ccool-thesis} Erwann Rogard and Olympia Hadjiliadis {\em Typesetting a math thesis with \pkg{ccool}}, 2020,
-%   \url{https://github.com/rogard/ccool/blob/master/thesis.pdf}
-% \bibitem{user-erw} \url{https://tex.stackexchange.com/users/112708/erwann?tab=questions}
-% \bibitem{a-534100} \href{https://tex.stackexchange.com/users/73/joseph-wright}{@{}joseph-wright}'s answer to
-%   ``Checking a function's expansion against a string'', \url{https://tex.stackexchange.com/a/534100}
-% \bibitem{a-536597} \href{https://tex.stackexchange.com/users/73317/frougon}{@{}frougon}'s answer to ``Journaling calls to a function \textdel{taking inline code as argument}'', \url{https://tex.stackexchange.com/a/536620}
-% \bibitem{p158966}\cs{Ccool}, extension à \LaTeX~à vocation mathématique, \url{http://forum.mathematex.net/latex-f6/ccool-extension-latex-a-vocation-mathematique-t17314.html}
-% \bibitem{a-547018}  \href{https://tex.stackexchange.com/users/5735/javier-bezos}{@{}Javier Bezos}'s answer to~\url{https://tex.stackexchange.com/a/547018/112708}
-% \end{thebibliography}
-% 
-% \changes{\docvers{1}{0}}
-% {2020/03/08}
-% {Initial version}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Rearrange: much of the implementation}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Replace: \Arg{kvl_{2}}~by~\docpard{\meta{kvl_{2}}}~given that option type \texttt{G} not recommended\cite{xparse}}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Replace: \cs{OopsOptions}~by~\cs{OopsOption}}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Replace: \docarg{GenericObject}~by~\docarg{Name}}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Replace: \docarg{Separators}~by~\docarg{Separ}}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Add:\cs{OopsTest}}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Add:\cs{OopsRestore}}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Add: \docarg{Save}}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Delete: Listing 1-5 from \docvers{1}{0}}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Add: Listing~1., 2., 3., 4., 6., and 9.}
-% \changes{\docvers{1}{1}}
-% {2020/04/04}
-% {Fix: apparent anomaly in \docvers{1}{0}'s Listing~4, see \docreflist{hw:i}}
-% \changes{\docvers{1}{2}}
-% {2020/04/06}
-% {Add: optional \pkgparex to \cs{OopsNew} as instruction to expand \pkgparkvl}
-% \changes{\docvers{1}{2}}
-% {2020/04/06}
-% {Replace: \cs{OopsClear}\Arg{\pkgparpa} by \cs{OopsClear}\docparo{\meta{\doccceptkvl}}}
-% \changes{\docvers{1}{2}}
-% {2020/04/06}
-% {Delete: \meta{kvl_{2}}~and~\meta{code_{2}}}
-% \changes{\docvers{1}{2}}
-% {2020/04/06}
-% {Delete: \cs{OopsTest}}
-% \changes{\docvers{1}{2}}
-% {2020/04/06}
-% {Delete: Listing~2-3 from \docvers{1}{1}.}
-% \changes{\docvers{1}{2}}
-% {2020/04/06}
-% {Replace: \cs{Save} by \cs{Write}}
-% \changes{\docvers{1}{2}}
-% {2020/04/06}
-% {Replace: \cs{Restore} by \cs{Read}}
-% \changes{\docvers{1}{3}}
-% {2020/04/06}
-% {Replace: \cs{OopsNew} by \cs{Oops}}
-% \changes{\docvers{1}{3}}
-% {2020/04/06}
-% {Replace: \Arg{\pkgparpa} and \docparo{\meta{\pkgparpa}} by \docpard{\meta{\pkgparpa}} }
-% \changes{\docvers{1}{4}}
-% {2020/04/10}
-% {Replace: \docpare{s}{\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}
-% by \docpare{s}{\Arg{\pkgparsi}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\docpipe\Arg{\pkgparsi}\Arg{\pkgparsii}\Arg{\pkgparsiii}}}
-% \changes{\docvers{1}{4}}
-% {2020/04/10}
-% {Add:optional \pkgparap to \cs{OopsNew} to make side effects presist beyond local group}
-% \changes{\docvers{1}{4}}
-% {2020/04/10}
-% {Add: \cs{OopsHook}}
-% \changes{\docvers{1}{4}}
-% {2020/04/10}
-% {Delete: Listing~1., and 2. }
-% \changes{\docvers{1}{4}}
-% {2020/04/10}
-% {Add: Listing~1., 2., and 3. }
-% \changes{\docvers{1}{4}}
-% {2020/04/10}
-% {Add: \docarg{Expans} (for debugging' sake, but...) }
-% \changes{\docvers{1}{4}}
-% {2020/04/10}
-% {Add: \autoref{usage:dosdont} }
-% \changes{\docvers{1}{4}}
-% {2020/04/10}
-% {Add: \cs{OopsDebug} }
-% \changes{\docvers{1}{5}}
-% {2020/04/10}
-% {Delete: dependence on \pkg{datetime} }
-% \changes{\docvers{1}{5}}
-% {2020/04/10}
-% {Add: \pkgoptfi }
-% \changes{\docvers{1}{6}}
-% {2020/04/10}
-% {Rename: \pkg{oops} to \pkg{ccool} (better describes the purpose) }
-% \changes{\docvers{1}{6}}
-% {2020/04/10}
-% {Rename: \cs{Oops} to \cs{Ccool}}
-% \changes{\docvers{1}{6}}
-% {2020/04/10}
-% {Rename: \cs{OopsClear} to \cs{CcoolClear}}
-% \changes{\docvers{1}{6}}
-% {2020/04/10}
-% {Rename: \cs{OopsDebug} to \cs{CcoolDebug}}
-% \changes{\docvers{1}{6}}
-% {2020/04/10}
-% {Rename: \cs{OopsHook} to \cs{CcoolHook}}
-% \changes{\docvers{1}{6}}
-% {2020/04/10}
-% {Rename: \cs{OopsOption} to \cs{CcoolOption}}
-% \changes{\docvers{1}{6}}
-% {2020/04/10}
-% {Rename: \cs{OopsRead} to \cs{CcoolRead}}
-% \changes{\docvers{1}{6}}
-% {2020/04/10}
-% {Add: Listing showing part of the preamble }
-% \changes{\docvers{1}{7}}
-% {2020/04/11}
-% {Add: \docreflist{cusum:i} (CUSUM) }
-% \changes{\docvers{1}{7}}
-% {2020/04/11}
-% {Add: Legends to listings }
-% \changes{\docvers{1}{7}}
-% {2020/04/11}
-% {Delete: \cs{CcoolDebug} }
-% \changes{\docvers{1}{7}}
-% {2020/04/11}
-% {Delete: Listing~5 from \docvers{1}{6} }
-% \changes{\docvers{1}{8}}
-% {2020/04/12}
-% {Add: \hyperref[usage:cs:lambda]{\cs{CcoolLambda}} }
-% \changes{\docvers{1}{8}}
-% {2020/04/12}
-% {Add: \docreflist{fonc:i}, \docreflist{fonc:ii} }
-% \changes{\docvers{1}{8}}
-% {2020/04/12}
-% {Add: \cs{CcoolVers} }
-% \changes{\docvers{1}{8}}
-% {2020/04/12}
-% {Add: \docreflist{vers} }
-% \changes{\docvers{1}{9}}
-% {2020/04/14}
-% {Add: support for \LuaTeX }
-% \changes{\docvers{1}{9}}
-% {2020/04/14}
-% {Move: from \autoref{part:usage} to \autoref{part:impl}, what is now that part's \autoref{impl:frontend}}
-% \changes{\docvers{2}{0}}
-% {2020/04/15}
-% {Delete: \pkgoptfi's dependency on \pkg{texosquery} and \cs{pdfcreationdate}}
-% \changes{\docvers{2}{0}}
-% {2020/04/15}
-% {Add: support for \XeTeX}
-% \changes{\docvers{2}{0}}
-% {2020/04/15}
-% {Update: \cs{RequirePackage}, \cs{NeedsTeXFormat}'s second argument / TeX Live 2020}
-% \changes{\docvers{2}{1}}
-% {2020/04/17}
-% {Replace: \hyperref[usage:cs:lambda]{\cs{CcoolLambda}}'s optional integer argument (number of \texttt{m}'s)
-% by a standard argument list}
-% \changes{\docvers{2}{1}}
-% {2020/04/17}
-% {Replace: \hyperref[ccool:pa]{\meta{\pkgparpa}}'s position within \cs{Ccool}'s argument list, from first to second. Greater versatility }
-% \changes{\docvers{2}{1}}
-% {2020/04/17}
-% {Replace: as~the~default~of~\pkgoptpa,~\docarg{Math}~by~\pkgoptpad}
-% \changes{\docvers{2}{1}}
-% {2020/04/17}
-% {Replace: \docccept{\doccceptgopt}~\docarg{Name} by \nameref{usage:opt:pa} }
-% \changes{\docvers{2}{1}}
-% {2020/04/17}
-% {Add:Listings 3, 4, 5, 6, 7, 8, and 9}
-% \changes{\docvers{2}{2}}
-% {2020/04/20}
-% {Remove: \% from listings}
-% \changes{\docvers{2}{2}}
-% {2020/04/20}
-% {Replace: part of the abstract's with more straighforward descriptions based on input from forum participtants}
-% \changes{\docvers{2}{3}}
-% {2020/05/16}
-% {Replace: for \cs{Ccool}, \docpare{i}{} by \docpare{c}{}}
-% \changes{\docvers{2}{3}}
-% {2020/05/16}
-% {Rearranged: \nameref{usage:cs:ccool}'s subsections. Previously, by argument. Now, by feature. }
-% \changes{\docvers{2}{3}}
-% {2020/05/16}
-% {Replace: In \docstep{key}, the created command's implementation, from \cs{ProvideDocumentCommand} to \cs{DeclareDocumentCommand}}
-% \changes{\docvers{2}{3}}
-% {2020/05/16}
-% {Complete: \docreflist{poly:real:i}}
-% \changes{\docvers{2}{3}}
-% {2020/05/16}
-% {Add: \docreflist{poly:real:ii}, \docreflist{poly:arb:i}, and \docreflist{poly:arb:ii}}
-% \changes{\docvers{2}{3}}
-% {2020/05/16}
-% {Remove: Listing showing part of the preamble }
-% \changes{\docvers{2}{4}}
-% {2020/05/16}
-% {Fix: minor error in the listings (\cs{Real} rather than \cs{Reel}, hitherto unnoticed). }
-% \changes{\docvers{2}{4}}
-% {2020/05/16}
-% {Remove: examples from \autoref{part:usage},~\nameref{usage:cs:ccool}, as redundant with \autoref{part:listing}~\docreflist{numbrsys:base}-\ref{listing:numbrsys:pa}}
-% \changes{\docvers{2}{5}}
-% {2020/05/21}
-% {Modify: behavior of \autoref{part:usage}~\nameref{ccool:ex}, rely on \pkg{erw-l3}'s \cs{erw_seq_use:Nn} }
-% 
-% \changes{\docvers{2}{5}}
-% {2020/05/21}
-% {Modify: \nameref{impl:opt:fi}, rely on \pkg{erw-l3}'s \cs{erw_jobnametimestamp:} }
-% 
-% \changes{\docvers{2}{6}}
-% {2020/05/22}
-% {Modify: \nameref{impl:cs:lambda}, rely on \pkg{erw-l3}'s \cs{erw_lambda:nnn} }
-% 
-% \changes{\docvers{2}{7}}
-% {2020/05/28}
-% {Add: \docccept{\doccceptgopt}~\nameref{usage:opt:an} }
-% 
-% \changes{\docvers{2}{7}}
-% {2020/05/28}
-% {Add: \doclist{lang} }
-% 
-% \changes{\docvers{2}{7}}
-% {2020/05/28}
-% {Modify: \nameref{usage:opt:se}'s default rely on \pkg{babel} and \pkg{amsmath}, if applicable}
-% 
-% \changes{\docvers{2}{7}}
-% {2020/05/28}
-% {Modify: \nameref{usage:cs:option}'s \docxparsem by \docxparseo}
-%
-% \changes{\docvers{2}{8}}
-% {2020/05/28}
-% {Fix: conflict between \cs{usepackage}\docparo{spanish}\docparm{babel} and \nameref{ccool:pa} }
-%
-% \changes{\docvers{2}{9}}
-% {2020/06/03}
-% {Miscellaneous }
-%
-% \changes{\docvers{3}{0}}
-% {2020/06/04}
-% {Miscellaneous }
-%
-% \changes{\docvers{3}{1}}
-% {2020/10/10}
-% {Replaced: \doclist{thisdeps}'s content, from exhaustive dependencies to those explicit with \cs{usepackage}}
-%
-% \PrintChanges
-% \PrintIndex
-% \clearpage
-% \StopEventually{
-% ^^A   \PrintChanges
-% ^^A   \PrintIndex
+%   \StopEventually{
+%    \clearpage
+%     \PrintChanges
+%     \PrintIndex %^^A https://tex.stackexchange.com/q/610349/112708
 % }
-% \end{documentation}
+%
+%\end{documentation}
 % \begin{implementation}
-%   \selectlanguage{english}
 %   \part{Implementation}\label{part:impl}
-%   
 %   \section{Opening}
 %    \begin{macrocode}
 %<*package>      
 %<@@=ccool>      
 \ExplSyntaxOn
 %    \end{macrocode}
+% \changes{v3.2}
+% {2021/09/20}
+% {Removed~dependence~on~\pkg{erw-l3}.}
+% \changes{v3.2}
+% {2021/09/20}
+% {Added~dependence~on~\pkg{lambdax}.}
+%
 % \section{\textsf{aux}}
 % \begin{macro}{\@@_aux_inner_set:n}
 %   \begin{arguments}
@@ -1786,18 +1192,22 @@ english
 }
 %    \end{macrocode}
 % \end{macro}
+%    \begin{macrocode}
+\cs_new:Nn\@@_aux_merge:nn{#1#2}
+%    \end{macrocode}
 % \section{\textsf{lang}}
 %    \begin{macrocode}
 \prop_new:N \g@@_lang_and_prop
 %    \end{macrocode}
 % \begin{macro}{\@@_lang_and_update:n}
 %    \begin{macrocode}
+%      \changes{v3.2}
+%      {2021/09/20}
+%      {Replace~\cs[no-index]{erw_prop_keyval:Nn}~by~\cs[no-index]{prop_set_from_keyval:Nn}} 
 \cs_new_protected:Nn \@@_lang_and_update:n
 {
-  \erw_prop_keyval_parse:NNNn
+  \prop_set_from_keyval:Nn
   \g@@_lang_and_prop
-  \erw_keyval_error:Nn
-  \prop_gput:Nnn
   { #1 }
 }
 \cs_generate_variant:Nn \@@_lang_and_update:n { e }
@@ -1973,6 +1383,7 @@ english
 % \section{\textsf{make_ccool}}
 % \begin{macro}{\@@_make_ccool_exp:nnn}
 %    \begin{macrocode}
+%      ^^A    \erw_seq_use:Nn
 \cs_new_protected:Nn \@@_make_ccool_exp:nnn
 {
   \@@_aux_val:Nn \g@@_aux_key_seq {#1}
@@ -1980,7 +1391,7 @@ english
   \@@_aux_outer:n
   {
     \exp_args:NNf
-    \erw_seq_use:Nn
+    \@@_seq_use:Nn
     \g@@_aux_val_seq
     {#2}
   }
@@ -2251,6 +1662,44 @@ english
 }
 %    \end{macrocode}
 % \end{macro}
+% \section{\textsf{seq_use}}
+% \begin{macro}{\@@_seq_from_prop:NNn}
+%    \begin{macrocode}
+%      \changes{v3.2}
+%      {2021/09/20}
+%      {Added~\cs[no-index]{__ccool_seq_use:Nn}~in~replacement~of~\cs[no-index][erw_seq_use:Nn]}
+\msg_new:nnn{@@}{separ}{#1~expects~1~to~3~items,~#2}
+\cs_new:Nn \@@_seq_use:Nn
+{
+  \exp_last_unbraced:NNf
+  \seq_use:Nnnn #1
+  \@@_tl_separators:n{#2}
+}
+\cs_new:Nn \@@_tl_separators:n
+{ \@@_tl_separators:en{ \tl_count:n{#1} }{#1} }
+\cs_new:Nn \@@_tl_separators:nn
+{ \int_case:nnTF {#1}
+  { {1}
+    { \prg_replicate:nn{ 3 }{#2} }
+    {2}
+    {
+      { \use_ii:nn #2 }
+      { \use_i:nn #2 }
+      { \use_i:nn #2 \use_ii:nn #2 }
+    }
+    {3}{#2}
+  }
+  { \c_empty_tl }
+  {
+    \msg_error:nnnn { @@ }
+    { separ }
+    { \@@_tl_separators:nn }
+    {#2}
+  }
+}
+\cs_generate_variant:Nn \@@_tl_separators:nn { e }
+%    \end{macrocode}
+% \end{macro}
 % \section{Front-end}\label{impl:frontend}
 % \DocPhantomSection*{subsection}{\cs{CcoolClear}}{impl:cs:clear}
 % \begin{macro}{\CcoolClear}
@@ -2272,10 +1721,10 @@ english
 % \begin{macro}{\CcoolLambda}
 %   \NB{todo}{allow only m- or o-type arguments}
 %    \begin{macrocode}
+%      \changes{v3.2}
+%      {2021/09/20}{\cs[CcoolLambda]'s~implementation~switched~from~\pkg{erw-l3}~to~\pkg{lambdax};~kept~only~for~backward~compat.}
 \ProvideDocumentCommand \CcoolLambda { O{m} m }
-{
-  \erw_lambda:nnn \DeclareDocumentCommand { #1 } { #2 }
-}
+{ \lambdax:nn{#1}{#2} }
 %    \end{macrocode}
 % \end{macro}
 % \DocPhantomSection*{subsection}{\cs{CcoolOption}}{impl:cs:option}
@@ -2294,50 +1743,50 @@ english
 \keys_define:nn { @@ }
 {
 %    \end{macrocode}
-% \DocPhantomSection*{subsubsection}{\pkgoptan}{impl:opt:an}
-% \DescribeOption{\pkgoptan}
 %    \begin{macrocode}
 And .code:n = { \@@_lang_and_update:e{ #1 } },
 And .default:n = { \c@@_lang_and_tl },
 And .initial:n = { \c@@_lang_and_tl },
 %    \end{macrocode}
-% \DocPhantomSection*{subsubsection}{\pkgoptex}{impl:opt:ex}
-% \DescribeOption{\pkgoptex}
 %    \begin{macrocode}
 Expans .multichoices:nn = { eo, ee, ex, xo, xe, xx }
 { \tl_gset_eq:NN \g@@_option_expans_tl \l_keys_choice_tl },
 Expans .default:n = { xo },
 Expans .initial:n = { xo },
 %    \end{macrocode}
-% \DocPhantomSection*{subsubsection}{\pkgoptfi}{impl:opt:fi}
-% \DescribeOption{\pkgoptfi}
 %    \begin{macrocode}
-File .code:n = {
-  \tl_gset:Nx \g@@_log_file_tl{#1}  
-},
-File .default:n = { \erw_sys_jobnametimestamp: },
-File .initial:n = { \erw_sys_jobnametimestamp: },
+%      \changes{v3.2}
+%      {2021/09/20}
+%      {Removed~module~key~File's~relianced~on~a~timestamp~(clumsy)}
+File .code:n = { \tl_gset:Nx \g@@_log_file_tl{#1} } }
+\cs_new_protected:Nn
+\@@_keys_define_file:n
+{\keys_define:nn { @@ }
+  {File .code:n = { \tl_gset:Nx \g@@_log_file_tl{#1} },
+    File .default:n = { #1 },
+    File .initial:n = { #1 } } }
+\cs_generate_variant:Nn\@@_keys_define_file:n{e}
+\@@_keys_define_file:e
+{\exp_args:Ne\@@_aux_merge:nn{\c_sys_jobname_str}{_ccool_log}}
 %    \end{macrocode}
-% \DocPhantomSection*{subsubsection}{\pkgoptin}{impl:opt:in}
-% \DescribeOption{\pkgoptin}
 %    \begin{macrocode}
-Inner .code:n={
-  \@@_option_inner:n{#1}
-  \exp_last_unbraced:Nf 
-  \@@_make_ccool:nnnn
-  {
-    { \g@@_option_param_tl }
-    { \g@@_option_inner_tl }
-    { \g@@_option_separ_tl }
-    { \g@@_option_outer_tl }
-  }
-},
+\keys_define:nn { @@ }
+{
+  Inner .code:n={
+    \@@_option_inner:n{#1}
+    \exp_last_unbraced:Nf 
+    \@@_make_ccool:nnnn
+    {
+      { \g@@_option_param_tl }
+      { \g@@_option_inner_tl }
+      { \g@@_option_separ_tl }
+      { \g@@_option_outer_tl }
+    }
+  },
 Inner .value_required:n = false,
 Inner .default:n = {####1},
 Inner .initial:n = {####1},
 %    \end{macrocode}
-% \DocPhantomSection*{subsubsection}{\pkgoptpa}{impl:opt:pa}
-% \DescribeOption{\pkgoptpa}
 %    \begin{macrocode}
 Param .code:n={
   \@@_option_param:n{#1}
@@ -2354,8 +1803,6 @@ Param .value_required:n = false,
 Param .default:n = { Default },
 Param .initial:n = { Default },
 %    \end{macrocode}
-% \DocPhantomSection*{subsubsection}{\pkgoptou}{impl:opt:ou}
-% \DescribeOption{\pkgoptou}
 %    \begin{macrocode}
 Outer .code:n={
   \@@_option_outer:n{#1}
@@ -2372,8 +1819,6 @@ Outer .value_required:n = false,
 Outer .default:n = { \ensuremath{####1} },
 Outer .initial:n = { \ensuremath{####1} },
 %    \end{macrocode}
-% \DocPhantomSection*{subsubsection}{\pkgoptse}{impl:opt:se}
-% \DescribeOption{\pkgoptse}
 %    \begin{macrocode}
 Separ .code:n={
   \@@_option_separ:n{#1}
@@ -2390,8 +1835,6 @@ Separ .value_required:n = false,
 Separ .default:n = { \c@@_option_separ_default_tl },
 Separ .initial:n = { \c@@_option_separ_default_tl },
 %    \end{macrocode}
-% \DocPhantomSection*{subsubsection}{\pkgoptwr}{impl:opt:wr}
-% \DescribeOption{\pkgoptwr}
 %    \begin{macrocode}
 Write .code:n = {
   \bool_if:nTF{#1}
@@ -2405,7 +1848,6 @@ Write .initial:n = \BooleanFalse
 %    \begin{macrocode}
 }
 %    \end{macrocode}
-% \DocPhantomSection*{subsection}{\cs{CcoolRead}}{impl:cs:read}
 % \begin{macro}{\CcoolRead}
 %    \begin{macrocode}
 \NewDocumentCommand{\CcoolRead}
@@ -2417,7 +1859,6 @@ Write .initial:n = \BooleanFalse
 }
 %    \end{macrocode}
 % \end{macro}
-% \DocPhantomSection*{subsection}{\cs{CcoolVers}}{impl:cs:vers}
 % \begin{macro}{\CcoolVers}
 %    \begin{macrocode}
 \NewDocumentCommand{\CcoolVers}
@@ -2426,13 +1867,10 @@ Write .initial:n = \BooleanFalse
 %    \end{macrocode}
 % \end{macro} 
 % \section{Closing}
-% 
 %    \begin{macrocode}
 \ExplSyntaxOff
 %</package> 
 %    \end{macrocode}
-% 
 % \end{implementation}
-% 
 % \Finale
 \endinput

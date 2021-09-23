@@ -5,22 +5,20 @@
 %% The original source files were:
 %%
 %% ccool.dtx  (with options: `package')
-%% ----------------------------------------------------------------------------
-%% ccool --- A key-value document command parser
+%% -----------------------------------------------------------------------------
+%% ccool ---  (Custom) COntext Oriented LaTeX
 %% Released under the LaTeX Project Public License v1.3c or later
 %% See http://www.latex-project.org/lppl.txt
 %% ----------------------------------------------------------------------------
 %% 
- \NeedsTeXFormat{LaTeX2e}[2020/02/02]
- \RequirePackage{erw-l3}[2020/06/04]
- \RequirePackage{etoolbox}[2019/09/21]
- \RequirePackage{l3keys2e}[2020/03/06]
- \RequirePackage{xparse}[2020/03/06]
+ \NeedsTeXFormat{LaTeX2e}[2021-06-01]
+ \RequirePackage{expl3, xparse, l3keys2e}[2021-06-01]
+ \RequirePackage{lambdax}[2021-06-01]
  \ProvidesExplPackage
- {ccool}                                                                            % Package name
- {2020/10/10}                                                                       % Release date
- {3.1}                                                                              % Release version
- {cool --- A key-value document command parser}                                     % Description
+ {ccool}                                             % Package name
+ {2021-09-20}                                        % Release date
+ {3.2}                                               % Release version
+ {ccool --- (Custom) COntext Oriented LaTeX  }       % Description
 \ExplSyntaxOn
 \cs_new_protected:Nn \__ccool_aux_inner_set:n
 {
@@ -76,13 +74,12 @@
   \seq_gclear_new:N \g__ccool_aux_val_seq
   \__ccool_seq_from_prop:NNn \g__ccool_aux_val_seq #1 { \__ccool_prop_name:n{#2} }
 }
+\cs_new:Nn\__ccool_aux_merge:nn{#1#2}
 \prop_new:N \g__ccool_lang_and_prop
 \cs_new_protected:Nn \__ccool_lang_and_update:n
 {
-  \erw_prop_keyval_parse:NNNn
+  \prop_set_from_keyval:Nn
   \g__ccool_lang_and_prop
-  \erw_keyval_error:Nn
-  \prop_gput:Nnn
   { #1 }
 }
 \cs_generate_variant:Nn \__ccool_lang_and_update:n { e }
@@ -203,7 +200,7 @@
   \__ccool_aux_outer:n
   {
     \exp_args:NNf
-    \erw_seq_use:Nn
+    \__ccool_seq_use:Nn
     \g__ccool_aux_val_seq
     {#2}
   }
@@ -346,6 +343,36 @@
   }
   \seq_map_function:NN #2 \__ccool_seq_from_prop:n
 }
+\msg_new:nnn{__ccool}{separ}{#1~expects~1~to~3~items,~#2}
+\cs_new:Nn \__ccool_seq_use:Nn
+{
+  \exp_last_unbraced:NNf
+  \seq_use:Nnnn #1
+  \__ccool_tl_separators:n{#2}
+}
+\cs_new:Nn \__ccool_tl_separators:n
+{ \__ccool_tl_separators:en{ \tl_count:n{#1} }{#1} }
+\cs_new:Nn \__ccool_tl_separators:nn
+{ \int_case:nnTF {#1}
+  { {1}
+    { \prg_replicate:nn{ 3 }{#2} }
+    {2}
+    {
+      { \use_ii:nn #2 }
+      { \use_i:nn #2 }
+      { \use_i:nn #2 \use_ii:nn #2 }
+    }
+    {3}{#2}
+  }
+  { \c_empty_tl }
+  {
+    \msg_error:nnnn { __ccool }
+    { separ }
+    { \__ccool_tl_separators:nn }
+    {#2}
+  }
+}
+\cs_generate_variant:Nn \__ccool_tl_separators:nn { e }
 \NewDocumentCommand{ \CcoolClear }
 { D<>{\g__ccool_option_param_tl} }
 {
@@ -353,9 +380,7 @@
 }
 \NewDocumentCommand{\CcoolHook}{}{\c_empty_tl}
 \ProvideDocumentCommand \CcoolLambda { O{m} m }
-{
-  \erw_lambda:nnn \DeclareDocumentCommand { #1 } { #2 }
-}
+{ \lambdax:nn{#1}{#2} }
 \NewDocumentCommand{ \CcoolOption }
 { O{ And, Expans, File, Inner, Param, Outer, Separ, Write } }
 {
@@ -370,22 +395,29 @@ Expans .multichoices:nn = { eo, ee, ex, xo, xe, xx }
 { \tl_gset_eq:NN \g__ccool_option_expans_tl \l_keys_choice_tl },
 Expans .default:n = { xo },
 Expans .initial:n = { xo },
-File .code:n = {
-  \tl_gset:Nx \g__ccool_log_file_tl{#1}
-},
-File .default:n = { \erw_sys_jobnametimestamp: },
-File .initial:n = { \erw_sys_jobnametimestamp: },
-Inner .code:n={
-  \__ccool_option_inner:n{#1}
-  \exp_last_unbraced:Nf
-  \__ccool_make_ccool:nnnn
-  {
-    { \g__ccool_option_param_tl }
-    { \g__ccool_option_inner_tl }
-    { \g__ccool_option_separ_tl }
-    { \g__ccool_option_outer_tl }
-  }
-},
+File .code:n = { \tl_gset:Nx \g__ccool_log_file_tl{#1} } }
+\cs_new_protected:Nn
+\__ccool_keys_define_file:n
+{\keys_define:nn { __ccool }
+  {File .code:n = { \tl_gset:Nx \g__ccool_log_file_tl{#1} },
+    File .default:n = { #1 },
+    File .initial:n = { #1 } } }
+\cs_generate_variant:Nn\__ccool_keys_define_file:n{e}
+\__ccool_keys_define_file:e
+{\exp_args:Ne\__ccool_aux_merge:nn{\c_sys_jobname_str}{_ccool_log}}
+\keys_define:nn { __ccool }
+{
+  Inner .code:n={
+    \__ccool_option_inner:n{#1}
+    \exp_last_unbraced:Nf
+    \__ccool_make_ccool:nnnn
+    {
+      { \g__ccool_option_param_tl }
+      { \g__ccool_option_inner_tl }
+      { \g__ccool_option_separ_tl }
+      { \g__ccool_option_outer_tl }
+    }
+  },
 Inner .value_required:n = false,
 Inner .default:n = {####1},
 Inner .initial:n = {####1},
@@ -452,7 +484,7 @@ Write .initial:n = \BooleanFalse
 {\use:c{ver@ccool.sty}}
 \ExplSyntaxOff
 %% 
-%% Copyright (C) 2020 by Erwann Rogard
+%% Copyright (C) 2020-2021 by Erwann Rogard
 %% 
 %% This work may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License (LPPL), either
